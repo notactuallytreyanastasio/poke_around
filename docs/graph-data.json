@@ -329,6 +329,28 @@
       "created_at": "2026-01-09T16:10:45.142768-05:00",
       "updated_at": "2026-01-09T16:10:45.142768-05:00",
       "metadata_json": "{\"branch\":\"feature/ollama-tagging\",\"confidence\":95,\"files\":[\"lib/poke_around/ai/tagger.ex\",\"lib/poke_around/ai/ollama.ex\",\"lib/poke_around/tags.ex\",\"lib/poke_around/tags/tag.ex\",\"lib/poke_around/tags/link_tag.ex\"]}"
+    },
+    {
+      "id": 31,
+      "change_id": "84a3d8d7-445f-4287-8abd-3dca2ef22fec",
+      "node_type": "action",
+      "title": "Refactor Ollama client from :httpc to Req",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:22:11.914805-05:00",
+      "updated_at": "2026-01-09T16:22:11.914805-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"c7b9468\",\"confidence\":95,\"files\":[\"lib/poke_around/ai/ollama.ex\",\"mix.exs\"]}"
+    },
+    {
+      "id": 32,
+      "change_id": "6ad8754e-48b3-49c6-9c50-ead2d56723f6",
+      "node_type": "outcome",
+      "title": "Cleaner HTTP client - 18 lines fewer, uses existing dep",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:22:12.459769-05:00",
+      "updated_at": "2026-01-09T16:22:12.459769-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"confidence\":95}"
     }
   ],
   "edges": [
@@ -672,6 +694,28 @@
       "weight": 1.0,
       "rationale": "Sub-goal: AI tagging",
       "created_at": "2026-01-09T16:11:47.576429-05:00"
+    },
+    {
+      "id": 32,
+      "from_node_id": 29,
+      "to_node_id": 31,
+      "from_change_id": "760fc190-1dd2-4b42-aa35-623563f17c9b",
+      "to_change_id": "84a3d8d7-445f-4287-8abd-3dca2ef22fec",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Refactoring Ollama client",
+      "created_at": "2026-01-09T16:22:17.663068-05:00"
+    },
+    {
+      "id": 33,
+      "from_node_id": 31,
+      "to_node_id": 32,
+      "from_change_id": "84a3d8d7-445f-4287-8abd-3dca2ef22fec",
+      "to_change_id": "6ad8754e-48b3-49c6-9c50-ead2d56723f6",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Refactor succeeded",
+      "created_at": "2026-01-09T16:22:17.671760-05:00"
     }
   ]
 }
