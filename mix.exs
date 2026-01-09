@@ -21,7 +21,7 @@ defmodule PokeAround.MixProject do
   def application do
     [
       mod: {PokeAround.Application, []},
-      extra_applications: [:logger, :runtime_tools, :inets]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 

@@ -3,8 +3,6 @@ defmodule PokeAround.AI.Ollama do
   Client for interacting with the Ollama API.
   """
 
-  require Logger
-
   @default_url "http://localhost:11434"
   @default_model "qwen3:8b"
   @timeout 60_000
@@ -20,32 +18,18 @@ defmodule PokeAround.AI.Ollama do
     model = opts[:model] || @default_model
     url = opts[:url] || @default_url
 
-    body =
-      Jason.encode!(%{
-        model: model,
-        prompt: prompt,
-        stream: false
-      })
-
-    case :httpc.request(
-           :post,
-           {~c"#{url}/api/generate", [], ~c"application/json", body},
-           [timeout: @timeout, connect_timeout: 5_000],
-           []
+    case Req.post("#{url}/api/generate",
+           json: %{model: model, prompt: prompt, stream: false},
+           receive_timeout: @timeout,
+           connect_options: [timeout: 5_000]
          ) do
-      {:ok, {{_, 200, _}, _headers, response_body}} ->
-        case Jason.decode(response_body) do
-          {:ok, %{"response" => response}} ->
-            {:ok, response}
+      {:ok, %{status: 200, body: %{"response" => response}}} ->
+        {:ok, response}
 
-          {:ok, %{"error" => error}} ->
-            {:error, error}
+      {:ok, %{status: 200, body: %{"error" => error}}} ->
+        {:error, error}
 
-          {:error, reason} ->
-            {:error, {:json_decode, reason}}
-        end
-
-      {:ok, {{_, status, _}, _headers, body}} ->
+      {:ok, %{status: status, body: body}} ->
         {:error, {:http_status, status, body}}
 
       {:error, reason} ->
@@ -59,8 +43,8 @@ defmodule PokeAround.AI.Ollama do
   def available?(opts \\ []) do
     url = opts[:url] || @default_url
 
-    case :httpc.request(:get, {~c"#{url}/api/tags", []}, [timeout: 5_000], []) do
-      {:ok, {{_, 200, _}, _, _}} -> true
+    case Req.get("#{url}/api/tags", receive_timeout: 5_000) do
+      {:ok, %{status: 200}} -> true
       _ -> false
     end
   end
@@ -71,15 +55,12 @@ defmodule PokeAround.AI.Ollama do
   def list_models(opts \\ []) do
     url = opts[:url] || @default_url
 
-    case :httpc.request(:get, {~c"#{url}/api/tags", []}, [timeout: 5_000], []) do
-      {:ok, {{_, 200, _}, _headers, body}} ->
-        case Jason.decode(body) do
-          {:ok, %{"models" => models}} ->
-            {:ok, Enum.map(models, & &1["name"])}
+    case Req.get("#{url}/api/tags", receive_timeout: 5_000) do
+      {:ok, %{status: 200, body: %{"models" => models}}} ->
+        {:ok, Enum.map(models, & &1["name"])}
 
-          error ->
-            error
-        end
+      {:ok, %{status: status, body: body}} ->
+        {:error, {:http_status, status, body}}
 
       {:error, reason} ->
         {:error, reason}

@@ -61,3 +61,4 @@ $(date '+%Y-%m-%d %H:%M:%S') - Planning: Initial Phoenix setup commit
 Staging Ollama tagging files
 git commit bcfd939 - Add Ollama-powered tagging
 git merge feature/ollama-tagging to main
+Switched Ollama client from :httpc to Req
