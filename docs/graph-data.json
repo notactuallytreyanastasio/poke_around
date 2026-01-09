@@ -186,6 +186,17 @@
       "created_at": "2026-01-09T15:22:28.945979-05:00",
       "updated_at": "2026-01-09T15:22:35.474553-05:00",
       "metadata_json": "{\"branch\":\"main\",\"confidence\":100,\"prompt\":\"Ran cleanup to purge links that passed old filters but fail new criteria.\\n\\nSQL queries:\\n1. DELETE WHERE author_followers_count < 500 OR IS NULL\\n2. DELETE WHERE length(regexp_replace(post_text, '#[a-zA-Z0-9_]+', '', 'g')) < 50\\n\\nResults:\\n- Before: 389 links\\n- Deleted for low followers: 131\\n- Deleted for short text: 35\\n- After: 223 links\\n- Total removed: 166 (43%)\"}"
+    },
+    {
+      "id": 18,
+      "change_id": "979c918a-d7e5-4397-b32a-d72600efe992",
+      "node_type": "action",
+      "title": "Redesign UI as retro Mac OS desktop",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T15:25:46.042981-05:00",
+      "updated_at": "2026-01-09T15:25:58.430409-05:00",
+      "metadata_json": "{\"branch\":\"feature/retro-mac-ui\",\"commit\":\"56a5082\",\"confidence\":95,\"files\":[\"lib/poke_around_web/live/stumble_live.ex\"],\"prompt\":\"User requested complete UI redesign:\\n\\\"redo it completely to look like its an old old apple desktop and have it look like a window that is a textfile of links on like 2/3 the screen that shows the a 'grab bag' of like, however many links tall the window is\\\"\\n\\nImplementation:\\n- Classic Mac OS 9 / System 7 aesthetic\\n- Purple/gray dithered desktop background\\n- Window with:\\n  - Titlebar with horizontal lines pattern\\n  - Close button box\\n  - Title: \\\"poke_around - grab bag\\\"\\n- Grab bag shows 20 random links\\n- Three columns: Domain | Post | Score\\n- Classic Mac scrollbar (non-functional, decorative)\\n- Menu bar with Apple logo, File, Edit, View, Special\\n- Shuffle button to get fresh random links\\n- Click row to open link (increments stumble_count)\\n- Status bar showing item count and total links\\n\\nFonts: Geneva, VT323 (Google Fonts fallback), Monaco for monospace\"}"
     }
   ],
   "edges": [
@@ -375,6 +386,17 @@
       "weight": 1.0,
       "rationale": "Clean up after fixing filter",
       "created_at": "2026-01-09T15:22:35.465197-05:00"
+    },
+    {
+      "id": 18,
+      "from_node_id": 1,
+      "to_node_id": 18,
+      "from_change_id": "fdd7e6ae-9619-4735-b661-427537aef5e1",
+      "to_change_id": "979c918a-d7e5-4397-b32a-d72600efe992",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "UI redesign request",
+      "created_at": "2026-01-09T15:25:58.416842-05:00"
     }
   ]
 }

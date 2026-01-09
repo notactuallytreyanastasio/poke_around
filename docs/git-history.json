@@ -1,5 +1,13 @@
 [
   {
+    "hash": "56a50820d3caff955a75a03da4a69448b3c99ff9",
+    "short_hash": "56a5082",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T15:25:40-05:00",
+    "message": "Redesign UI as retro Mac OS desktop\n\n- Classic Mac OS 9/System 7 aesthetic\n- Window with titlebar, horizontal lines, close button\n- Grab bag view showing 20 links at once\n- Domain | Post | Score columns\n- Classic Mac scrollbar styling\n- Menu bar with Apple menu\n- Shuffle button to get new random links\n- Click any row to open link",
+    "files_changed": 1
+  },
+  {
     "hash": "97a9069fa4415a2c54fe70b93beca4ce2721c6df",
     "short_hash": "97a9069",
     "author": "Bobby Nathan",
