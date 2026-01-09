@@ -516,6 +516,28 @@
       "created_at": "2026-01-09T16:31:51.364193-05:00",
       "updated_at": "2026-01-09T16:31:51.364193-05:00",
       "metadata_json": "{\"branch\":\"main\",\"commit\":\"8f03dab\",\"confidence\":95,\"files\":[\"lib/poke_around/ai/tagger.ex\"]}"
+    },
+    {
+      "id": 48,
+      "change_id": "734b26b8-c446-45e8-89fd-62402b1fbafb",
+      "node_type": "action",
+      "title": "Tighten emoji filter from 3 to 1 max emoji",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:33:10.168349-05:00",
+      "updated_at": "2026-01-09T16:33:10.168349-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"confidence\":95,\"prompt\":\"User: purge 2 or more emojis, one emoji only\"}"
+    },
+    {
+      "id": 49,
+      "change_id": "8840bb10-6ac0-405e-8fc1-91d5d285f9cb",
+      "node_type": "outcome",
+      "title": "Deleted 62 links with 2+ emojis, filter now allows max 1 emoji",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:33:47.535170-05:00",
+      "updated_at": "2026-01-09T16:33:47.535170-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"confidence\":100}"
     }
   ],
   "edges": [
@@ -1134,6 +1156,28 @@
       "weight": 1.0,
       "rationale": "Improved observability",
       "created_at": "2026-01-09T16:31:51.373666-05:00"
+    },
+    {
+      "id": 57,
+      "from_node_id": 1,
+      "to_node_id": 48,
+      "from_change_id": "fdd7e6ae-9619-4735-b661-427537aef5e1",
+      "to_change_id": "734b26b8-c446-45e8-89fd-62402b1fbafb",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Quality filter refinement",
+      "created_at": "2026-01-09T16:33:15.385691-05:00"
+    },
+    {
+      "id": 58,
+      "from_node_id": 48,
+      "to_node_id": 49,
+      "from_change_id": "734b26b8-c446-45e8-89fd-62402b1fbafb",
+      "to_change_id": "8840bb10-6ac0-405e-8fc1-91d5d285f9cb",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Purge completed",
+      "created_at": "2026-01-09T16:33:52.418260-05:00"
     }
   ]
 }
