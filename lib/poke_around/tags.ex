@@ -116,11 +116,17 @@ defmodule PokeAround.Tags do
 
   @doc """
   Get untagged links for processing.
+
+  Options:
+  - `:langs` - Filter by languages (default: ["en"] for English only)
   """
-  def untagged_links(limit \\ 10) do
+  def untagged_links(limit \\ 10, opts \\ []) do
+    langs = opts[:langs] || ["en"]
+
     from(l in Link,
       where: is_nil(l.tagged_at),
       where: not is_nil(l.post_text),
+      where: fragment("? && ?", l.langs, ^langs),
       order_by: [desc: l.score],
       limit: ^limit
     )
@@ -129,9 +135,18 @@ defmodule PokeAround.Tags do
 
   @doc """
   Count untagged links.
+
+  Options:
+  - `:langs` - Filter by languages (default: ["en"] for English only)
   """
-  def count_untagged do
-    from(l in Link, where: is_nil(l.tagged_at), where: not is_nil(l.post_text))
+  def count_untagged(opts \\ []) do
+    langs = opts[:langs] || ["en"]
+
+    from(l in Link,
+      where: is_nil(l.tagged_at),
+      where: not is_nil(l.post_text),
+      where: fragment("? && ?", l.langs, ^langs)
+    )
     |> Repo.aggregate(:count)
   end
 end

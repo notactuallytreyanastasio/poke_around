@@ -66,3 +66,4 @@ Add AI.Supervisor for Tagger
 Add detailed tagger logging
 Tightened emoji filter: max 1 emoji, deleted 62 links
 Add parallel processing to Tagger
+Default tagger to English only
