@@ -18,6 +18,14 @@ defmodule PokeAroundWeb.Router do
     pipe_through :browser
 
     live "/", StumbleLive, :index
+    live "/bookmarklet", BookmarkletLive, :index
+  end
+
+  # API for bookmarklet
+  scope "/api", PokeAroundWeb.API do
+    pipe_through :api
+
+    post "/links", LinkController, :create
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
