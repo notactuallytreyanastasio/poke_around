@@ -38,3 +38,5 @@ $(date '+%Y-%m-%d %H:%M:%S') - Planning: Initial Phoenix setup commit
 2026-01-09 15:08:18 - git commit - Refine link quality signals
 2026-01-09 15:08:44 - git checkout main
 2026-01-09 15:08:44 - git merge feature/refined-quality-signals
+2026-01-09 15:14:20 - git add extractor.ex
+2026-01-09 15:14:20 - git commit - Fix text length to exclude hashtags

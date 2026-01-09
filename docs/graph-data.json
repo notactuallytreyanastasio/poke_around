@@ -164,6 +164,28 @@
       "created_at": "2026-01-09T15:08:24.581682-05:00",
       "updated_at": "2026-01-09T15:08:44.640067-05:00",
       "metadata_json": "{\"branch\":\"feature/refined-quality-signals\",\"commit\":\"ef7fdbb\",\"confidence\":95,\"files\":[\"lib/poke_around/links/extractor.ex\"],\"prompt\":\"Updated extractor.ex with refined quality signals.\\n\\nNew module attributes:\\n  @min_followers 500\\n  @max_following 5000\\n  @min_account_age_days 365\\n  @min_text_length 50\\n  @max_hashtags 1\\n\\nNew qualification logic:\\n- author_qualifies?(author): checks followers, following, bio, account age\\n- post_qualifies?(text): checks text length, hashtag count\\n- account_age_ok?(indexed_at): DateTime comparison for 365+ days\\n- count_hashtags(text): Regex.scan for #\\\\w+ patterns\\n\\nprocess_links changed:\\n- Only processes posts with exactly 1 link (multiple = spam)\\n- Single link extraction instead of Enum.map\\n\\nScoring updated:\\n- follower_score = log10(followers) * 15\\n- ratio_bonus = min(followers/following * 5, 20)\\n- Combined and capped at 100\\n- Rewards accounts with good follower/following ratio\"}"
+    },
+    {
+      "id": 16,
+      "change_id": "6f3f2bf3-4b30-40b4-a72b-24762b0039eb",
+      "node_type": "observation",
+      "title": "Found hashtag-only posts passing filter - text length was including hashtag chars",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T15:14:28.198757-05:00",
+      "updated_at": "2026-01-09T15:14:28.198757-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"97a9069\",\"confidence\":100}"
+    },
+    {
+      "id": 17,
+      "change_id": "56a7a93a-6525-4feb-9f69-7b6b8302f4f1",
+      "node_type": "action",
+      "title": "Purge old links not meeting new quality criteria",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T15:22:28.945979-05:00",
+      "updated_at": "2026-01-09T15:22:35.474553-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"confidence\":100,\"prompt\":\"Ran cleanup to purge links that passed old filters but fail new criteria.\\n\\nSQL queries:\\n1. DELETE WHERE author_followers_count < 500 OR IS NULL\\n2. DELETE WHERE length(regexp_replace(post_text, '#[a-zA-Z0-9_]+', '', 'g')) < 50\\n\\nResults:\\n- Before: 389 links\\n- Deleted for low followers: 131\\n- Deleted for short text: 35\\n- After: 223 links\\n- Total removed: 166 (43%)\"}"
     }
   ],
   "edges": [
@@ -331,6 +353,28 @@
       "weight": 1.0,
       "rationale": "Implementation of refined criteria",
       "created_at": "2026-01-09T15:08:35.575687-05:00"
+    },
+    {
+      "id": 16,
+      "from_node_id": 15,
+      "to_node_id": 16,
+      "from_change_id": "ecb2b4b0-6687-4681-9090-a365f91cedb7",
+      "to_change_id": "6f3f2bf3-4b30-40b4-a72b-24762b0039eb",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Bug found during testing",
+      "created_at": "2026-01-09T15:14:34.678680-05:00"
+    },
+    {
+      "id": 17,
+      "from_node_id": 16,
+      "to_node_id": 17,
+      "from_change_id": "6f3f2bf3-4b30-40b4-a72b-24762b0039eb",
+      "to_change_id": "56a7a93a-6525-4feb-9f69-7b6b8302f4f1",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Clean up after fixing filter",
+      "created_at": "2026-01-09T15:22:35.465197-05:00"
     }
   ]
 }

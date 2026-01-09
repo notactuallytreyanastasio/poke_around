@@ -1,5 +1,13 @@
 [
   {
+    "hash": "97a9069fa4415a2c54fe70b93beca4ce2721c6df",
+    "short_hash": "97a9069",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T15:14:21-05:00",
+    "message": "Fix: text length check now excludes hashtags\n\nPosts like '#totp' with just a hashtag and link no longer qualify.\nText length requirement (50 chars) now measured AFTER stripping hashtags.",
+    "files_changed": 1
+  },
+  {
     "hash": "ef7fdbb71f4b2071c7dda4cf3aebdf281bb2eb7b",
     "short_hash": "ef7fdbb",
     "author": "Bobby Nathan",
