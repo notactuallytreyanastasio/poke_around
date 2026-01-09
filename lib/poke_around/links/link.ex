@@ -37,6 +37,10 @@ defmodule PokeAround.Links.Link do
     # Stats
     field :stumble_count, :integer, default: 0
 
+    # Tagging
+    field :tagged_at, :utc_datetime_usec
+    many_to_many :normalized_tags, PokeAround.Tags.Tag, join_through: "link_tags"
+
     timestamps(type: :utc_datetime_usec)
   end
 
@@ -56,7 +60,8 @@ defmodule PokeAround.Links.Link do
     :domain,
     :tags,
     :langs,
-    :stumble_count
+    :stumble_count,
+    :tagged_at
   ]
 
   def changeset(link, attrs) do

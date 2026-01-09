@@ -296,6 +296,39 @@
       "created_at": "2026-01-09T15:56:29.750474-05:00",
       "updated_at": "2026-01-09T15:56:29.750474-05:00",
       "metadata_json": "{\"branch\":\"feature/language-filter\",\"confidence\":95,\"files\":[\"lib/poke_around_web/live/bookmarklet_live.ex\"]}"
+    },
+    {
+      "id": 28,
+      "change_id": "2c45139e-8232-4849-a52f-76ebc183ff04",
+      "node_type": "outcome",
+      "title": "Ollama tagging pipeline working - 10 tags created, continuous processing enabled",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:10:19.279628-05:00",
+      "updated_at": "2026-01-09T16:10:19.279628-05:00",
+      "metadata_json": "{\"branch\":\"feature/ollama-tagging\",\"confidence\":95}"
+    },
+    {
+      "id": 29,
+      "change_id": "760fc190-1dd2-4b42-aa35-623563f17c9b",
+      "node_type": "goal",
+      "title": "Add Ollama-powered tagging for link categorization",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:10:33.462756-05:00",
+      "updated_at": "2026-01-09T16:10:33.462756-05:00",
+      "metadata_json": "{\"branch\":\"feature/ollama-tagging\",\"confidence\":90,\"prompt\":\"User asked: build a module to process links from DB, send to Ollama for tagging, persist tags with normalized tables\"}"
+    },
+    {
+      "id": 30,
+      "change_id": "9051d6c7-8e07-4680-ba8b-6c5f3afd0f1e",
+      "node_type": "action",
+      "title": "Implement Tagger GenServer with Ollama client, Tags context, normalized schemas",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:10:45.142768-05:00",
+      "updated_at": "2026-01-09T16:10:45.142768-05:00",
+      "metadata_json": "{\"branch\":\"feature/ollama-tagging\",\"confidence\":95,\"files\":[\"lib/poke_around/ai/tagger.ex\",\"lib/poke_around/ai/ollama.ex\",\"lib/poke_around/tags.ex\",\"lib/poke_around/tags/tag.ex\",\"lib/poke_around/tags/link_tag.ex\"]}"
     }
   ],
   "edges": [
@@ -584,6 +617,39 @@
       "weight": 1.0,
       "rationale": "Bookmarklet language detection",
       "created_at": "2026-01-09T15:56:35.992702-05:00"
+    },
+    {
+      "id": 27,
+      "from_node_id": 29,
+      "to_node_id": 28,
+      "from_change_id": "760fc190-1dd2-4b42-aa35-623563f17c9b",
+      "to_change_id": "2c45139e-8232-4849-a52f-76ebc183ff04",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Tagging pipeline implementation completed",
+      "created_at": "2026-01-09T16:10:38.703735-05:00"
+    },
+    {
+      "id": 28,
+      "from_node_id": 29,
+      "to_node_id": 30,
+      "from_change_id": "760fc190-1dd2-4b42-aa35-623563f17c9b",
+      "to_change_id": "9051d6c7-8e07-4680-ba8b-6c5f3afd0f1e",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Implementation work",
+      "created_at": "2026-01-09T16:10:51.147101-05:00"
+    },
+    {
+      "id": 29,
+      "from_node_id": 30,
+      "to_node_id": 28,
+      "from_change_id": "9051d6c7-8e07-4680-ba8b-6c5f3afd0f1e",
+      "to_change_id": "2c45139e-8232-4849-a52f-76ebc183ff04",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Implementation succeeded",
+      "created_at": "2026-01-09T16:10:51.158175-05:00"
     }
   ]
 }

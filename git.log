@@ -57,3 +57,6 @@ $(date '+%Y-%m-%d %H:%M:%S') - Planning: Initial Phoenix setup commit
 2026-01-09 15:56:44 - git add all language filter files
 2026-01-09 15:56:58 - git commit - Language filter feature
 2026-01-09 15:57:03 - git checkout main && git merge feature/language-filter
+2026-01-09 16:04:49 - git checkout -b feature/ollama-tagging
+Staging Ollama tagging files
+git commit bcfd939 - Add Ollama-powered tagging
