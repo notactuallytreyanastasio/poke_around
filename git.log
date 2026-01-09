@@ -1,0 +1,32 @@
+2026-01-09 14:55:37 - Starting branching model setup for poke_around
+$(date '+%Y-%m-%d %H:%M:%S') - git add .formatter.exs .gitignore mix.exs mix.lock config/ test/
+$(date '+%Y-%m-%d %H:%M:%S') - Planning: Initial Phoenix setup commit
+2026-01-09 14:56:06 - Creating initial Phoenix setup commit on main
+2026-01-09 14:56:06 - git add (base phoenix files)
+2026-01-09 14:56:38 - git add application.ex router.ex (base versions)
+2026-01-09 14:56:38 - git commit - Initial Phoenix setup
+2026-01-09 14:56:42 - git checkout -b feature/bluesky-firehose
+2026-01-09 14:56:48 - git add bluesky module files
+2026-01-09 14:56:55 - git add application.ex (with supervisor)
+2026-01-09 14:56:55 - git commit - Add Bluesky firehose integration
+2026-01-09 14:57:17 - git checkout main
+2026-01-09 14:57:17 - git merge feature/bluesky-firehose
+2026-01-09 14:57:24 - git checkout -b feature/links-database
+2026-01-09 14:57:24 - git commit - Add links database schema
+2026-01-09 14:57:33 - git checkout main
+2026-01-09 14:57:34 - git merge feature/links-database
+2026-01-09 14:57:40 - git checkout -b feature/link-processing
+2026-01-09 14:57:40 - git commit - Add link extraction and scoring
+2026-01-09 14:57:58 - git checkout main
+2026-01-09 14:57:59 - git merge feature/link-processing
+2026-01-09 14:58:03 - git checkout -b feature/stumble-ui
+2026-01-09 14:58:03 - Updating router with stumble route
+2026-01-09 14:58:14 - git commit - Add stumble LiveView UI
+2026-01-09 14:58:25 - git checkout main
+2026-01-09 14:58:25 - git merge feature/stumble-ui
+2026-01-09 14:58:29 - git checkout -b feature/bookmarklet
+2026-01-09 14:58:39 - git commit - Add bookmarklet and API
+2026-01-09 14:58:49 - git checkout main
+2026-01-09 14:58:49 - git merge feature/bookmarklet
+2026-01-09 14:59:17 - git add docs/ .deciduous/
+2026-01-09 14:59:17 - git commit - Add decision graph
