@@ -10,11 +10,21 @@ defmodule PokeAroundWeb.API.LinkController do
   Body: { "url": "https://example.com", "title": "Page Title" }
   """
   def create(conn, %{"url" => url} = params) do
+    # Handle lang parameter - wrap single value in array for consistency
+    langs =
+      case params["lang"] do
+        nil -> []
+        "" -> []
+        lang when is_binary(lang) -> [lang]
+        langs when is_list(langs) -> langs
+      end
+
     attrs = %{
       url: url,
       title: params["title"],
       description: params["description"],
-      score: 50  # Default score for user-submitted links
+      score: 50,  # Default score for user-submitted links
+      langs: langs
     }
 
     case Links.store_link(attrs) do

@@ -223,7 +223,8 @@ defmodule PokeAround.Links.Extractor do
       author_handle: post.author && post.author.handle,
       author_display_name: post.author && post.author.display_name,
       author_followers_count: post.author && post.author.followers_count,
-      score: calculate_score(post)
+      score: calculate_score(post),
+      langs: post.langs || []
     }
 
     case Links.store_link(attrs) do

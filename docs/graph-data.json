@@ -241,6 +241,61 @@
       "created_at": "2026-01-09T15:34:04.585706-05:00",
       "updated_at": "2026-01-09T15:34:04.585706-05:00",
       "metadata_json": "{\"branch\":\"feature/emoji-filter-ui-fixes\",\"confidence\":95}"
+    },
+    {
+      "id": 23,
+      "change_id": "e828f5c6-b03e-4f2f-bb5f-52a6bc545c00",
+      "node_type": "goal",
+      "title": "Add language filter feature",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T15:56:18.520037-05:00",
+      "updated_at": "2026-01-09T15:56:18.520037-05:00",
+      "metadata_json": "{\"branch\":\"feature/language-filter\",\"confidence\":95,\"files\":[\"lib/poke_around/links/link.ex\",\"lib/poke_around_web/live/stumble_live.ex\"],\"prompt\":\"User asked: add language filter that can be set as preference for bookmarklet or toggled in UI\"}"
+    },
+    {
+      "id": 24,
+      "change_id": "83ff0cd7-2614-46e6-aeb9-0dbfdbc9ce84",
+      "node_type": "action",
+      "title": "Add langs column migration with GIN index",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T15:56:27.187399-05:00",
+      "updated_at": "2026-01-09T15:56:27.187399-05:00",
+      "metadata_json": "{\"branch\":\"feature/language-filter\",\"confidence\":95,\"files\":[\"priv/repo/migrations/20260109205326_add_langs_to_links.exs\"]}"
+    },
+    {
+      "id": 25,
+      "change_id": "a70e58da-71ba-4837-9b42-61b56f9f08c9",
+      "node_type": "action",
+      "title": "Add langs field to Link schema and context filtering",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T15:56:28.400939-05:00",
+      "updated_at": "2026-01-09T15:56:28.400939-05:00",
+      "metadata_json": "{\"branch\":\"feature/language-filter\",\"confidence\":95,\"files\":[\"lib/poke_around/links/link.ex\",\"lib/poke_around/links.ex\"]}"
+    },
+    {
+      "id": 26,
+      "change_id": "81c98e88-4f5b-4d4d-b78c-2da10e570bf4",
+      "node_type": "action",
+      "title": "Add Mac-style Language dropdown menu in StumbleLive",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T15:56:29.017418-05:00",
+      "updated_at": "2026-01-09T15:56:29.017418-05:00",
+      "metadata_json": "{\"branch\":\"feature/language-filter\",\"confidence\":95,\"files\":[\"lib/poke_around_web/live/stumble_live.ex\"]}"
+    },
+    {
+      "id": 27,
+      "change_id": "d189f597-1b6b-4ec1-ac76-043c0bcd03da",
+      "node_type": "action",
+      "title": "Update bookmarklet to detect page language via document.documentElement.lang",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T15:56:29.750474-05:00",
+      "updated_at": "2026-01-09T15:56:29.750474-05:00",
+      "metadata_json": "{\"branch\":\"feature/language-filter\",\"confidence\":95,\"files\":[\"lib/poke_around_web/live/bookmarklet_live.ex\"]}"
     }
   ],
   "edges": [
@@ -485,6 +540,50 @@
       "weight": 1.0,
       "rationale": "Database cleanup for emoji spam",
       "created_at": "2026-01-09T15:34:20.991440-05:00"
+    },
+    {
+      "id": 23,
+      "from_node_id": 23,
+      "to_node_id": 24,
+      "from_change_id": "e828f5c6-b03e-4f2f-bb5f-52a6bc545c00",
+      "to_change_id": "83ff0cd7-2614-46e6-aeb9-0dbfdbc9ce84",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Migration for language storage",
+      "created_at": "2026-01-09T15:56:35.956127-05:00"
+    },
+    {
+      "id": 24,
+      "from_node_id": 23,
+      "to_node_id": 25,
+      "from_change_id": "e828f5c6-b03e-4f2f-bb5f-52a6bc545c00",
+      "to_change_id": "a70e58da-71ba-4837-9b42-61b56f9f08c9",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Schema and context for language filtering",
+      "created_at": "2026-01-09T15:56:35.968076-05:00"
+    },
+    {
+      "id": 25,
+      "from_node_id": 23,
+      "to_node_id": 26,
+      "from_change_id": "e828f5c6-b03e-4f2f-bb5f-52a6bc545c00",
+      "to_change_id": "81c98e88-4f5b-4d4d-b78c-2da10e570bf4",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "UI implementation",
+      "created_at": "2026-01-09T15:56:35.981619-05:00"
+    },
+    {
+      "id": 26,
+      "from_node_id": 23,
+      "to_node_id": 27,
+      "from_change_id": "e828f5c6-b03e-4f2f-bb5f-52a6bc545c00",
+      "to_change_id": "d189f597-1b6b-4ec1-ac76-043c0bcd03da",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Bookmarklet language detection",
+      "created_at": "2026-01-09T15:56:35.992702-05:00"
     }
   ]
 }

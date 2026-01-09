@@ -77,10 +77,16 @@ defmodule PokeAround.Links do
 
   @doc """
   Get multiple random links.
+
+  Options:
+  - `:min_score` - minimum score (default: 0)
+  - `:exclude_ids` - list of link IDs to exclude
+  - `:langs` - filter by languages (any match)
   """
   def random_links(count, opts \\ []) do
     min_score = opts[:min_score] || 0
     exclude_ids = opts[:exclude_ids] || []
+    langs = opts[:langs] || []
 
     query =
       from(l in Link,
@@ -92,6 +98,14 @@ defmodule PokeAround.Links do
     query =
       if exclude_ids != [] do
         from(l in query, where: l.id not in ^exclude_ids)
+      else
+        query
+      end
+
+    # Language filter - matches links containing ANY of the selected languages
+    query =
+      if langs != [] do
+        from(l in query, where: fragment("? && ?", l.langs, ^langs))
       else
         query
       end

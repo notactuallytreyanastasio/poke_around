@@ -5,21 +5,70 @@ defmodule PokeAroundWeb.StumbleLive do
 
   @links_per_page 20
 
+  @supported_langs [
+    {"en", "English"},
+    {"es", "Espanol"},
+    {"pt", "Portugues"},
+    {"de", "Deutsch"},
+    {"fr", "Francais"},
+    {"ja", "Japanese"},
+    {"ko", "Korean"},
+    {"zh", "Chinese"}
+  ]
+
   @impl true
   def mount(_params, _session, socket) do
-    links = Links.random_links(@links_per_page, min_score: 20)
+    selected_langs = []
+    links = fetch_links(selected_langs)
 
     {:ok,
      socket
      |> assign(:links, links)
      |> assign(:selected_index, nil)
+     |> assign(:selected_langs, selected_langs)
+     |> assign(:supported_langs, @supported_langs)
+     |> assign(:show_lang_menu, false)
      |> assign(:stats, get_stats())}
   end
 
   @impl true
   def handle_event("shuffle", _params, socket) do
-    links = Links.random_links(@links_per_page, min_score: 20)
+    links = fetch_links(socket.assigns.selected_langs)
     {:noreply, assign(socket, :links, links)}
+  end
+
+  @impl true
+  def handle_event("toggle_lang_menu", _params, socket) do
+    {:noreply, assign(socket, :show_lang_menu, !socket.assigns.show_lang_menu)}
+  end
+
+  @impl true
+  def handle_event("toggle_lang", %{"lang" => lang}, socket) do
+    current = socket.assigns.selected_langs
+
+    new_langs =
+      if lang in current do
+        List.delete(current, lang)
+      else
+        [lang | current]
+      end
+
+    links = fetch_links(new_langs)
+
+    {:noreply,
+     socket
+     |> assign(:selected_langs, new_langs)
+     |> assign(:links, links)}
+  end
+
+  @impl true
+  def handle_event("clear_langs", _params, socket) do
+    links = fetch_links([])
+
+    {:noreply,
+     socket
+     |> assign(:selected_langs, [])
+     |> assign(:links, links)}
   end
 
   @impl true
@@ -38,6 +87,12 @@ defmodule PokeAroundWeb.StumbleLive do
       total_links: Links.count_links(),
       top_domains: Links.top_domains(5)
     }
+  end
+
+  defp fetch_links(selected_langs) do
+    opts = [min_score: 20]
+    opts = if selected_langs != [], do: Keyword.put(opts, :langs, selected_langs), else: opts
+    Links.random_links(@links_per_page, opts)
   end
 
   @impl true
@@ -250,11 +305,47 @@ defmodule PokeAroundWeb.StumbleLive do
       .mac-menu-item {
         padding: 2px 8px;
         cursor: default;
+        position: relative;
       }
 
       .mac-menu-item:hover {
         background: #000000;
         color: #ffffff;
+      }
+
+      .mac-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: #ffffff;
+        border: 1px solid #000000;
+        box-shadow: 2px 2px 0 #000000;
+        min-width: 150px;
+        z-index: 100;
+        font-weight: normal;
+      }
+
+      .mac-dropdown-item {
+        padding: 4px 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        color: #000000;
+      }
+
+      .mac-dropdown-item:hover {
+        background: #000000;
+        color: #ffffff;
+      }
+
+      .mac-check {
+        width: 16px;
+        font-family: monospace;
+      }
+
+      .mac-divider {
+        border-top: 1px solid #000000;
+        margin: 2px 0;
       }
 
       .shuffle-row {
@@ -284,6 +375,24 @@ defmodule PokeAroundWeb.StumbleLive do
         <div class="mac-menu-item">File</div>
         <div class="mac-menu-item">Edit</div>
         <div class="mac-menu-item">View</div>
+        <div class="mac-menu-item" phx-click="toggle_lang_menu">
+          Language
+          <%= if @show_lang_menu do %>
+            <div class="mac-dropdown">
+              <div class="mac-dropdown-item" phx-click="clear_langs">
+                <span class="mac-check"><%= if @selected_langs == [], do: "✓", else: " " %></span>
+                All Languages
+              </div>
+              <div class="mac-divider"></div>
+              <%= for {code, name} <- @supported_langs do %>
+                <div class="mac-dropdown-item" phx-click="toggle_lang" phx-value-lang={code}>
+                  <span class="mac-check"><%= if code in @selected_langs, do: "✓", else: " " %></span>
+                  <%= name %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
         <div class="mac-menu-item">Special</div>
       </div>
 
@@ -340,7 +449,12 @@ defmodule PokeAroundWeb.StumbleLive do
 
         <div class="mac-statusbar">
           <span><%= length(@links) %> items</span>
-          <span><%= @stats.total_links %> links in database</span>
+          <span>
+            <%= if @selected_langs != [] do %>
+              Filter: <%= Enum.join(@selected_langs, ", ") %> |
+            <% end %>
+            <%= @stats.total_links %> links in database
+          </span>
         </div>
       </div>
 

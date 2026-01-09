@@ -32,6 +32,7 @@ defmodule PokeAround.Links.Link do
 
     # Categorization
     field :tags, {:array, :string}, default: []
+    field :langs, {:array, :string}, default: []
 
     # Stats
     field :stumble_count, :integer, default: 0
@@ -54,6 +55,7 @@ defmodule PokeAround.Links.Link do
     :image_url,
     :domain,
     :tags,
+    :langs,
     :stumble_count
   ]
 

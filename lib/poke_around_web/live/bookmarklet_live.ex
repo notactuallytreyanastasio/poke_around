@@ -86,15 +86,21 @@ defmodule PokeAroundWeb.BookmarkletLive do
   end
 
   defp bookmarklet_code(base_url) do
-    # JavaScript bookmarklet code
+    # JavaScript bookmarklet code with language detection
     js = """
     (function(){
       var url=encodeURIComponent(window.location.href);
       var title=encodeURIComponent(document.title);
+      var lang=document.documentElement.lang||navigator.language||'';
+      lang=lang.split('-')[0].toLowerCase();
       fetch('#{base_url}/api/links',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({url:decodeURIComponent(url),title:decodeURIComponent(title)})
+        body:JSON.stringify({
+          url:decodeURIComponent(url),
+          title:decodeURIComponent(title),
+          lang:lang
+        })
       })
       .then(r=>r.json())
       .then(d=>alert('PokeAround: '+d.message))
