@@ -650,6 +650,28 @@
       "weight": 1.0,
       "rationale": "Implementation succeeded",
       "created_at": "2026-01-09T16:10:51.158175-05:00"
+    },
+    {
+      "id": 30,
+      "from_node_id": 1,
+      "to_node_id": 23,
+      "from_change_id": "fdd7e6ae-9619-4735-b661-427537aef5e1",
+      "to_change_id": "e828f5c6-b03e-4f2f-bb5f-52a6bc545c00",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Sub-goal: language filtering",
+      "created_at": "2026-01-09T16:11:47.568105-05:00"
+    },
+    {
+      "id": 31,
+      "from_node_id": 1,
+      "to_node_id": 29,
+      "from_change_id": "fdd7e6ae-9619-4735-b661-427537aef5e1",
+      "to_change_id": "760fc190-1dd2-4b42-aa35-623563f17c9b",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Sub-goal: AI tagging",
+      "created_at": "2026-01-09T16:11:47.576429-05:00"
     }
   ]
 }
