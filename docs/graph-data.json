@@ -142,6 +142,28 @@
       "created_at": "2026-01-09T14:59:01.413948-05:00",
       "updated_at": "2026-01-09T15:02:29.214019-05:00",
       "metadata_json": "{\"branch\":\"main\",\"confidence\":70,\"prompt\":\"From original requirements:\\n\\\"4. OAuth with atproto\\\"\\n\\nUser confirmed Bluesky OAuth is mandatory:\\n\\\"Full OAuth with Bluesky is mandatory\\\"\\n\\nImplementation needed:\\n- AT Protocol OAuth flow (not legacy app passwords)\\n- User authentication before saving/stumbling\\n- Store user DID and handle in session\\n- Associate saved links with user accounts\\n- Use Req for HTTP requests (user-specified)\\n\\nReference: https://atproto.com/specs/oauth\\n\\nStatus: PENDING - not yet implemented\"}"
+    },
+    {
+      "id": 14,
+      "change_id": "c8c2eca7-6b54-4904-95dd-1cf1ac6cd528",
+      "node_type": "decision",
+      "title": "Refine link quality signals v2",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T15:05:46.714119-05:00",
+      "updated_at": "2026-01-09T15:08:35.596927-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"confidence\":80,\"prompt\":\"User requested refined quality filtering criteria:\\n\\n\\\"1. user posting has > 500 followers\\n2. replies are OK but they have to meet the above requirement\\n3. the post with the link should not have more than one hashtag\\n4. if the post has a LOT of replies, this is a boost\\n5. weigh people with more followers higher, but only if they follow less than 5000 people themselves\\\"\\n\\nAdditional criteria added:\\n- \\\"no accounts less than a year old\\\"\\n- \\\"bio has to be filled\\\"\\n- \\\"no bare links\\\"\\n- \\\"no multiple links\\\"\\n\\nFinal criteria implemented:\\n- Author: >= 500 followers (up from 100)\\n- Author: <= 5000 following (ratio filter)\\n- Author: account >= 1 year old (indexed_at check)\\n- Author: non-empty bio/description required\\n- Post: >= 50 chars text (no bare links)\\n- Post: max 1 hashtag\\n- Post: exactly 1 link (multiple = spam)\\n- Replies: now allowed if all criteria met\\n\\nNote: Reply count boost not implemented (requires API calls we don't have)\"}"
+    },
+    {
+      "id": 15,
+      "change_id": "ecb2b4b0-6687-4681-9090-a365f91cedb7",
+      "node_type": "action",
+      "title": "Implement refined quality signals v2",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T15:08:24.581682-05:00",
+      "updated_at": "2026-01-09T15:08:44.640067-05:00",
+      "metadata_json": "{\"branch\":\"feature/refined-quality-signals\",\"commit\":\"ef7fdbb\",\"confidence\":95,\"files\":[\"lib/poke_around/links/extractor.ex\"],\"prompt\":\"Updated extractor.ex with refined quality signals.\\n\\nNew module attributes:\\n  @min_followers 500\\n  @max_following 5000\\n  @min_account_age_days 365\\n  @min_text_length 50\\n  @max_hashtags 1\\n\\nNew qualification logic:\\n- author_qualifies?(author): checks followers, following, bio, account age\\n- post_qualifies?(text): checks text length, hashtag count\\n- account_age_ok?(indexed_at): DateTime comparison for 365+ days\\n- count_hashtags(text): Regex.scan for #\\\\w+ patterns\\n\\nprocess_links changed:\\n- Only processes posts with exactly 1 link (multiple = spam)\\n- Single link extraction instead of Enum.map\\n\\nScoring updated:\\n- follower_score = log10(followers) * 15\\n- ratio_bonus = min(followers/following * 5, 20)\\n- Combined and capped at 100\\n- Rewards accounts with good follower/following ratio\"}"
     }
   ],
   "edges": [
@@ -287,6 +309,28 @@
       "weight": 1.0,
       "rationale": "OAuth requirement from initial spec",
       "created_at": "2026-01-09T14:59:05.873268-05:00"
+    },
+    {
+      "id": 14,
+      "from_node_id": 1,
+      "to_node_id": 14,
+      "from_change_id": "fdd7e6ae-9619-4735-b661-427537aef5e1",
+      "to_change_id": "c8c2eca7-6b54-4904-95dd-1cf1ac6cd528",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Iterating on quality signals",
+      "created_at": "2026-01-09T15:05:51.054788-05:00"
+    },
+    {
+      "id": 15,
+      "from_node_id": 14,
+      "to_node_id": 15,
+      "from_change_id": "c8c2eca7-6b54-4904-95dd-1cf1ac6cd528",
+      "to_change_id": "ecb2b4b0-6687-4681-9090-a365f91cedb7",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Implementation of refined criteria",
+      "created_at": "2026-01-09T15:08:35.575687-05:00"
     }
   ]
 }

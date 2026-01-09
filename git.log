@@ -30,3 +30,11 @@ $(date '+%Y-%m-%d %H:%M:%S') - Planning: Initial Phoenix setup commit
 2026-01-09 14:58:49 - git merge feature/bookmarklet
 2026-01-09 14:59:17 - git add docs/ .deciduous/
 2026-01-09 14:59:17 - git commit - Add decision graph
+2026-01-09 14:59:23 - git commit - Add project documentation
+2026-01-09 15:02:51 - git add docs/ (updated graph)
+2026-01-09 15:02:51 - git commit - Update decision graph with detailed context
+2026-01-09 15:07:26 - git checkout -b feature/refined-quality-signals
+2026-01-09 15:08:18 - git add extractor.ex
+2026-01-09 15:08:18 - git commit - Refine link quality signals
+2026-01-09 15:08:44 - git checkout main
+2026-01-09 15:08:44 - git merge feature/refined-quality-signals

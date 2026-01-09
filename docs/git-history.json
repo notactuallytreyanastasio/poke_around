@@ -1,5 +1,13 @@
 [
   {
+    "hash": "ef7fdbb71f4b2071c7dda4cf3aebdf281bb2eb7b",
+    "short_hash": "ef7fdbb",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T15:08:18-05:00",
+    "message": "Refine link quality signals for higher quality links\n\nQuality criteria:\n- Author: >= 500 followers, <= 5000 following\n- Account age: >= 1 year old (indexed_at)\n- Bio: must be filled (non-empty description)\n- Post: >= 50 chars text (no bare links)\n- Post: max 1 hashtag (spam filter)\n- Post: exactly 1 link (multiple links = spam)\n- Replies: now allowed if meeting all criteria\n\nScoring updated:\n- Base score from log10(followers) * 15\n- Bonus for follower/following ratio (up to +20)\n- Rewards curated accounts over follow-for-follow",
+    "files_changed": 1
+  },
+  {
     "hash": "db6869f88ebebe938130d2bb3b0155d374b47275",
     "short_hash": "db6869f",
     "author": "Bobby Nathan",
