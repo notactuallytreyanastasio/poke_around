@@ -63,3 +63,4 @@ git commit bcfd939 - Add Ollama-powered tagging
 git merge feature/ollama-tagging to main
 Switched Ollama client from :httpc to Req
 Add AI.Supervisor for Tagger
+Add detailed tagger logging

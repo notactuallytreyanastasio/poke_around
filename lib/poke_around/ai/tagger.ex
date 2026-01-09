@@ -167,7 +167,7 @@ defmodule PokeAround.AI.Tagger do
       Enum.reduce(links, state, fn link, acc ->
         case tag_link(link, state.model) do
           {:ok, tags} ->
-            Logger.debug("Tagger: tagged link #{link.id} with #{inspect(tags)}")
+            log_tagged_link(link, tags)
             %{acc | processed: acc.processed + 1}
 
           {:error, reason} ->
@@ -260,5 +260,17 @@ defmodule PokeAround.AI.Tagger do
     |> Enum.map(&String.replace(&1, ~r/[^a-z0-9\-]/, ""))
     |> Enum.reject(&(&1 == ""))
     |> Enum.take(5)
+  end
+
+  defp log_tagged_link(link, tags) do
+    post_preview = link.post_text |> String.slice(0, 80) |> String.replace(~r/\s+/, " ")
+    tags_str = Enum.join(tags, ", ")
+
+    Logger.info("""
+    [Tagger] Tagged link ##{link.id}
+      Post: #{post_preview}...
+      Link: #{link.url}
+      Tags: #{tags_str}
+    """)
   end
 end
