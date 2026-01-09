@@ -162,19 +162,41 @@ defmodule PokeAround.AI.Tagger do
     if links == [] do
       state
     else
-      Logger.debug("Tagger: processing #{length(links)} links")
+      Logger.info("Tagger: processing #{length(links)} links in parallel")
+      start_time = System.monotonic_time(:millisecond)
 
-      Enum.reduce(links, state, fn link, acc ->
-        case tag_link(link, state.model) do
-          {:ok, tags} ->
+      # Process all links in parallel
+      results =
+        links
+        |> Task.async_stream(
+          fn link -> {link, tag_link(link, state.model)} end,
+          max_concurrency: state.batch_size,
+          timeout: 120_000,
+          on_timeout: :kill_task
+        )
+        |> Enum.to_list()
+
+      elapsed = System.monotonic_time(:millisecond) - start_time
+
+      # Tally results
+      {processed, errors} =
+        Enum.reduce(results, {0, 0}, fn
+          {:ok, {link, {:ok, tags}}}, {p, e} ->
             log_tagged_link(link, tags)
-            %{acc | processed: acc.processed + 1}
+            {p + 1, e}
 
-          {:error, reason} ->
+          {:ok, {link, {:error, reason}}}, {p, e} ->
             Logger.warning("Tagger: failed to tag link #{link.id}: #{inspect(reason)}")
-            %{acc | errors: acc.errors + 1}
-        end
-      end)
+            {p, e + 1}
+
+          {:exit, :timeout}, {p, e} ->
+            Logger.warning("Tagger: task timed out")
+            {p, e + 1}
+        end)
+
+      Logger.info("Tagger: batch complete in #{elapsed}ms (#{processed} ok, #{errors} errors)")
+
+      %{state | processed: state.processed + processed, errors: state.errors + errors}
     end
   end
 
