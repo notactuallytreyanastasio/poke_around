@@ -1,0 +1,42 @@
+[
+  {
+    "hash": "db6869f88ebebe938130d2bb3b0155d374b47275",
+    "short_hash": "db6869f",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T14:58:39-05:00",
+    "message": "Add bookmarklet and API endpoint\n\n- BookmarkletLive at GET /bookmarklet with draggable bookmarklet\n- POST /api/links endpoint for bookmarklet submissions\n- LinkController handles create with validation\n- JavaScript bookmarklet sends URL/title via fetch",
+    "files_changed": 3
+  },
+  {
+    "hash": "34ca01feba574364376624fe4e5e4657313cdac0",
+    "short_hash": "34ca01f",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T14:58:14-05:00",
+    "message": "Add stumble LiveView UI\n\n- StumbleLive at GET / with Stumble! button\n- Shows random link with author info, avatar, follower count\n- Tracks session history to avoid showing same links\n- Displays total link count and top domains\n- Gradient purple/pink design with Tailwind CSS",
+    "files_changed": 2
+  },
+  {
+    "hash": "44c48bacf629dec7c331b79883e635cd754b07df",
+    "short_hash": "44c48ba",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T14:57:40-05:00",
+    "message": "Add link extraction and scoring\n\n- Extractor subscribes to firehose posts via PubSub\n- Filters links by author quality (>=100 followers)\n- Excludes replies and Bluesky internal links\n- Log-based scoring algorithm (log10(followers) * 20)\n- Links context with random_link/1 for stumbling",
+    "files_changed": 2
+  },
+  {
+    "hash": "a7e5a735816c395fb185ad54bc6b8361168df1a7",
+    "short_hash": "a7e5a73",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T14:57:24-05:00",
+    "message": "Add links database schema\n\n- Link Ecto schema with url, url_hash, domain, title, score\n- Author metadata fields (handle, display_name, followers_count)\n- Stumble count tracking\n- Migration with indexes on url_hash, domain, score",
+    "files_changed": 2
+  },
+  {
+    "hash": "6fd0faec202c562c6d2bd4ce49f5df9b9e49c18b",
+    "short_hash": "6fd0fae",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T14:56:55-05:00",
+    "message": "Add Bluesky firehose integration via Graze Turbostream\n\n- WebSocket client connecting to Turbostream (hydrated firehose)\n- Parser for Turbostream events with snake_case keys\n- Type definitions for Post, Author, ExternalEmbed, FacetLink\n- Supervisor for firehose process\n- Broadcasts posts via Phoenix PubSub",
+    "files_changed": 5
+  }
+]

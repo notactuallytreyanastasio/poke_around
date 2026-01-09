@@ -1,0 +1,292 @@
+{
+  "nodes": [
+    {
+      "id": 1,
+      "change_id": "fdd7e6ae-9619-4735-b661-427537aef5e1",
+      "node_type": "goal",
+      "title": "Build StumbleUpon clone with Bluesky firehose",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T14:54:06.605085-05:00",
+      "updated_at": "2026-01-09T14:54:06.605085-05:00",
+      "metadata_json": "{\"confidence\":95,\"prompt\":\"I want to build a StumbleUpon like experience using the Bluesky Firehose as the source of the links\\n\\nrequirements:\\n1. Bookmarklet\\n2. Website\\n3. AT protocol lexicon\\n4. OAuth with atproto\\n5. Landing page\"}"
+    },
+    {
+      "id": 2,
+      "change_id": "74713c16-5be3-471c-96b5-ced3b4c16842",
+      "node_type": "decision",
+      "title": "Choose quality signals for link filtering",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T14:54:12.817980-05:00",
+      "updated_at": "2026-01-09T14:54:12.817980-05:00",
+      "metadata_json": "{\"confidence\":90}"
+    },
+    {
+      "id": 3,
+      "change_id": "80f42537-6da6-49f8-8f12-a6bd0e7897c9",
+      "node_type": "decision",
+      "title": "Choose firehose source",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T14:54:13.653001-05:00",
+      "updated_at": "2026-01-09T14:54:13.653001-05:00",
+      "metadata_json": "{\"confidence\":95}"
+    },
+    {
+      "id": 4,
+      "change_id": "12b795f6-46ca-478e-af0f-b5e539b855c6",
+      "node_type": "decision",
+      "title": "Choose concurrency architecture",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T14:54:14.983226-05:00",
+      "updated_at": "2026-01-09T14:54:14.983226-05:00",
+      "metadata_json": "{\"confidence\":90}"
+    },
+    {
+      "id": 5,
+      "change_id": "07eb2546-dcaf-4278-b8c9-63b7cad3a00d",
+      "node_type": "action",
+      "title": "Implement Turbostream WebSocket client",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T14:57:01.878583-05:00",
+      "updated_at": "2026-01-09T14:57:01.878583-05:00",
+      "metadata_json": "{\"branch\":\"feature/bluesky-firehose\",\"commit\":\"6fd0fae\",\"confidence\":95,\"files\":[\"lib/poke_around/bluesky/firehose.ex\",\"lib/poke_around/bluesky/parser.ex\",\"lib/poke_around/bluesky/types.ex\",\"lib/poke_around/bluesky/supervisor.ex\"]}"
+    },
+    {
+      "id": 6,
+      "change_id": "e2733e45-71ea-40c9-a36a-93ba1f18dfb9",
+      "node_type": "outcome",
+      "title": "Firehose connected and receiving ~100 msgs/sec",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T14:57:11.461403-05:00",
+      "updated_at": "2026-01-09T14:57:11.461403-05:00",
+      "metadata_json": "{\"branch\":\"feature/bluesky-firehose\",\"confidence\":95}"
+    },
+    {
+      "id": 7,
+      "change_id": "baf33ecc-00fa-4061-8145-e9fa122ad3de",
+      "node_type": "action",
+      "title": "Design and implement links database schema",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T14:57:29.171508-05:00",
+      "updated_at": "2026-01-09T14:57:29.171508-05:00",
+      "metadata_json": "{\"branch\":\"feature/links-database\",\"commit\":\"a7e5a73\",\"confidence\":95,\"files\":[\"lib/poke_around/links/link.ex\",\"priv/repo/migrations/20260109193658_create_links.exs\"]}"
+    },
+    {
+      "id": 8,
+      "change_id": "eb9a13db-fcc5-4d54-94c5-57a57c630307",
+      "node_type": "action",
+      "title": "Implement link extractor with quality filtering",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T14:57:46.200567-05:00",
+      "updated_at": "2026-01-09T14:57:46.200567-05:00",
+      "metadata_json": "{\"branch\":\"feature/link-processing\",\"commit\":\"44c48ba\",\"confidence\":95,\"files\":[\"lib/poke_around/links/extractor.ex\",\"lib/poke_around/links.ex\"]}"
+    },
+    {
+      "id": 9,
+      "change_id": "23684375-d065-4b7e-b27e-00da72cc1b19",
+      "node_type": "observation",
+      "title": "User requested simple GenServer pattern, not Broadway",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T14:57:52.453733-05:00",
+      "updated_at": "2026-01-09T14:57:52.453733-05:00",
+      "metadata_json": "{\"branch\":\"feature/link-processing\",\"confidence\":100}"
+    },
+    {
+      "id": 10,
+      "change_id": "0055e285-423a-49f0-a058-7714321cc92d",
+      "node_type": "action",
+      "title": "Build stumble LiveView interface",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T14:58:20.549747-05:00",
+      "updated_at": "2026-01-09T14:58:20.549747-05:00",
+      "metadata_json": "{\"branch\":\"feature/stumble-ui\",\"commit\":\"34ca01f\",\"confidence\":95,\"files\":[\"lib/poke_around_web/live/stumble_live.ex\",\"lib/poke_around_web/router.ex\"]}"
+    },
+    {
+      "id": 11,
+      "change_id": "eb310d11-72e0-4b8e-b3e5-17991647147d",
+      "node_type": "action",
+      "title": "Implement bookmarklet and API endpoint",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T14:58:44.504166-05:00",
+      "updated_at": "2026-01-09T14:58:44.504166-05:00",
+      "metadata_json": "{\"branch\":\"feature/bookmarklet\",\"commit\":\"db6869f\",\"confidence\":95,\"files\":[\"lib/poke_around_web/live/bookmarklet_live.ex\",\"lib/poke_around_web/controllers/api/link_controller.ex\",\"lib/poke_around_web/router.ex\"]}"
+    },
+    {
+      "id": 12,
+      "change_id": "1787d0ad-852d-4fa9-b239-40931030c9b5",
+      "node_type": "observation",
+      "title": "User feedback: use pattern matching for valid_link? not cond",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T14:58:56.017385-05:00",
+      "updated_at": "2026-01-09T14:58:56.017385-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"confidence\":100}"
+    },
+    {
+      "id": 13,
+      "change_id": "21ff48eb-d1c3-4e74-b554-614e3323b5b6",
+      "node_type": "goal",
+      "title": "Implement Bluesky OAuth",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T14:59:01.413948-05:00",
+      "updated_at": "2026-01-09T14:59:01.413948-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"confidence\":70}"
+    }
+  ],
+  "edges": [
+    {
+      "id": 1,
+      "from_node_id": 3,
+      "to_node_id": 5,
+      "from_change_id": "80f42537-6da6-49f8-8f12-a6bd0e7897c9",
+      "to_change_id": "07eb2546-dcaf-4278-b8c9-63b7cad3a00d",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Chose Graze Turbostream for hydrated profiles",
+      "created_at": "2026-01-09T14:57:11.428454-05:00"
+    },
+    {
+      "id": 2,
+      "from_node_id": 1,
+      "to_node_id": 3,
+      "from_change_id": "fdd7e6ae-9619-4735-b661-427537aef5e1",
+      "to_change_id": "80f42537-6da6-49f8-8f12-a6bd0e7897c9",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Need firehose source for links",
+      "created_at": "2026-01-09T14:57:11.438153-05:00"
+    },
+    {
+      "id": 3,
+      "from_node_id": 5,
+      "to_node_id": 6,
+      "from_change_id": "07eb2546-dcaf-4278-b8c9-63b7cad3a00d",
+      "to_change_id": "e2733e45-71ea-40c9-a36a-93ba1f18dfb9",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Successfully implemented",
+      "created_at": "2026-01-09T14:57:17.592808-05:00"
+    },
+    {
+      "id": 4,
+      "from_node_id": 1,
+      "to_node_id": 7,
+      "from_change_id": "fdd7e6ae-9619-4735-b661-427537aef5e1",
+      "to_change_id": "baf33ecc-00fa-4061-8145-e9fa122ad3de",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Need database to store discovered links",
+      "created_at": "2026-01-09T14:57:33.994515-05:00"
+    },
+    {
+      "id": 5,
+      "from_node_id": 2,
+      "to_node_id": 8,
+      "from_change_id": "74713c16-5be3-471c-96b5-ced3b4c16842",
+      "to_change_id": "eb9a13db-fcc5-4d54-94c5-57a57c630307",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Implemented follower count filtering (>=100)",
+      "created_at": "2026-01-09T14:57:52.404997-05:00"
+    },
+    {
+      "id": 6,
+      "from_node_id": 1,
+      "to_node_id": 2,
+      "from_change_id": "fdd7e6ae-9619-4735-b661-427537aef5e1",
+      "to_change_id": "74713c16-5be3-471c-96b5-ced3b4c16842",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Need quality signals to filter spam links",
+      "created_at": "2026-01-09T14:57:52.414813-05:00"
+    },
+    {
+      "id": 7,
+      "from_node_id": 1,
+      "to_node_id": 4,
+      "from_change_id": "fdd7e6ae-9619-4735-b661-427537aef5e1",
+      "to_change_id": "12b795f6-46ca-478e-af0f-b5e539b855c6",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Need to decide how to process firehose",
+      "created_at": "2026-01-09T14:57:52.424681-05:00"
+    },
+    {
+      "id": 8,
+      "from_node_id": 4,
+      "to_node_id": 9,
+      "from_change_id": "12b795f6-46ca-478e-af0f-b5e539b855c6",
+      "to_change_id": "23684375-d065-4b7e-b27e-00da72cc1b19",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "User direction",
+      "created_at": "2026-01-09T14:57:58.980716-05:00"
+    },
+    {
+      "id": 9,
+      "from_node_id": 4,
+      "to_node_id": 8,
+      "from_change_id": "12b795f6-46ca-478e-af0f-b5e539b855c6",
+      "to_change_id": "eb9a13db-fcc5-4d54-94c5-57a57c630307",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Used simple GenServer approach",
+      "created_at": "2026-01-09T14:57:58.990662-05:00"
+    },
+    {
+      "id": 10,
+      "from_node_id": 1,
+      "to_node_id": 10,
+      "from_change_id": "fdd7e6ae-9619-4735-b661-427537aef5e1",
+      "to_change_id": "0055e285-423a-49f0-a058-7714321cc92d",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Core stumble UI requirement",
+      "created_at": "2026-01-09T14:58:25.708162-05:00"
+    },
+    {
+      "id": 11,
+      "from_node_id": 1,
+      "to_node_id": 11,
+      "from_change_id": "fdd7e6ae-9619-4735-b661-427537aef5e1",
+      "to_change_id": "eb310d11-72e0-4b8e-b3e5-17991647147d",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Bookmarklet requirement",
+      "created_at": "2026-01-09T14:58:49.443367-05:00"
+    },
+    {
+      "id": 12,
+      "from_node_id": 5,
+      "to_node_id": 12,
+      "from_change_id": "07eb2546-dcaf-4278-b8c9-63b7cad3a00d",
+      "to_change_id": "1787d0ad-852d-4fa9-b239-40931030c9b5",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Code style correction",
+      "created_at": "2026-01-09T14:59:01.389558-05:00"
+    },
+    {
+      "id": 13,
+      "from_node_id": 1,
+      "to_node_id": 13,
+      "from_change_id": "fdd7e6ae-9619-4735-b661-427537aef5e1",
+      "to_change_id": "21ff48eb-d1c3-4e74-b554-614e3323b5b6",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "OAuth requirement from initial spec",
+      "created_at": "2026-01-09T14:59:05.873268-05:00"
+    }
+  ]
+}
