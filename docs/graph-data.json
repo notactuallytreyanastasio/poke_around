@@ -351,6 +351,138 @@
       "created_at": "2026-01-09T16:22:12.459769-05:00",
       "updated_at": "2026-01-09T16:22:12.459769-05:00",
       "metadata_json": "{\"branch\":\"main\",\"confidence\":95}"
+    },
+    {
+      "id": 33,
+      "change_id": "9b08fc15-bd6f-4a36-b354-2eb943cc5880",
+      "node_type": "action",
+      "title": "Initial Phoenix setup",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:24:49.130776-05:00",
+      "updated_at": "2026-01-09T16:24:49.130776-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"ceaf5cb\",\"confidence\":100,\"files\":[\"mix.exs\"]}"
+    },
+    {
+      "id": 34,
+      "change_id": "a8f2fd06-d5db-4594-a533-e362ad299818",
+      "node_type": "outcome",
+      "title": "Firehose integration complete",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:24:50.644943-05:00",
+      "updated_at": "2026-01-09T16:24:50.644943-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"6fd0fae\",\"confidence\":100}"
+    },
+    {
+      "id": 35,
+      "change_id": "b8c9ca52-9069-44a9-a2b0-e6f80945a25a",
+      "node_type": "outcome",
+      "title": "Links database schema complete",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:24:51.272662-05:00",
+      "updated_at": "2026-01-09T16:24:51.272662-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"a7e5a73\",\"confidence\":100}"
+    },
+    {
+      "id": 36,
+      "change_id": "b6ca8dc0-1826-4f26-a0a5-f1004309c89b",
+      "node_type": "outcome",
+      "title": "Link extraction with scoring complete",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:24:53.279563-05:00",
+      "updated_at": "2026-01-09T16:24:53.279563-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"44c48ba\",\"confidence\":100}"
+    },
+    {
+      "id": 37,
+      "change_id": "7d9668c6-9b62-4d08-b3da-225ac79040a0",
+      "node_type": "outcome",
+      "title": "Stumble LiveView UI complete",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:25:01.953326-05:00",
+      "updated_at": "2026-01-09T16:25:01.953326-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"34ca01f\",\"confidence\":100}"
+    },
+    {
+      "id": 38,
+      "change_id": "7d92ce77-da66-47e7-acbe-16cec97c29fa",
+      "node_type": "outcome",
+      "title": "Bookmarklet and API endpoint complete",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:25:01.978397-05:00",
+      "updated_at": "2026-01-09T16:25:01.978397-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"db6869f\",\"confidence\":100}"
+    },
+    {
+      "id": 39,
+      "change_id": "1af17e5b-9fde-4e3e-a59c-625229b6e71c",
+      "node_type": "outcome",
+      "title": "Retro Mac OS desktop UI complete",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:25:01.998383-05:00",
+      "updated_at": "2026-01-09T16:25:01.998383-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"56a5082\",\"confidence\":100}"
+    },
+    {
+      "id": 40,
+      "change_id": "8bb0717b-cf1f-4b2d-a553-7681d59a544c",
+      "node_type": "outcome",
+      "title": "Refined quality signals implemented",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:25:02.016484-05:00",
+      "updated_at": "2026-01-09T16:25:02.016484-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"ef7fdbb\",\"confidence\":100}"
+    },
+    {
+      "id": 41,
+      "change_id": "033e368b-e347-468d-a841-770e34e3ef5b",
+      "node_type": "outcome",
+      "title": "Language filter feature complete",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:25:02.031404-05:00",
+      "updated_at": "2026-01-09T16:25:02.031404-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"b65346f\",\"confidence\":100}"
+    },
+    {
+      "id": 42,
+      "change_id": "0b8edfbb-41ab-408e-9e9d-04ebb7b7e761",
+      "node_type": "action",
+      "title": "Fix text length to exclude hashtags",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:25:27.542935-05:00",
+      "updated_at": "2026-01-09T16:25:27.542935-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"97a9069\",\"confidence\":100}"
+    },
+    {
+      "id": 43,
+      "change_id": "32a838ad-7356-497f-92d7-672aa885239f",
+      "node_type": "action",
+      "title": "Purge 166 old links not meeting quality criteria",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:25:27.561385-05:00",
+      "updated_at": "2026-01-09T16:25:27.561385-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"d9973b5\",\"confidence\":100}"
+    },
+    {
+      "id": 44,
+      "change_id": "25180de6-102b-490c-be19-3b101794a926",
+      "node_type": "action",
+      "title": "Add emoji filter and banned domains",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:25:27.577744-05:00",
+      "updated_at": "2026-01-09T16:25:27.577744-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"074f350\",\"confidence\":100}"
     }
   ],
   "edges": [
@@ -716,6 +848,226 @@
       "weight": 1.0,
       "rationale": "Refactor succeeded",
       "created_at": "2026-01-09T16:22:17.671760-05:00"
+    },
+    {
+      "id": 34,
+      "from_node_id": 1,
+      "to_node_id": 33,
+      "from_change_id": "fdd7e6ae-9619-4735-b661-427537aef5e1",
+      "to_change_id": "9b08fc15-bd6f-4a36-b354-2eb943cc5880",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Project initialization",
+      "created_at": "2026-01-09T16:25:09.541237-05:00"
+    },
+    {
+      "id": 35,
+      "from_node_id": 33,
+      "to_node_id": 34,
+      "from_change_id": "9b08fc15-bd6f-4a36-b354-2eb943cc5880",
+      "to_change_id": "a8f2fd06-d5db-4594-a533-e362ad299818",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "First major feature",
+      "created_at": "2026-01-09T16:25:09.550572-05:00"
+    },
+    {
+      "id": 36,
+      "from_node_id": 5,
+      "to_node_id": 34,
+      "from_change_id": "07eb2546-dcaf-4278-b8c9-63b7cad3a00d",
+      "to_change_id": "a8f2fd06-d5db-4594-a533-e362ad299818",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Turbostream implementation succeeded",
+      "created_at": "2026-01-09T16:25:09.561412-05:00"
+    },
+    {
+      "id": 37,
+      "from_node_id": 7,
+      "to_node_id": 35,
+      "from_change_id": "baf33ecc-00fa-4061-8145-e9fa122ad3de",
+      "to_change_id": "b8c9ca52-9069-44a9-a2b0-e6f80945a25a",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Database schema implemented",
+      "created_at": "2026-01-09T16:25:09.572839-05:00"
+    },
+    {
+      "id": 38,
+      "from_node_id": 8,
+      "to_node_id": 36,
+      "from_change_id": "eb9a13db-fcc5-4d54-94c5-57a57c630307",
+      "to_change_id": "b6ca8dc0-1826-4f26-a0a5-f1004309c89b",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Extractor implementation succeeded",
+      "created_at": "2026-01-09T16:25:09.581027-05:00"
+    },
+    {
+      "id": 39,
+      "from_node_id": 10,
+      "to_node_id": 37,
+      "from_change_id": "0055e285-423a-49f0-a058-7714321cc92d",
+      "to_change_id": "7d9668c6-9b62-4d08-b3da-225ac79040a0",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "UI implementation succeeded",
+      "created_at": "2026-01-09T16:25:09.589203-05:00"
+    },
+    {
+      "id": 40,
+      "from_node_id": 11,
+      "to_node_id": 38,
+      "from_change_id": "eb310d11-72e0-4b8e-b3e5-17991647147d",
+      "to_change_id": "7d92ce77-da66-47e7-acbe-16cec97c29fa",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Bookmarklet implementation succeeded",
+      "created_at": "2026-01-09T16:25:09.598488-05:00"
+    },
+    {
+      "id": 41,
+      "from_node_id": 18,
+      "to_node_id": 39,
+      "from_change_id": "979c918a-d7e5-4397-b32a-d72600efe992",
+      "to_change_id": "1af17e5b-9fde-4e3e-a59c-625229b6e71c",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "UI redesign succeeded",
+      "created_at": "2026-01-09T16:25:09.608796-05:00"
+    },
+    {
+      "id": 42,
+      "from_node_id": 15,
+      "to_node_id": 40,
+      "from_change_id": "ecb2b4b0-6687-4681-9090-a365f91cedb7",
+      "to_change_id": "8bb0717b-cf1f-4b2d-a553-7681d59a544c",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Quality signals v2 succeeded",
+      "created_at": "2026-01-09T16:25:09.619024-05:00"
+    },
+    {
+      "id": 43,
+      "from_node_id": 23,
+      "to_node_id": 41,
+      "from_change_id": "e828f5c6-b03e-4f2f-bb5f-52a6bc545c00",
+      "to_change_id": "033e368b-e347-468d-a841-770e34e3ef5b",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Language filter succeeded",
+      "created_at": "2026-01-09T16:25:09.628270-05:00"
+    },
+    {
+      "id": 44,
+      "from_node_id": 24,
+      "to_node_id": 41,
+      "from_change_id": "83ff0cd7-2614-46e6-aeb9-0dbfdbc9ce84",
+      "to_change_id": "033e368b-e347-468d-a841-770e34e3ef5b",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Migration contributed to feature",
+      "created_at": "2026-01-09T16:25:17.309048-05:00"
+    },
+    {
+      "id": 45,
+      "from_node_id": 25,
+      "to_node_id": 41,
+      "from_change_id": "a70e58da-71ba-4837-9b42-61b56f9f08c9",
+      "to_change_id": "033e368b-e347-468d-a841-770e34e3ef5b",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Schema changes contributed to feature",
+      "created_at": "2026-01-09T16:25:17.318092-05:00"
+    },
+    {
+      "id": 46,
+      "from_node_id": 26,
+      "to_node_id": 41,
+      "from_change_id": "81c98e88-4f5b-4d4d-b78c-2da10e570bf4",
+      "to_change_id": "033e368b-e347-468d-a841-770e34e3ef5b",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "UI dropdown contributed to feature",
+      "created_at": "2026-01-09T16:25:17.326782-05:00"
+    },
+    {
+      "id": 47,
+      "from_node_id": 27,
+      "to_node_id": 41,
+      "from_change_id": "d189f597-1b6b-4ec1-ac76-043c0bcd03da",
+      "to_change_id": "033e368b-e347-468d-a841-770e34e3ef5b",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Bookmarklet lang detection contributed to feature",
+      "created_at": "2026-01-09T16:25:17.336627-05:00"
+    },
+    {
+      "id": 48,
+      "from_node_id": 16,
+      "to_node_id": 42,
+      "from_change_id": "6f3f2bf3-4b30-40b4-a72b-24762b0039eb",
+      "to_change_id": "0b8edfbb-41ab-408e-9e9d-04ebb7b7e761",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Fixed the hashtag bug",
+      "created_at": "2026-01-09T16:25:34.728482-05:00"
+    },
+    {
+      "id": 49,
+      "from_node_id": 42,
+      "to_node_id": 43,
+      "from_change_id": "0b8edfbb-41ab-408e-9e9d-04ebb7b7e761",
+      "to_change_id": "32a838ad-7356-497f-92d7-672aa885239f",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Then purged old bad links",
+      "created_at": "2026-01-09T16:25:34.738450-05:00"
+    },
+    {
+      "id": 50,
+      "from_node_id": 17,
+      "to_node_id": 43,
+      "from_change_id": "56a7a93a-6525-4feb-9f69-7b6b8302f4f1",
+      "to_change_id": "32a838ad-7356-497f-92d7-672aa885239f",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Duplicate - linking both",
+      "created_at": "2026-01-09T16:25:34.749371-05:00"
+    },
+    {
+      "id": 51,
+      "from_node_id": 19,
+      "to_node_id": 44,
+      "from_change_id": "71d52da1-fb00-4383-91a4-e62029d2bf0e",
+      "to_change_id": "25180de6-102b-490c-be19-3b101794a926",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Implementation of emoji filter decision",
+      "created_at": "2026-01-09T16:25:34.759991-05:00"
+    },
+    {
+      "id": 52,
+      "from_node_id": 44,
+      "to_node_id": 21,
+      "from_change_id": "25180de6-102b-490c-be19-3b101794a926",
+      "to_change_id": "a79db728-98cc-414b-9e26-454b91cdcb55",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Led to banned domain cleanup",
+      "created_at": "2026-01-09T16:25:34.767935-05:00"
+    },
+    {
+      "id": 53,
+      "from_node_id": 44,
+      "to_node_id": 22,
+      "from_change_id": "25180de6-102b-490c-be19-3b101794a926",
+      "to_change_id": "000a98b8-af6d-4e58-a8bf-06301276bb4b",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Led to emoji spam cleanup",
+      "created_at": "2026-01-09T16:25:34.777820-05:00"
     }
   ]
 }

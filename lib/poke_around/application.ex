@@ -14,8 +14,8 @@ defmodule PokeAround.Application do
       {Phoenix.PubSub, name: PokeAround.PubSub},
       # Bluesky firehose
       PokeAround.Bluesky.Supervisor,
-      # AI tagging (runs independently)
-      PokeAround.AI.Tagger,
+      # AI services (tagging, etc.)
+      PokeAround.AI.Supervisor,
       # Start to serve requests, typically the last entry
       PokeAroundWeb.Endpoint
     ]
