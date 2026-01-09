@@ -483,6 +483,28 @@
       "created_at": "2026-01-09T16:25:27.577744-05:00",
       "updated_at": "2026-01-09T16:25:27.577744-05:00",
       "metadata_json": "{\"branch\":\"main\",\"commit\":\"074f350\",\"confidence\":100}"
+    },
+    {
+      "id": 45,
+      "change_id": "d3bfbf6f-84f3-4571-ab2f-ac8ee2f1919d",
+      "node_type": "action",
+      "title": "Add AI.Supervisor for Tagger process",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:26:09.643269-05:00",
+      "updated_at": "2026-01-09T16:26:09.643269-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"confidence\":95,\"files\":[\"lib/poke_around/ai/supervisor.ex\",\"lib/poke_around/application.ex\"]}"
+    },
+    {
+      "id": 46,
+      "change_id": "e739bdb5-e3c4-4da5-ad10-d6a1511c23a7",
+      "node_type": "outcome",
+      "title": "AI services now have dedicated supervisor tree",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:26:10.302630-05:00",
+      "updated_at": "2026-01-09T16:26:10.302630-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"confidence\":95}"
     }
   ],
   "edges": [
@@ -1068,6 +1090,28 @@
       "weight": 1.0,
       "rationale": "Led to emoji spam cleanup",
       "created_at": "2026-01-09T16:25:34.777820-05:00"
+    },
+    {
+      "id": 54,
+      "from_node_id": 29,
+      "to_node_id": 45,
+      "from_change_id": "760fc190-1dd2-4b42-aa35-623563f17c9b",
+      "to_change_id": "d3bfbf6f-84f3-4571-ab2f-ac8ee2f1919d",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Improving AI subsystem architecture",
+      "created_at": "2026-01-09T16:26:15.672902-05:00"
+    },
+    {
+      "id": 55,
+      "from_node_id": 45,
+      "to_node_id": 46,
+      "from_change_id": "d3bfbf6f-84f3-4571-ab2f-ac8ee2f1919d",
+      "to_change_id": "e739bdb5-e3c4-4da5-ad10-d6a1511c23a7",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Supervisor implemented",
+      "created_at": "2026-01-09T16:26:15.681284-05:00"
     }
   ]
 }
