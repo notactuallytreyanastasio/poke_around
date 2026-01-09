@@ -29,7 +29,7 @@ defmodule PokeAround.Links.Extractor do
   @min_account_age_days 365
   @min_text_length 50
   @max_hashtags 1
-  @max_emojis 3
+  @max_emojis 1
 
   # Banned domains (URL shorteners, spam magnets)
   @banned_domains [
