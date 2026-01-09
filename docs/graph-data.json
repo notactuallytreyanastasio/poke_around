@@ -8,8 +8,8 @@
       "description": null,
       "status": "pending",
       "created_at": "2026-01-09T14:54:06.605085-05:00",
-      "updated_at": "2026-01-09T14:54:06.605085-05:00",
-      "metadata_json": "{\"confidence\":95,\"prompt\":\"I want to build a StumbleUpon like experience using the Bluesky Firehose as the source of the links\\n\\nrequirements:\\n1. Bookmarklet\\n2. Website\\n3. AT protocol lexicon\\n4. OAuth with atproto\\n5. Landing page\"}"
+      "updated_at": "2026-01-09T15:02:38.799400-05:00",
+      "metadata_json": "{\"confidence\":95,\"prompt\":\"User's original request:\\n\\\"I want to build a StumbleUpon like experience using the Bluesky Firehose as the source of the links\\n\\nrequirements:\\n1. Bookmarklet\\n2. Website\\n3. AT protocol lexicon\\n4. OAuth with atproto\\n5. Landing page\\\"\\n\\nFollow-up clarifications:\\n- Quality signals: \\\"follower count, reply count\\\"\\n- Lexicon: \\\"link, metadata, user prefs, tags\\\"\\n- Strategy: \\\"we are gonna get a lot of links at the start and slowly refine our quality filter\\\"\\n- Discovery: \\\"you start on discovery and then we can do tags for similar content\\\"\\n- Project name: \\\"we are calling it poke_around\\\"\\n- HTTP library: \\\"Use Req for HTTP requests\\\"\\n- Firehose: \\\"use the graze stuff\\\" (Turbostream)\\n- Architecture: \\\"dont think we need broadway...use normal elixir stuff\\\"\\n\\nCompleted:\\n✓ Bookmarklet\\n✓ Website (stumble UI)\\n✓ Firehose integration\\n\\nRemaining:\\n- AT Protocol lexicon\\n- OAuth with atproto\\n- Landing page (currently stumble IS the landing)\"}"
     },
     {
       "id": 2,
@@ -19,8 +19,8 @@
       "description": null,
       "status": "pending",
       "created_at": "2026-01-09T14:54:12.817980-05:00",
-      "updated_at": "2026-01-09T14:54:12.817980-05:00",
-      "metadata_json": "{\"confidence\":90}"
+      "updated_at": "2026-01-09T15:01:00.547398-05:00",
+      "metadata_json": "{\"confidence\":90,\"prompt\":\"User specified quality signals for filtering links from the firehose:\\n\\\"1. follower count, reply count\\\"\\n\\nDecision: Use author follower count as primary quality signal.\\n- Minimum 100 followers required to pass filter\\n- Exclude replies (is_reply: true)\\n- Score calculated as: log10(followers) * 20, capped at 100\\n\\nThis filters out spam accounts and low-quality posts while keeping signal from established users.\"}"
     },
     {
       "id": 3,
@@ -30,8 +30,8 @@
       "description": null,
       "status": "pending",
       "created_at": "2026-01-09T14:54:13.653001-05:00",
-      "updated_at": "2026-01-09T14:54:13.653001-05:00",
-      "metadata_json": "{\"confidence\":95}"
+      "updated_at": "2026-01-09T15:01:08.674368-05:00",
+      "metadata_json": "{\"confidence\":95,\"prompt\":\"User suggested using Graze Turbostream instead of raw Jetstream:\\n\\\"should we use https://www.graze.social/docs/graze-turbostream\\\"\\n\\\"yeah lets use the graze stuff\\\"\\n\\nDecision: Use Graze Turbostream WebSocket API\\n- URL: wss://api.graze.social/app/api/v1/turbostream/turbostream\\n- Provides hydrated events with author profiles inline\\n- No need for separate API calls to resolve DIDs to profiles\\n- Includes follower_count, display_name, avatar directly in events\\n- Uses snake_case keys (followers_count not followersCount)\\n\\nKey insight: Turbostream event structure is different from raw Jetstream:\\n- Keys: at_uri, did, hydrated_metadata, message, time_us\\n- Author data in hydrated_metadata.user (not .author)\"}"
     },
     {
       "id": 4,
@@ -41,8 +41,8 @@
       "description": null,
       "status": "pending",
       "created_at": "2026-01-09T14:54:14.983226-05:00",
-      "updated_at": "2026-01-09T14:54:14.983226-05:00",
-      "metadata_json": "{\"confidence\":90}"
+      "updated_at": "2026-01-09T15:01:16.057551-05:00",
+      "metadata_json": "{\"confidence\":90,\"prompt\":\"User explicitly rejected Broadway for processing:\\n\\\"also I dont think we need broadway here...we can just use normal elixir stuff to start\\\"\\n\\nDecision: Use simple GenServer/Supervisor pattern\\n- WebSockex for WebSocket connection\\n- Phoenix PubSub for broadcasting events\\n- GenServer for link extraction (subscribes to PubSub)\\n- Standard Elixir supervision tree\\n\\nRationale: Broadway adds complexity for batching/acknowledgment that isn't needed here.\\nThe firehose is continuous - we process each event immediately and store links.\\nSimple GenServer pattern is sufficient and easier to debug.\"}"
     },
     {
       "id": 5,
@@ -52,8 +52,8 @@
       "description": null,
       "status": "pending",
       "created_at": "2026-01-09T14:57:01.878583-05:00",
-      "updated_at": "2026-01-09T14:57:01.878583-05:00",
-      "metadata_json": "{\"branch\":\"feature/bluesky-firehose\",\"commit\":\"6fd0fae\",\"confidence\":95,\"files\":[\"lib/poke_around/bluesky/firehose.ex\",\"lib/poke_around/bluesky/parser.ex\",\"lib/poke_around/bluesky/types.ex\",\"lib/poke_around/bluesky/supervisor.ex\"]}"
+      "updated_at": "2026-01-09T15:01:26.260014-05:00",
+      "metadata_json": "{\"branch\":\"feature/bluesky-firehose\",\"commit\":\"6fd0fae\",\"confidence\":95,\"files\":[\"lib/poke_around/bluesky/firehose.ex\",\"lib/poke_around/bluesky/parser.ex\",\"lib/poke_around/bluesky/types.ex\",\"lib/poke_around/bluesky/supervisor.ex\"],\"prompt\":\"Implementation of Bluesky firehose client using Graze Turbostream.\\n\\nFiles created:\\n- lib/poke_around/bluesky/firehose.ex - WebSockex client\\n- lib/poke_around/bluesky/parser.ex - Event parser with snake_case handling\\n- lib/poke_around/bluesky/types.ex - Structs for Post, Author, ExternalEmbed, FacetLink\\n- lib/poke_around/bluesky/supervisor.ex - Supervisor for firehose process\\n\\nKey implementation details:\\n1. WebSockex connects to wss://api.graze.social/app/api/v1/turbostream/turbostream\\n2. Filters for app.bsky.feed.post create operations\\n3. Parses hydrated_metadata.user for author info (snake_case keys)\\n4. Extracts links from both embeds and facets\\n5. Broadcasts posts via Phoenix.PubSub to \\\"bluesky:posts\\\"\\n6. Pattern matching for valid_link? (filters bsky.app, bsky.social, at:// URLs)\\n\\nDebug process: Had to log event keys to discover Turbostream format differed from Jetstream docs.\"}"
     },
     {
       "id": 6,
@@ -63,8 +63,8 @@
       "description": null,
       "status": "pending",
       "created_at": "2026-01-09T14:57:11.461403-05:00",
-      "updated_at": "2026-01-09T14:57:11.461403-05:00",
-      "metadata_json": "{\"branch\":\"feature/bluesky-firehose\",\"confidence\":95}"
+      "updated_at": "2026-01-09T15:01:33.859682-05:00",
+      "metadata_json": "{\"branch\":\"feature/bluesky-firehose\",\"confidence\":95,\"prompt\":\"Firehose integration successful after debugging event format issues.\\n\\nResults:\\n- Connected to Turbostream and receiving ~100 messages/second\\n- Posts with external embeds and facet links being extracted\\n- Author metadata (followers_count, handle, display_name) correctly parsed\\n- Links being stored in database (353+ links observed during initial testing)\\n\\nIssues resolved:\\n1. Initial code expected Jetstream format with \\\"kind\\\"/\\\"commit\\\" keys\\n   - Fixed: Updated to match Turbostream keys (at_uri, message, hydrated_metadata)\\n2. Expected \\\"author\\\" in metadata but actual key is \\\"user\\\"\\n   - Fixed: parse_turbostream_author matches on \\\"user\\\"\\n3. Expected camelCase but Turbostream uses snake_case\\n   - Fixed: followers_count not followersCount\"}"
     },
     {
       "id": 7,
@@ -74,8 +74,8 @@
       "description": null,
       "status": "pending",
       "created_at": "2026-01-09T14:57:29.171508-05:00",
-      "updated_at": "2026-01-09T14:57:29.171508-05:00",
-      "metadata_json": "{\"branch\":\"feature/links-database\",\"commit\":\"a7e5a73\",\"confidence\":95,\"files\":[\"lib/poke_around/links/link.ex\",\"priv/repo/migrations/20260109193658_create_links.exs\"]}"
+      "updated_at": "2026-01-09T15:01:42.196990-05:00",
+      "metadata_json": "{\"branch\":\"feature/links-database\",\"commit\":\"a7e5a73\",\"confidence\":95,\"files\":[\"lib/poke_around/links/link.ex\",\"priv/repo/migrations/20260109193658_create_links.exs\"],\"prompt\":\"Database schema for storing discovered links.\\n\\nFiles created:\\n- lib/poke_around/links/link.ex - Ecto schema\\n- priv/repo/migrations/20260109193658_create_links.exs - Migration\\n\\nSchema fields:\\n- url (string, required) - The actual link URL\\n- url_hash (string, unique index) - SHA256 hash for deduplication\\n- domain (string, indexed) - Extracted domain for stats\\n- title (string) - Page title from embed or post\\n- description (text) - Description from embed\\n- score (integer, indexed) - Quality score 0-100\\n- stumble_count (integer, default 0) - Times shown to users\\n\\nAuthor metadata (denormalized for display):\\n- author_did, author_handle, author_display_name\\n- author_avatar, author_followers_count\\n\\nPost context:\\n- post_uri, post_text - Original Bluesky post reference\\n\\nIndexes: url_hash (unique), domain, score, inserted_at\"}"
     },
     {
       "id": 8,
@@ -85,8 +85,8 @@
       "description": null,
       "status": "pending",
       "created_at": "2026-01-09T14:57:46.200567-05:00",
-      "updated_at": "2026-01-09T14:57:46.200567-05:00",
-      "metadata_json": "{\"branch\":\"feature/link-processing\",\"commit\":\"44c48ba\",\"confidence\":95,\"files\":[\"lib/poke_around/links/extractor.ex\",\"lib/poke_around/links.ex\"]}"
+      "updated_at": "2026-01-09T15:01:51.104981-05:00",
+      "metadata_json": "{\"branch\":\"feature/link-processing\",\"commit\":\"44c48ba\",\"confidence\":95,\"files\":[\"lib/poke_around/links/extractor.ex\",\"lib/poke_around/links.ex\"],\"prompt\":\"Link extraction and quality filtering implementation.\\n\\nFiles created:\\n- lib/poke_around/links/extractor.ex - GenServer that processes firehose posts\\n- lib/poke_around/links.ex - Context module for link operations\\n\\nExtractor logic:\\n1. Subscribes to \\\"bluesky:posts\\\" PubSub topic\\n2. For each post, checks qualifies?/1:\\n   - Author must have >= 100 followers\\n   - Must not be a reply (is_reply: false)\\n3. Extracts links from parser results\\n4. Filters out invalid links (bsky.app, bsky.social, at://)\\n5. Calculates score: log10(followers) * 20, capped at 100\\n6. Stores via Links.store_link/1 (upserts on url_hash)\\n\\nLinks context provides:\\n- store_link/1 - Insert or update link\\n- random_link/1 - Get random link with min_score and exclude_ids options\\n- increment_stumble_count/1 - Track link impressions\\n- count_links/0, top_domains/1 - Stats for UI\\n\\nQuality filtering rationale: 100 followers filters out most spam bots while keeping\\nreal users who share interesting content.\"}"
     },
     {
       "id": 9,
@@ -96,8 +96,8 @@
       "description": null,
       "status": "pending",
       "created_at": "2026-01-09T14:57:52.453733-05:00",
-      "updated_at": "2026-01-09T14:57:52.453733-05:00",
-      "metadata_json": "{\"branch\":\"feature/link-processing\",\"confidence\":100}"
+      "updated_at": "2026-01-09T15:01:56.980224-05:00",
+      "metadata_json": "{\"branch\":\"feature/link-processing\",\"confidence\":100,\"prompt\":\"User explicitly rejected Broadway in favor of simpler architecture:\\n\\\"also I dont think we need broadway here...we can just use normal elixir stuff to start\\\"\\n\\nThis informed the entire processing architecture:\\n- Simple GenServer for Extractor instead of Broadway pipeline\\n- Direct PubSub subscription instead of Broadway producers/consumers\\n- No batching or acknowledgment complexity\\n- Easier to reason about and debug\\n\\nThe simpler approach proved sufficient - firehose runs at ~100 msgs/sec which \\na single GenServer handles easily without backpressure concerns.\"}"
     },
     {
       "id": 10,
@@ -107,8 +107,8 @@
       "description": null,
       "status": "pending",
       "created_at": "2026-01-09T14:58:20.549747-05:00",
-      "updated_at": "2026-01-09T14:58:20.549747-05:00",
-      "metadata_json": "{\"branch\":\"feature/stumble-ui\",\"commit\":\"34ca01f\",\"confidence\":95,\"files\":[\"lib/poke_around_web/live/stumble_live.ex\",\"lib/poke_around_web/router.ex\"]}"
+      "updated_at": "2026-01-09T15:02:06.607710-05:00",
+      "metadata_json": "{\"branch\":\"feature/stumble-ui\",\"commit\":\"34ca01f\",\"confidence\":95,\"files\":[\"lib/poke_around_web/live/stumble_live.ex\",\"lib/poke_around_web/router.ex\"],\"prompt\":\"Main stumble interface using Phoenix LiveView.\\n\\nFiles created:\\n- lib/poke_around_web/live/stumble_live.ex\\n- Updated router.ex: live \\\"/\\\", StumbleLive, :index\\n\\nUI Features:\\n1. Header with app name and total link count\\n2. Link card showing:\\n   - Author avatar (first letter), handle, display name\\n   - Follower count badge\\n   - Post text excerpt (truncated to 200 chars)\\n   - Clickable link button with domain and URL\\n   - Score badge\\n3. \\\"Stumble!\\\" button to get next random link\\n4. Session history tracking (up to 50 links)\\n5. Footer with top domains stats\\n\\nImplementation details:\\n- mount/3: Loads random link with min_score: 20\\n- handle_event(\\\"stumble\\\"): Gets new link excluding history, increments stumble_count\\n- handle_event(\\\"refresh-stats\\\"): Updates stats display\\n- Helper functions: truncate/2, format_followers/1\\n\\nDesign: Gradient purple/pink background, glassmorphism cards, Tailwind CSS\"}"
     },
     {
       "id": 11,
@@ -118,8 +118,8 @@
       "description": null,
       "status": "pending",
       "created_at": "2026-01-09T14:58:44.504166-05:00",
-      "updated_at": "2026-01-09T14:58:44.504166-05:00",
-      "metadata_json": "{\"branch\":\"feature/bookmarklet\",\"commit\":\"db6869f\",\"confidence\":95,\"files\":[\"lib/poke_around_web/live/bookmarklet_live.ex\",\"lib/poke_around_web/controllers/api/link_controller.ex\",\"lib/poke_around_web/router.ex\"]}"
+      "updated_at": "2026-01-09T15:02:16.067800-05:00",
+      "metadata_json": "{\"branch\":\"feature/bookmarklet\",\"commit\":\"db6869f\",\"confidence\":95,\"files\":[\"lib/poke_around_web/live/bookmarklet_live.ex\",\"lib/poke_around_web/controllers/api/link_controller.ex\",\"lib/poke_around_web/router.ex\"],\"prompt\":\"Bookmarklet for users to save links from any page.\\n\\nFiles created:\\n- lib/poke_around_web/live/bookmarklet_live.ex - Instructions page\\n- lib/poke_around_web/controllers/api/link_controller.ex - API endpoint\\n- Updated router.ex:\\n  - live \\\"/bookmarklet\\\", BookmarkletLive, :index\\n  - post \\\"/api/links\\\", LinkController, :create\\n\\nBookmarkletLive:\\n- Displays draggable bookmarklet button\\n- Dynamically generates JavaScript with current host URL\\n- Step-by-step instructions for installation\\n- Link back to main stumble page\\n\\nJavaScript bookmarklet code:\\n(function(){\\n  var url=encodeURIComponent(window.location.href);\\n  var title=encodeURIComponent(document.title);\\n  fetch('BASE_URL/api/links',{\\n    method:'POST',\\n    headers:{'Content-Type':'application/json'},\\n    body:JSON.stringify({url:decodeURIComponent(url),title:decodeURIComponent(title)})\\n  })\\n  .then(r=>r.json())\\n  .then(d=>alert('PokeAround: '+d.message))\\n  .catch(e=>alert('Error saving link'));\\n})();\\n\\nLinkController.create/2:\\n- Accepts {url, title, description} JSON body\\n- Validates url is required\\n- Stores via Links.store_link/1 with default score: 50\\n- Returns JSON: {status, message, id?}\"}"
     },
     {
       "id": 12,
@@ -129,8 +129,8 @@
       "description": null,
       "status": "pending",
       "created_at": "2026-01-09T14:58:56.017385-05:00",
-      "updated_at": "2026-01-09T14:58:56.017385-05:00",
-      "metadata_json": "{\"branch\":\"main\",\"confidence\":100}"
+      "updated_at": "2026-01-09T15:02:22.951306-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"confidence\":100,\"prompt\":\"User feedback on code style in parser.ex:\\n\\\"use pattern matching here\\\"\\n\\nOriginal code used cond:\\n  cond do\\n    String.contains?(uri, \\\"bsky.app\\\") -> false\\n    String.starts_with?(uri, \\\"https://\\\") -> true\\n    ...\\n  end\\n\\nCorrected to pattern matching:\\n  defp valid_link?(\\\"https://bsky.app\\\" <> _), do: false\\n  defp valid_link?(\\\"http://bsky.app\\\" <> _), do: false\\n  defp valid_link?(\\\"https://bsky.social\\\" <> _), do: false\\n  defp valid_link?(\\\"http://bsky.social\\\" <> _), do: false\\n  defp valid_link?(\\\"at://\\\" <> _), do: false\\n  defp valid_link?(\\\"https://\\\" <> _), do: true\\n  defp valid_link?(\\\"http://\\\" <> _), do: true\\n  defp valid_link?(_), do: false\\n\\nBenefits: More idiomatic Elixir, clearer intent, leverages BEAM pattern matching.\"}"
     },
     {
       "id": 13,
@@ -140,8 +140,8 @@
       "description": null,
       "status": "pending",
       "created_at": "2026-01-09T14:59:01.413948-05:00",
-      "updated_at": "2026-01-09T14:59:01.413948-05:00",
-      "metadata_json": "{\"branch\":\"main\",\"confidence\":70}"
+      "updated_at": "2026-01-09T15:02:29.214019-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"confidence\":70,\"prompt\":\"From original requirements:\\n\\\"4. OAuth with atproto\\\"\\n\\nUser confirmed Bluesky OAuth is mandatory:\\n\\\"Full OAuth with Bluesky is mandatory\\\"\\n\\nImplementation needed:\\n- AT Protocol OAuth flow (not legacy app passwords)\\n- User authentication before saving/stumbling\\n- Store user DID and handle in session\\n- Associate saved links with user accounts\\n- Use Req for HTTP requests (user-specified)\\n\\nReference: https://atproto.com/specs/oauth\\n\\nStatus: PENDING - not yet implemented\"}"
     }
   ],
   "edges": [
