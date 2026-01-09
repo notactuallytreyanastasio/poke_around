@@ -12,6 +12,8 @@ defmodule PokeAround.Application do
       PokeAround.Repo,
       {DNSCluster, query: Application.get_env(:poke_around, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: PokeAround.PubSub},
+      # Bluesky firehose
+      PokeAround.Bluesky.Supervisor,
       # Start to serve requests, typically the last entry
       PokeAroundWeb.Endpoint
     ]
