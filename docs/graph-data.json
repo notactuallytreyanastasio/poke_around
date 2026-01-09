@@ -197,6 +197,50 @@
       "created_at": "2026-01-09T15:25:46.042981-05:00",
       "updated_at": "2026-01-09T15:25:58.430409-05:00",
       "metadata_json": "{\"branch\":\"feature/retro-mac-ui\",\"commit\":\"56a5082\",\"confidence\":95,\"files\":[\"lib/poke_around_web/live/stumble_live.ex\"],\"prompt\":\"User requested complete UI redesign:\\n\\\"redo it completely to look like its an old old apple desktop and have it look like a window that is a textfile of links on like 2/3 the screen that shows the a 'grab bag' of like, however many links tall the window is\\\"\\n\\nImplementation:\\n- Classic Mac OS 9 / System 7 aesthetic\\n- Purple/gray dithered desktop background\\n- Window with:\\n  - Titlebar with horizontal lines pattern\\n  - Close button box\\n  - Title: \\\"poke_around - grab bag\\\"\\n- Grab bag shows 20 random links\\n- Three columns: Domain | Post | Score\\n- Classic Mac scrollbar (non-functional, decorative)\\n- Menu bar with Apple logo, File, Edit, View, Special\\n- Shuffle button to get fresh random links\\n- Click row to open link (increments stumble_count)\\n- Status bar showing item count and total links\\n\\nFonts: Geneva, VT323 (Google Fonts fallback), Monaco for monospace\"}"
+    },
+    {
+      "id": 19,
+      "change_id": "71d52da1-fb00-4383-91a4-e62029d2bf0e",
+      "node_type": "decision",
+      "title": "Add emoji spam filter and fix UI styling",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T15:30:12.155505-05:00",
+      "updated_at": "2026-01-09T15:30:12.155505-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"confidence\":90,\"prompt\":\"User feedback on UI and quality filters:\\n\\n1. \\\"make the dark background be a grey and white dot pattern like it really was\\\"\\n   - Current purple dithered pattern is wrong\\n   - Classic Mac OS used grey/white dot pattern\\n\\n2. \\\"get the grab bag window to be as wide as the links\\\"\\n   - Window too narrow, content getting cut off\\n\\n3. \\\"lets also add a filter for avoiding links with > 3 emojis\\\"\\n   - Spam posts often use many emojis (see t.me link with 🖤🫧👹🍷🔥🐱💨😩💜💛💗🐷🔴🦶🐾✨)\\n   - Filter out posts with more than 3 emojis\\n\\n4. \\\"and delete ones that had that\\\"\\n   - Clean up existing database entries with emoji spam\"}"
+    },
+    {
+      "id": 20,
+      "change_id": "28450b5d-7f3c-4e59-93e9-7ae5cb33a04d",
+      "node_type": "action",
+      "title": "Clean up score column CSS from stumble_live.ex",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T15:34:03.259270-05:00",
+      "updated_at": "2026-01-09T15:34:03.259270-05:00",
+      "metadata_json": "{\"branch\":\"feature/emoji-filter-ui-fixes\",\"confidence\":95,\"files\":[\"lib/poke_around_web/live/stumble_live.ex\"]}"
+    },
+    {
+      "id": 21,
+      "change_id": "a79db728-98cc-414b-9e26-454b91cdcb55",
+      "node_type": "outcome",
+      "title": "Deleted 21 links from banned domains (tinyurl.com, bit.ly, t.co)",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T15:34:03.867321-05:00",
+      "updated_at": "2026-01-09T15:34:03.867321-05:00",
+      "metadata_json": "{\"branch\":\"feature/emoji-filter-ui-fixes\",\"confidence\":95}"
+    },
+    {
+      "id": 22,
+      "change_id": "000a98b8-af6d-4e58-a8bf-06301276bb4b",
+      "node_type": "outcome",
+      "title": "Deleted 4 emoji spam links (>3 emojis) using Elixir filter approach",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T15:34:04.585706-05:00",
+      "updated_at": "2026-01-09T15:34:04.585706-05:00",
+      "metadata_json": "{\"branch\":\"feature/emoji-filter-ui-fixes\",\"confidence\":95}"
     }
   ],
   "edges": [
@@ -397,6 +441,50 @@
       "weight": 1.0,
       "rationale": "UI redesign request",
       "created_at": "2026-01-09T15:25:58.416842-05:00"
+    },
+    {
+      "id": 19,
+      "from_node_id": 1,
+      "to_node_id": 19,
+      "from_change_id": "fdd7e6ae-9619-4735-b661-427537aef5e1",
+      "to_change_id": "71d52da1-fb00-4383-91a4-e62029d2bf0e",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "UI polish and quality filter refinement",
+      "created_at": "2026-01-09T15:30:21.381327-05:00"
+    },
+    {
+      "id": 20,
+      "from_node_id": 19,
+      "to_node_id": 20,
+      "from_change_id": "71d52da1-fb00-4383-91a4-e62029d2bf0e",
+      "to_change_id": "28450b5d-7f3c-4e59-93e9-7ae5cb33a04d",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "CSS cleanup for UI column swap",
+      "created_at": "2026-01-09T15:34:19.634785-05:00"
+    },
+    {
+      "id": 21,
+      "from_node_id": 19,
+      "to_node_id": 21,
+      "from_change_id": "71d52da1-fb00-4383-91a4-e62029d2bf0e",
+      "to_change_id": "a79db728-98cc-414b-9e26-454b91cdcb55",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Database cleanup for banned domains",
+      "created_at": "2026-01-09T15:34:20.359848-05:00"
+    },
+    {
+      "id": 22,
+      "from_node_id": 19,
+      "to_node_id": 22,
+      "from_change_id": "71d52da1-fb00-4383-91a4-e62029d2bf0e",
+      "to_change_id": "000a98b8-af6d-4e58-a8bf-06301276bb4b",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Database cleanup for emoji spam",
+      "created_at": "2026-01-09T15:34:20.991440-05:00"
     }
   ]
 }

@@ -52,13 +52,10 @@ defmodule PokeAroundWeb.StumbleLive do
 
       .mac-desktop {
         min-height: 100vh;
-        background: #666699;
-        background-image:
-          linear-gradient(45deg, #5a5a8a 25%, transparent 25%),
-          linear-gradient(-45deg, #5a5a8a 25%, transparent 25%),
-          linear-gradient(45deg, transparent 75%, #5a5a8a 75%),
-          linear-gradient(-45deg, transparent 75%, #5a5a8a 75%);
-        background-size: 4px 4px;
+        background-color: #808080;
+        background-image: url("data:image/svg+xml,%3Csvg width='2' height='2' viewBox='0 0 2 2' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0' y='0' width='1' height='1' fill='%23a0a0a0'/%3E%3Crect x='1' y='1' width='1' height='1' fill='%23a0a0a0'/%3E%3C/svg%3E");
+        background-size: 2px 2px;
+        image-rendering: pixelated;
         padding: 20px;
         font-family: 'Geneva', 'VT323', 'Chicago', monospace;
       }
@@ -70,7 +67,8 @@ defmodule PokeAroundWeb.StumbleLive do
           2px 2px 0 #000000,
           inset -1px -1px 0 #808080,
           inset 1px 1px 0 #dfdfdf;
-        max-width: 700px;
+        width: 95%;
+        max-width: 1000px;
         margin: 0 auto;
       }
 
@@ -195,7 +193,7 @@ defmodule PokeAroundWeb.StumbleLive do
       }
 
       .link-domain {
-        width: 140px;
+        width: 180px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -210,12 +208,6 @@ defmodule PokeAroundWeb.StumbleLive do
         padding-left: 8px;
       }
 
-      .link-score {
-        width: 30px;
-        text-align: right;
-        flex-shrink: 0;
-        padding-left: 8px;
-      }
 
       .mac-statusbar {
         background: #dddddd;
@@ -250,7 +242,8 @@ defmodule PokeAroundWeb.StumbleLive do
         gap: 16px;
         font-size: 12px;
         font-weight: bold;
-        max-width: 700px;
+        width: 95%;
+        max-width: 1000px;
         margin: 0 auto 20px auto;
       }
 
@@ -281,9 +274,8 @@ defmodule PokeAroundWeb.StumbleLive do
         font-weight: bold;
       }
 
-      .header-domain { width: 140px; }
-      .header-text { flex: 1; padding-left: 8px; }
-      .header-score { width: 30px; text-align: right; padding-left: 8px; }
+      .header-text { flex: 1; }
+      .header-domain { width: 180px; padding-left: 8px; }
     </style>
 
     <div class="mac-desktop">
@@ -305,9 +297,8 @@ defmodule PokeAroundWeb.StumbleLive do
 
         <div class="mac-content">
           <div class="header-row">
-            <div class="header-domain">Domain</div>
             <div class="header-text">Post</div>
-            <div class="header-score">Score</div>
+            <div class="header-domain">Domain</div>
           </div>
 
           <div class="mac-scrollbar">
@@ -319,9 +310,8 @@ defmodule PokeAroundWeb.StumbleLive do
                   phx-value-url={link.url}
                   phx-value-id={link.id}
                 >
+                  <div class="link-text"><%= truncate(link.post_text, 100) %></div>
                   <div class="link-domain"><%= link.domain %></div>
-                  <div class="link-text"><%= truncate(link.post_text, 60) %></div>
-                  <div class="link-score"><%= link.score %></div>
                 </div>
               <% end %>
 

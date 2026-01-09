@@ -29,6 +29,14 @@ defmodule PokeAround.Links.Extractor do
   @min_account_age_days 365
   @min_text_length 50
   @max_hashtags 1
+  @max_emojis 3
+
+  # Banned domains (URL shorteners, spam magnets)
+  @banned_domains [
+    "tinyurl.com",
+    "bit.ly",
+    "t.co"
+  ]
 
   @stats_interval_ms 30_000
 
@@ -127,13 +135,28 @@ defmodule PokeAround.Links.Extractor do
     # Multiple links = spam, only process if single link
     if length(links) == 1 && qualifies?(post) do
       [url] = links
-      case store_link(url, post) do
-        :ok -> %{state | links_qualified: state.links_qualified + 1}
-        _ -> state
+
+      # Check if domain is banned
+      if domain_banned?(url) do
+        state
+      else
+        case store_link(url, post) do
+          :ok -> %{state | links_qualified: state.links_qualified + 1}
+          _ -> state
+        end
       end
     else
       state
     end
+  end
+
+  defp domain_banned?(url) do
+    uri = URI.parse(url)
+    host = uri.host || ""
+
+    Enum.any?(@banned_domains, fn banned ->
+      host == banned || String.ends_with?(host, "." <> banned)
+    end)
   end
 
   # No author = skip
@@ -157,11 +180,15 @@ defmodule PokeAround.Links.Extractor do
 
   defp post_qualifies?(text) when is_binary(text) do
     hashtag_count = count_hashtags(text)
+    emoji_count = count_emojis(text)
+
     # Text length AFTER removing hashtags - must have real content
     text_without_hashtags = Regex.replace(~r/#\w+/, text, "") |> String.trim()
     clean_text_length = String.length(text_without_hashtags)
 
-    clean_text_length >= @min_text_length && hashtag_count <= @max_hashtags
+    clean_text_length >= @min_text_length &&
+      hashtag_count <= @max_hashtags &&
+      emoji_count <= @max_emojis
   end
 
   defp post_qualifies?(_), do: false
@@ -175,6 +202,13 @@ defmodule PokeAround.Links.Extractor do
 
   defp count_hashtags(text) do
     ~r/#\w+/
+    |> Regex.scan(text)
+    |> length()
+  end
+
+  defp count_emojis(text) do
+    # Match common emoji ranges
+    ~r/[\x{1F300}-\x{1F9FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|[\x{1F600}-\x{1F64F}]|[\x{1F680}-\x{1F6FF}]/u
     |> Regex.scan(text)
     |> length()
   end
