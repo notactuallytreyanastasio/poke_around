@@ -3,41 +3,34 @@ defmodule PokeAroundWeb.StumbleLive do
 
   alias PokeAround.Links
 
+  @links_per_page 20
+
   @impl true
   def mount(_params, _session, socket) do
-    link = Links.random_link(min_score: 20)
+    links = Links.random_links(@links_per_page, min_score: 20)
 
     {:ok,
      socket
-     |> assign(:link, link)
-     |> assign(:history, [])
+     |> assign(:links, links)
+     |> assign(:selected_index, nil)
      |> assign(:stats, get_stats())}
   end
 
   @impl true
-  def handle_event("stumble", _params, socket) do
-    # Add current link to history
-    history =
-      case socket.assigns.link do
-        nil -> socket.assigns.history
-        link -> [link.id | socket.assigns.history] |> Enum.take(50)
-      end
-
-    # Get a new random link, excluding recently seen
-    link = Links.random_link(min_score: 20, exclude_ids: history)
-
-    # Increment stumble count if we got a link
-    if link, do: Links.increment_stumble_count(link.id)
-
-    {:noreply,
-     socket
-     |> assign(:link, link)
-     |> assign(:history, history)}
+  def handle_event("shuffle", _params, socket) do
+    links = Links.random_links(@links_per_page, min_score: 20)
+    {:noreply, assign(socket, :links, links)}
   end
 
   @impl true
-  def handle_event("refresh-stats", _params, socket) do
-    {:noreply, assign(socket, :stats, get_stats())}
+  def handle_event("select", %{"index" => index}, socket) do
+    {:noreply, assign(socket, :selected_index, String.to_integer(index))}
+  end
+
+  @impl true
+  def handle_event("open", %{"url" => url, "id" => id}, socket) do
+    Links.increment_stumble_count(String.to_integer(id))
+    {:noreply, redirect(socket, external: url)}
   end
 
   defp get_stats do
@@ -50,115 +43,321 @@ defmodule PokeAroundWeb.StumbleLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800">
-      <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <header class="text-center mb-12">
-          <h1 class="text-5xl font-bold text-white mb-2">poke_around</h1>
-          <p class="text-purple-200 text-lg">Discover random links from Bluesky</p>
-          <p class="text-purple-300 text-sm mt-2">
-            <%= @stats.total_links %> links to explore
-          </p>
-        </header>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
-        <!-- Main Content -->
-        <div class="max-w-2xl mx-auto">
-          <%= if @link do %>
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-white/20">
-              <!-- Link Card -->
-              <div class="mb-6">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
-                    <%= String.first(@link.author_handle || "?") |> String.upcase() %>
-                  </div>
-                  <div>
-                    <p class="text-white font-medium"><%= @link.author_display_name || @link.author_handle %></p>
-                    <p class="text-purple-300 text-sm">@<%= @link.author_handle %></p>
-                  </div>
-                  <div class="ml-auto">
-                    <span class="bg-purple-500/30 text-purple-200 px-3 py-1 rounded-full text-sm">
-                      <%= format_followers(@link.author_followers_count) %> followers
-                    </span>
-                  </div>
-                </div>
+      * {
+        box-sizing: border-box;
+      }
 
-                <div class="bg-black/20 rounded-xl p-4 mb-4">
-                  <p class="text-white/90 text-sm mb-3"><%= truncate(@link.post_text, 200) %></p>
-                </div>
+      .mac-desktop {
+        min-height: 100vh;
+        background: #666699;
+        background-image:
+          linear-gradient(45deg, #5a5a8a 25%, transparent 25%),
+          linear-gradient(-45deg, #5a5a8a 25%, transparent 25%),
+          linear-gradient(45deg, transparent 75%, #5a5a8a 75%),
+          linear-gradient(-45deg, transparent 75%, #5a5a8a 75%);
+        background-size: 4px 4px;
+        padding: 20px;
+        font-family: 'Geneva', 'VT323', 'Chicago', monospace;
+      }
 
-                <a
-                  href={@link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="block bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl p-4 transition-all hover:scale-[1.02] hover:shadow-lg"
-                >
-                  <div class="flex items-center gap-3">
-                    <div class="flex-shrink-0">
-                      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <p class="font-medium truncate"><%= @link.domain %></p>
-                      <p class="text-white/70 text-sm truncate"><%= @link.url %></p>
-                    </div>
-                  </div>
-                </a>
-              </div>
+      .mac-window {
+        background: #ffffff;
+        border: 2px solid #000000;
+        box-shadow:
+          2px 2px 0 #000000,
+          inset -1px -1px 0 #808080,
+          inset 1px 1px 0 #dfdfdf;
+        max-width: 700px;
+        margin: 0 auto;
+      }
 
-              <!-- Score Badge -->
-              <div class="flex justify-center mb-6">
-                <div class="bg-white/10 rounded-full px-4 py-2 flex items-center gap-2">
-                  <span class="text-yellow-400">★</span>
-                  <span class="text-white">Score: <%= @link.score %></span>
-                </div>
-              </div>
-            </div>
-          <% else %>
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-white/20 text-center">
-              <p class="text-white text-xl">No more links to show!</p>
-              <p class="text-purple-300 mt-2">Check back later for more content.</p>
-            </div>
-          <% end %>
+      .mac-titlebar {
+        background: linear-gradient(to bottom, #ffffff 0%, #cccccc 100%);
+        border-bottom: 2px solid #000000;
+        padding: 2px 4px;
+        display: flex;
+        align-items: center;
+        height: 20px;
+      }
 
-          <!-- Stumble Button -->
-          <div class="flex justify-center mt-8">
-            <button
-              phx-click="stumble"
-              class="group relative px-12 py-4 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-full text-white font-bold text-xl shadow-lg hover:shadow-2xl transition-all hover:scale-105 active:scale-95"
-            >
-              <span class="relative z-10 flex items-center gap-2">
-                <svg class="w-6 h-6 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Stumble!
-              </span>
-            </button>
-          </div>
+      .mac-titlebar-lines {
+        flex: 1;
+        height: 12px;
+        margin: 0 8px;
+        background: repeating-linear-gradient(
+          to bottom,
+          #000000 0px,
+          #000000 1px,
+          #ffffff 1px,
+          #ffffff 3px
+        );
+      }
 
-          <!-- History indicator -->
-          <%= if length(@history) > 0 do %>
-            <p class="text-center text-purple-300 mt-4 text-sm">
-              You've seen <%= length(@history) %> links this session
-            </p>
-          <% end %>
+      .mac-close-btn {
+        width: 12px;
+        height: 12px;
+        border: 1px solid #000000;
+        background: #ffffff;
+        margin-right: 4px;
+      }
+
+      .mac-title {
+        font-size: 12px;
+        font-weight: bold;
+        white-space: nowrap;
+        padding: 0 8px;
+      }
+
+      .mac-content {
+        background: #ffffff;
+        padding: 0;
+      }
+
+      .mac-scrollbar {
+        display: flex;
+      }
+
+      .mac-text-area {
+        flex: 1;
+        font-family: 'Monaco', 'VT323', monospace;
+        font-size: 11px;
+        line-height: 1.4;
+        padding: 8px;
+        min-height: 500px;
+        background: #ffffff;
+      }
+
+      .mac-scrollbar-track {
+        width: 16px;
+        background: #ffffff;
+        border-left: 1px solid #000000;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .mac-scroll-btn {
+        width: 16px;
+        height: 16px;
+        background: #dddddd;
+        border: 1px solid #000000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 8px;
+        cursor: pointer;
+      }
+
+      .mac-scroll-btn:active {
+        background: #000000;
+        color: #ffffff;
+      }
+
+      .mac-scroll-track {
+        flex: 1;
+        background: repeating-linear-gradient(
+          to bottom,
+          #ffffff 0px,
+          #ffffff 1px,
+          #dddddd 1px,
+          #dddddd 2px
+        );
+        position: relative;
+      }
+
+      .mac-scroll-thumb {
+        position: absolute;
+        top: 10%;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background: #dddddd;
+        border: 1px solid #000000;
+      }
+
+      .link-row {
+        padding: 2px 4px;
+        cursor: pointer;
+        display: flex;
+        border-bottom: 1px dotted #cccccc;
+      }
+
+      .link-row:hover {
+        background: #000000;
+        color: #ffffff;
+      }
+
+      .link-row.selected {
+        background: #000080;
+        color: #ffffff;
+      }
+
+      .link-domain {
+        width: 140px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .link-text {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-left: 8px;
+      }
+
+      .link-score {
+        width: 30px;
+        text-align: right;
+        flex-shrink: 0;
+        padding-left: 8px;
+      }
+
+      .mac-statusbar {
+        background: #dddddd;
+        border-top: 1px solid #000000;
+        padding: 2px 8px;
+        font-size: 10px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .mac-btn {
+        background: #dddddd;
+        border: 2px outset #ffffff;
+        padding: 4px 16px;
+        font-family: 'Geneva', 'VT323', monospace;
+        font-size: 12px;
+        cursor: pointer;
+        margin: 8px;
+      }
+
+      .mac-btn:active {
+        border-style: inset;
+        background: #cccccc;
+      }
+
+      .mac-menubar {
+        background: #ffffff;
+        border-bottom: 2px solid #000000;
+        padding: 2px 8px;
+        margin-bottom: 20px;
+        display: flex;
+        gap: 16px;
+        font-size: 12px;
+        font-weight: bold;
+        max-width: 700px;
+        margin: 0 auto 20px auto;
+      }
+
+      .mac-menu-item {
+        padding: 2px 8px;
+        cursor: default;
+      }
+
+      .mac-menu-item:hover {
+        background: #000000;
+        color: #ffffff;
+      }
+
+      .shuffle-row {
+        display: flex;
+        justify-content: center;
+        padding: 8px;
+        border-top: 1px solid #000000;
+        background: #eeeeee;
+      }
+
+      .header-row {
+        display: flex;
+        padding: 4px;
+        background: #dddddd;
+        border-bottom: 2px solid #000000;
+        font-size: 10px;
+        font-weight: bold;
+      }
+
+      .header-domain { width: 140px; }
+      .header-text { flex: 1; padding-left: 8px; }
+      .header-score { width: 30px; text-align: right; padding-left: 8px; }
+    </style>
+
+    <div class="mac-desktop">
+      <div class="mac-menubar">
+        <div class="mac-menu-item">🍎</div>
+        <div class="mac-menu-item">File</div>
+        <div class="mac-menu-item">Edit</div>
+        <div class="mac-menu-item">View</div>
+        <div class="mac-menu-item">Special</div>
+      </div>
+
+      <div class="mac-window">
+        <div class="mac-titlebar">
+          <div class="mac-close-btn"></div>
+          <div class="mac-titlebar-lines"></div>
+          <div class="mac-title">poke_around - grab bag</div>
+          <div class="mac-titlebar-lines"></div>
         </div>
 
-        <!-- Stats Footer -->
-        <footer class="mt-16 text-center">
-          <div class="mb-4">
-            <.link navigate="/bookmarklet" class="text-purple-300 hover:text-white transition-colors">
-              Get the bookmarklet to save your own links →
-            </.link>
+        <div class="mac-content">
+          <div class="header-row">
+            <div class="header-domain">Domain</div>
+            <div class="header-text">Post</div>
+            <div class="header-score">Score</div>
           </div>
-          <div class="inline-flex gap-4 flex-wrap justify-center">
-            <%= for {domain, count} <- @stats.top_domains do %>
-              <span class="bg-white/10 text-purple-200 px-3 py-1 rounded-full text-sm">
-                <%= domain %>: <%= count %>
-              </span>
-            <% end %>
+
+          <div class="mac-scrollbar">
+            <div class="mac-text-area">
+              <%= for {link, index} <- Enum.with_index(@links) do %>
+                <div
+                  class={"link-row #{if @selected_index == index, do: "selected", else: ""}"}
+                  phx-click="open"
+                  phx-value-url={link.url}
+                  phx-value-id={link.id}
+                >
+                  <div class="link-domain"><%= link.domain %></div>
+                  <div class="link-text"><%= truncate(link.post_text, 60) %></div>
+                  <div class="link-score"><%= link.score %></div>
+                </div>
+              <% end %>
+
+              <%= if @links == [] do %>
+                <div style="padding: 20px; text-align: center; color: #666;">
+                  No links found. Check back later!
+                </div>
+              <% end %>
+            </div>
+
+            <div class="mac-scrollbar-track">
+              <div class="mac-scroll-btn">▲</div>
+              <div class="mac-scroll-track">
+                <div class="mac-scroll-thumb"></div>
+              </div>
+              <div class="mac-scroll-btn">▼</div>
+            </div>
           </div>
-        </footer>
+
+          <div class="shuffle-row">
+            <button class="mac-btn" phx-click="shuffle">
+              ↻ Shuffle
+            </button>
+          </div>
+        </div>
+
+        <div class="mac-statusbar">
+          <span><%= length(@links) %> items</span>
+          <span><%= @stats.total_links %> links in database</span>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 16px;">
+        <.link navigate="/bookmarklet" style="color: #ffffff; font-size: 11px; font-family: Geneva, monospace;">
+          Get the bookmarklet →
+        </.link>
       </div>
     </div>
     """
@@ -166,10 +365,5 @@ defmodule PokeAroundWeb.StumbleLive do
 
   defp truncate(nil, _), do: ""
   defp truncate(text, max) when byte_size(text) <= max, do: text
-  defp truncate(text, max), do: String.slice(text, 0, max) <> "..."
-
-  defp format_followers(nil), do: "?"
-  defp format_followers(n) when n >= 1_000_000, do: "#{Float.round(n / 1_000_000, 1)}M"
-  defp format_followers(n) when n >= 1_000, do: "#{Float.round(n / 1_000, 1)}K"
-  defp format_followers(n), do: "#{n}"
+  defp truncate(text, max), do: String.slice(text, 0, max) <> "…"
 end
