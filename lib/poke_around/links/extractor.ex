@@ -23,7 +23,13 @@ defmodule PokeAround.Links.Extractor do
   alias PokeAround.Bluesky.Parser
   alias PokeAround.Links
 
-  @min_followers 100
+  # Quality thresholds
+  @min_followers 500
+  @max_following 5000
+  @min_account_age_days 365
+  @min_text_length 50
+  @max_hashtags 1
+
   @stats_interval_ms 30_000
 
   defstruct [
@@ -64,7 +70,12 @@ defmodule PokeAround.Links.Extractor do
     schedule_stats_log()
 
     state = %__MODULE__{started_at: DateTime.utc_now()}
-    Logger.info("Link extractor started, min followers: #{@min_followers}")
+    Logger.info(
+      "Link extractor started: " <>
+        "min_followers=#{@min_followers}, max_following=#{@max_following}, " <>
+        "min_account_age=#{@min_account_age_days}d, min_text=#{@min_text_length}, " <>
+        "max_hashtags=#{@max_hashtags}"
+    )
 
     {:ok, state}
   end
@@ -113,21 +124,57 @@ defmodule PokeAround.Links.Extractor do
   end
 
   defp process_links(links, post, state) do
-    qualified_count =
-      links
-      |> Enum.filter(fn _url -> qualifies?(post) end)
-      |> Enum.map(fn url -> store_link(url, post) end)
-      |> Enum.count(fn result -> result == :ok end)
-
-    %{state | links_qualified: state.links_qualified + qualified_count}
+    # Multiple links = spam, only process if single link
+    if length(links) == 1 && qualifies?(post) do
+      [url] = links
+      case store_link(url, post) do
+        :ok -> %{state | links_qualified: state.links_qualified + 1}
+        _ -> state
+      end
+    else
+      state
+    end
   end
 
+  # No author = skip
   defp qualifies?(%{author: nil}), do: false
-  defp qualifies?(%{is_reply: true}), do: false
 
-  defp qualifies?(%{author: author}) do
+  defp qualifies?(%{author: author, text: text}) do
+    author_qualifies?(author) && post_qualifies?(text)
+  end
+
+  defp author_qualifies?(author) do
     followers = author.followers_count || 0
-    followers >= @min_followers
+    following = author.follows_count || 0
+    has_bio = author.description != nil && String.trim(author.description) != ""
+    account_old_enough = account_age_ok?(author.indexed_at)
+
+    followers >= @min_followers &&
+      following <= @max_following &&
+      has_bio &&
+      account_old_enough
+  end
+
+  defp post_qualifies?(text) when is_binary(text) do
+    hashtag_count = count_hashtags(text)
+    text_length = String.length(String.trim(text))
+
+    text_length >= @min_text_length && hashtag_count <= @max_hashtags
+  end
+
+  defp post_qualifies?(_), do: false
+
+  defp account_age_ok?(nil), do: false
+
+  defp account_age_ok?(%DateTime{} = indexed_at) do
+    days_old = DateTime.diff(DateTime.utc_now(), indexed_at, :day)
+    days_old >= @min_account_age_days
+  end
+
+  defp count_hashtags(text) do
+    ~r/#\w+/
+    |> Regex.scan(text)
+    |> length()
   end
 
   defp store_link(url, post) do
@@ -154,11 +201,17 @@ defmodule PokeAround.Links.Extractor do
 
   defp calculate_score(%{author: author}) do
     followers = author.followers_count || 0
+    following = author.follows_count || 1
 
-    # Simple log-based score: more followers = higher score, but diminishing returns
-    # Score range: 0-100
-    base_score = :math.log10(max(followers, 1)) * 20
-    min(round(base_score), 100)
+    # Base score from followers (log scale, diminishing returns)
+    follower_score = :math.log10(max(followers, 1)) * 15
+
+    # Bonus for good follower/following ratio (curated taste, not follow-for-follow)
+    ratio = followers / max(following, 1)
+    ratio_bonus = min(ratio * 5, 20)
+
+    # Combined score, capped at 100
+    min(round(follower_score + ratio_bonus), 100)
   end
 
   defp build_stats(state) do
