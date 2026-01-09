@@ -17,7 +17,7 @@ defmodule PokeAroundWeb.Router do
   scope "/", PokeAroundWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", StumbleLive, :index
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
