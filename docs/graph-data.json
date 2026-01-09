@@ -505,6 +505,17 @@
       "created_at": "2026-01-09T16:26:10.302630-05:00",
       "updated_at": "2026-01-09T16:26:10.302630-05:00",
       "metadata_json": "{\"branch\":\"main\",\"confidence\":95}"
+    },
+    {
+      "id": 47,
+      "change_id": "a1d9e5fb-d9fc-46bf-9d07-2b8eea10980e",
+      "node_type": "action",
+      "title": "Add detailed tagger logging showing post, link, tags",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-09T16:31:51.364193-05:00",
+      "updated_at": "2026-01-09T16:31:51.364193-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"8f03dab\",\"confidence\":95,\"files\":[\"lib/poke_around/ai/tagger.ex\"]}"
     }
   ],
   "edges": [
@@ -1112,6 +1123,17 @@
       "weight": 1.0,
       "rationale": "Supervisor implemented",
       "created_at": "2026-01-09T16:26:15.681284-05:00"
+    },
+    {
+      "id": 56,
+      "from_node_id": 29,
+      "to_node_id": 47,
+      "from_change_id": "760fc190-1dd2-4b42-aa35-623563f17c9b",
+      "to_change_id": "a1d9e5fb-d9fc-46bf-9d07-2b8eea10980e",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Improved observability",
+      "created_at": "2026-01-09T16:31:51.373666-05:00"
     }
   ]
 }
