@@ -157,9 +157,11 @@ defmodule PokeAround.Links.Extractor do
 
   defp post_qualifies?(text) when is_binary(text) do
     hashtag_count = count_hashtags(text)
-    text_length = String.length(String.trim(text))
+    # Text length AFTER removing hashtags - must have real content
+    text_without_hashtags = Regex.replace(~r/#\w+/, text, "") |> String.trim()
+    clean_text_length = String.length(text_without_hashtags)
 
-    text_length >= @min_text_length && hashtag_count <= @max_hashtags
+    clean_text_length >= @min_text_length && hashtag_count <= @max_hashtags
   end
 
   defp post_qualifies?(_), do: false
