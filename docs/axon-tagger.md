@@ -24,18 +24,16 @@ We evaluated five approaches for lightweight tagging:
 | **Embeddings + cosine** | Simple, interpretable | No learning | Doesn't leverage our data |
 | **External API** | State of the art | Cost, latency, privacy | Against local-first philosophy |
 | **Axon custom model** | Fast, small, trainable | Needs training data | **Chosen** |
-| **Ollama (current)** | High accuracy | 1000ms+ latency | Keep as fallback |
 
-**Decision:** Use Axon for common categories (fast), Ollama for niche topics (accurate).
+**Decision:** Use Axon for fast, on-device tagging with no external dependencies.
 
-### Speed Comparison
+### Performance
 
 | Method | Time per Prediction | Throughput |
 |--------|---------------------|------------|
-| Ollama (llama3.2:3b) | ~1000ms | 1/sec |
 | Axon/EXLA on M Max | 0.59ms | **1,700/sec** |
 
-That's a **1,700x speedup** for common tag categories.
+Fast enough for real-time tagging of all incoming links.
 
 ## Architecture
 
@@ -443,31 +441,19 @@ AxonTagger.stats()
    - Problem: Bad EXLA config in config.exs
    - Solution: Set `XLA_TARGET=cpu` in mix tasks
 
-## When to Use Axon vs Ollama
+## Best Practices
 
-### Use Axon When:
+### Confidence Thresholds
 
-- Processing high volume (batch tagging)
-- Common content categories (weather, politics, sports, music)
-- Speed is critical (real-time tagging)
-- Ollama not available/running
-- Resource constrained environment
+- **High confidence (>0.5)**: Apply tags automatically
+- **Medium confidence (0.25-0.5)**: Apply tags, flag for review
+- **Low confidence (<0.25)**: Skip tagging, needs more training data
 
-### Use Ollama When:
+### Improving Accuracy
 
-- Niche/specialized content
-- Need nuanced understanding
-- New/emerging topics not in training data
-- Higher accuracy required over speed
-- First-time tagging (to build training data)
-
-### Hybrid Approach (Recommended)
-
-```
-1. Axon first pass: Tag confident predictions (threshold > 0.5)
-2. Ollama second pass: Handle uncertain cases (Axon < 0.3)
-3. Manual review: Edge cases (0.3-0.5 confidence)
-```
+1. Add more training data for underperforming tags
+2. Retrain with `mix poke.train` periodically
+3. Increase `min_tags` threshold to focus on common categories
 
 ## Files
 
@@ -496,7 +482,6 @@ AxonTagger.stats()
 - [ ] Cross-validation for robust evaluation
 
 ### Integration Improvements
-- [ ] Automatic Ollama fallback for low-confidence
 - [ ] Nx.Serving for batched inference
 - [ ] Model versioning and A/B testing
 - [ ] Periodic retraining on new data
@@ -521,7 +506,7 @@ This feature is fully documented in the deciduous decision graph:
 │   └── 82 [OBSERVATION] Implementation challenges
 ├── 76 [OBSERVATION] Accuracy evaluation
 │   ├── 86 [OBSERVATION] Detailed test results
-│   └── 83 [DECISION] Axon vs Ollama strategy
+│   └── 83 [DECISION] Tagging strategy
 ├── 77 [OBSERVATION] EXLA performance
 ├── 78 [ACTION] Files created
 ├── 72 [OUTCOME] Implementation complete

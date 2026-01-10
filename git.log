@@ -111,3 +111,7 @@ Created docs/axon-tagger.html - wrapper for axon-tagger.md
 Created docs/atproto-integration.html - wrapper for atproto-integration.md
 2026-01-10 11:44:16 - Staging README and docs updates for push
 2026-01-10 11:44:58 - Synced deciduous graph with documentation outcome
+Sat Jan 10 12:28:20 EST 2026: git add docs/architecture.html docs/atproto-integration.html docs/axon-tagger.html docs/graph.html docs/index.html docs/images/
+Sat Jan 10 12:28:24 EST 2026: git commit
+Sat Jan 10 12:28:28 EST 2026: git push
+2026-01-10 12:31:25 - Removed all Ollama references from docs (architecture.md, axon-tagger.md, README.md)

@@ -109,22 +109,6 @@ mix poke.tag_axon --batch 50 --threshold 0.25
 - 1,700 predictions/sec on Apple M Max
 - 70-95% accuracy on common categories
 
-### Ollama Tagger (Fallback)
-
-Local LLM for niche topics and high accuracy needs.
-
-```bash
-# Requires Ollama running
-ollama serve
-
-# Run tagging
-mix poke.tag --model llama3.2:3b --batch 10
-```
-
-**When to use which:**
-- **Axon**: High volume, common categories, real-time
-- **Ollama**: Niche topics, new categories, highest accuracy
-
 ## ATProto Integration
 
 PokeAround integrates with the AT Protocol for decentralized storage:
@@ -155,8 +139,7 @@ lib/poke_around/
 │   ├── axon/
 │   │   └── text_classifier.ex  # ML model
 │   ├── axon_tagger.ex   # Production GenServer
-│   ├── ollama.ex        # LLM client
-│   └── tagger.ex        # Ollama tagger
+│   └── supervisor.ex    # AI process supervisor
 ├── atproto/
 │   ├── client.ex        # PDS operations
 │   ├── oauth.ex         # OAuth flow
@@ -190,7 +173,7 @@ lib/poke_around_web/
 ```elixir
 # config/config.exs
 
-# Axon Tagger (default)
+# Axon Tagger
 config :poke_around, PokeAround.AI.AxonTagger,
   enabled: true,
   model_path: "priv/models/tagger",
@@ -198,13 +181,6 @@ config :poke_around, PokeAround.AI.AxonTagger,
   batch_size: 20,
   interval_ms: 10_000,
   langs: ["en"]
-
-# Ollama Tagger (fallback)
-config :poke_around, PokeAround.AI.Tagger,
-  enabled: false,
-  model: "llama3.2:3b",
-  batch_size: 10,
-  interval_ms: 5_000
 ```
 
 ## Mix Tasks
@@ -217,20 +193,16 @@ mix poke.train --min-tags 20      # Only common tags
 mix poke.train --test             # Run test predictions
 
 # Tagging
-mix poke.tag_axon                 # Axon tagger (fast)
+mix poke.tag_axon                 # Run Axon tagger
 mix poke.tag_axon --once          # Single batch
 mix poke.tag_axon --threshold 0.3 # Higher confidence
-
-mix poke.tag                      # Ollama tagger
-mix poke.tag --model qwen3:8b     # Different model
-mix poke.tag --all-langs          # All languages
+mix poke.tag_axon --all-langs     # All languages
 ```
 
 ## Requirements
 
 - Elixir 1.15+
 - PostgreSQL 14+
-- (Optional) Ollama for LLM tagging
 
 ## Development
 

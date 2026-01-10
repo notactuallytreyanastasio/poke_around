@@ -30,8 +30,8 @@ PokeAround is a link curation system that extracts, filters, tags, and surfaces 
         ┌───────────────────────────┼───────────────────────────┐
         │                           │                           │
 ┌───────▼───────┐         ┌─────────▼─────────┐        ┌────────▼────────┐
-│    Tagger     │         │    PDS Sync       │        │   Stumble UI    │
-│   (Ollama)    │         │   (ATProto)       │        │  (LiveView)     │
+│  Axon Tagger  │         │    PDS Sync       │        │   Stumble UI    │
+│  (On-device)  │         │   (ATProto)       │        │  (LiveView)     │
 └───────────────┘         └───────────────────┘        └─────────────────┘
 ```
 
@@ -205,73 +205,59 @@ Manages normalized tags and link-tag associations.
 - Usage count tracking
 - Language filtering (English-only by default)
 
-#### Tagger Worker (`lib/poke_around/ai/tagger.ex`)
+#### Axon Tagger (`lib/poke_around/ai/axon_tagger.ex`)
 
-Background GenServer that tags untagged links using Ollama.
+Background GenServer that tags untagged links using on-device ML with Axon/Nx/EXLA.
 
 **Configuration:**
 ```elixir
-config :poke_around, PokeAround.AI.Tagger,
+config :poke_around, PokeAround.AI.AxonTagger,
   enabled: true,
-  model: "llama3.2:3b",
-  batch_size: 10,
-  interval_ms: 5_000
+  model_path: "priv/models/tagger",
+  threshold: 0.25,
+  batch_size: 20,
+  interval_ms: 10_000,
+  langs: ["en"]
 ```
+
+**Model Architecture (`lib/poke_around/ai/axon/text_classifier.ex`):**
+- Multi-label text classification
+- 286K parameters (1.14 MB model file)
+- Input: Bag-of-words text encoding (10K vocabulary)
+- Hidden layers: 256 → 128 neurons with ReLU + dropout
+- Output: Sigmoid activation for multi-label prediction
 
 **Process:**
 1. Query untagged English links (ordered by score)
-2. Build prompt with post text, URL, domain
-3. Call Ollama for JSON array of tags
-4. Parse response, normalize tags
-5. Create tag associations
+2. Encode text using bag-of-words vocabulary
+3. Run inference with trained Axon model
+4. Apply confidence threshold (default 0.25)
+5. Create tag associations for predictions above threshold
 
-**Prompt:**
+**Performance:**
+- 0.59ms per prediction on Apple M Max
+- ~1,700 predictions/sec
+- 70-95% accuracy on common categories (weather, politics, tech, music)
+
+**Training:**
+```bash
+# Train a model from existing tagged links
+mix poke.train --epochs 100 --min-tags 20
+
+# Run with test predictions
+mix poke.train --test
 ```
-You are a link categorization assistant. Given a social media post
-and a link, suggest 3-5 tags that would help humans browse and
-discover this content.
-
-Rules:
-- Tags must be single words or hyphenated (no spaces)
-- Tags should be lowercase
-- Focus on the topic, technology, or category
-- Be specific but not too narrow
-- Avoid generic tags like "interesting" or "cool"
-
-Post: {post_text}
-URL: {url}
-Domain: {domain}
-
-Respond with ONLY a JSON array of tags. Example: ["javascript", "web-dev", "tutorial"]
-```
-
-**Parallel Processing:**
-- Uses `Task.async_stream` for concurrent tagging
-- Max concurrency matches batch size
-- 120 second timeout per task
 
 **Stats:**
 ```elixir
-Tagger.stats()
+AxonTagger.stats()
 # => %{
 #   enabled: true,
-#   model: "llama3.2:3b",
+#   model_loaded: true,
 #   processed: 5000,
-#   errors: 50,
-#   untagged_count: 1200
+#   untagged_count: 1200,
+#   tags_available: 52
 # }
-```
-
-#### Ollama Integration (`lib/poke_around/ai/ollama.ex`)
-
-HTTP client for local Ollama inference.
-
-```elixir
-Ollama.generate("Summarize this", model: "llama3.2:3b")
-# => {:ok, "A summary..."}
-
-Ollama.available?()
-# => true
 ```
 
 ### 7. Stumble UI (`lib/poke_around_web/live/stumble_live.ex`)
@@ -327,7 +313,7 @@ PokeAround.Application
 │   ├── Firehose
 │   └── Extractor
 ├── PokeAround.AI.Supervisor
-│   └── Tagger
+│   └── AxonTagger
 ├── PokeAround.ATProto.Supervisor
 │   ├── TID (Agent)
 │   └── Sync (GenServer)
@@ -348,16 +334,19 @@ Turbostream → Firehose → Parser → Extractor → Links.store_link()
 ### Tag Processing
 
 ```
-Tagger (every 5s)
+AxonTagger (every 10s)
     │
     ▼
-Tags.untagged_links(10, langs: ["en"])
+Tags.untagged_links(20, langs: ["en"])
     │
     ▼
-Ollama.generate(prompt)
+TextClassifier.predict(model, text)
     │
     ▼
-Tags.tag_link(link, ["tag1", "tag2"])
+Filter predictions > threshold (0.25)
+    │
+    ▼
+Tags.tag_link(link, predicted_tags)
 ```
 
 ### PDS Sync
@@ -395,12 +384,14 @@ Update link: at_uri, synced_at, sync_status
 config :poke_around, PokeAround.Bluesky.Firehose,
   url: "wss://api.graze.social/app/api/v1/turbostream/turbostream"
 
-# Tagger
-config :poke_around, PokeAround.AI.Tagger,
+# Axon Tagger
+config :poke_around, PokeAround.AI.AxonTagger,
   enabled: true,
-  model: "llama3.2:3b",
-  batch_size: 10,
-  interval_ms: 5_000
+  model_path: "priv/models/tagger",
+  threshold: 0.25,
+  batch_size: 20,
+  interval_ms: 10_000,
+  langs: ["en"]
 
 # ATProto
 config :poke_around, PokeAround.ATProto,
@@ -439,7 +430,8 @@ CREATE UNIQUE INDEX tags_slug_index ON tags(slug);
 |--------|-------|
 | Firehose throughput | ~31 msg/sec |
 | Qualification rate | ~14% of posts with links |
-| Tagging batch | 10 links every 5 seconds |
+| Axon inference | 0.59ms per prediction (~1,700/sec) |
+| Tagging batch | 20 links every 10 seconds |
 | PDS sync batch | 20 links every 60 seconds |
 | Stumble query | 50 random links, ~20ms |
 
