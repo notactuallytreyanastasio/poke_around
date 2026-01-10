@@ -115,3 +115,7 @@ Sat Jan 10 12:28:20 EST 2026: git add docs/architecture.html docs/atproto-integr
 Sat Jan 10 12:28:24 EST 2026: git commit
 Sat Jan 10 12:28:28 EST 2026: git push
 2026-01-10 12:31:25 - Removed all Ollama references from docs (architecture.md, axon-tagger.md, README.md)
+Sat Jan 10 12:38:41 EST 2026: git add docs/images/
+Sat Jan 10 12:38:41 EST 2026: git commit
+Sat Jan 10 12:38:41 EST 2026: git push
+2026-01-10 12:53:26 - Rewrote README with compelling narrative and better structure
