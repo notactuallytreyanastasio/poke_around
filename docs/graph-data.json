@@ -1077,6 +1077,28 @@
       "created_at": "2026-01-10T11:33:30.443138-05:00",
       "updated_at": "2026-01-10T11:33:30.443138-05:00",
       "metadata_json": "{\"branch\":\"feature/axon-tagger-tests\",\"confidence\":100}"
+    },
+    {
+      "id": 99,
+      "change_id": "a157cd11-572e-4560-983b-aec8f8d98476",
+      "node_type": "outcome",
+      "title": "Pushed to GitHub with Axon tagger, ATProto, and Pages docs",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-10T11:39:40.580043-05:00",
+      "updated_at": "2026-01-10T11:39:40.580043-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"db776de\",\"confidence\":100}"
+    },
+    {
+      "id": 100,
+      "change_id": "647a288a-0a44-481d-b851-8b5ba5983417",
+      "node_type": "outcome",
+      "title": "Fleshed out README and fixed docs GitHub link",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-10T11:44:39.352037-05:00",
+      "updated_at": "2026-01-10T11:44:39.352037-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"7a199be\",\"confidence\":95}"
     }
   ],
   "edges": [
@@ -2223,6 +2245,28 @@
       "weight": 1.0,
       "rationale": "Site implementation complete",
       "created_at": "2026-01-10T11:33:30.451114-05:00"
+    },
+    {
+      "id": 105,
+      "from_node_id": 98,
+      "to_node_id": 99,
+      "from_change_id": "40938814-2d37-4e35-8a52-4093a0f11fef",
+      "to_change_id": "a157cd11-572e-4560-983b-aec8f8d98476",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Commit pushed to GitHub",
+      "created_at": "2026-01-10T11:39:45.673229-05:00"
+    },
+    {
+      "id": 106,
+      "from_node_id": 96,
+      "to_node_id": 100,
+      "from_change_id": "acaab132-4092-40a7-929c-2c3842bb3f6a",
+      "to_change_id": "647a288a-0a44-481d-b851-8b5ba5983417",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Documentation enhancement",
+      "created_at": "2026-01-10T11:44:44.203728-05:00"
     }
   ]
 }

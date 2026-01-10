@@ -1,5 +1,21 @@
 [
   {
+    "hash": "7a199bed04cb35425c421e34532bd044e42bf494",
+    "short_hash": "7a199be",
+    "author": "Bobby Nathan",
+    "date": "2026-01-10T11:44:25-05:00",
+    "message": "Flesh out README and fix docs GitHub link",
+    "files_changed": 6
+  },
+  {
+    "hash": "db776de694ff439435907be0f727141cec9a1a73",
+    "short_hash": "db776de",
+    "author": "Bobby Nathan",
+    "date": "2026-01-10T11:39:35-05:00",
+    "message": "Add Axon ML tagger, ATProto integration, and GitHub Pages docs\n\n- Axon/Nx/EXLA tagger for on-device ML tagging (1700 pred/sec)\n- ATProto OAuth, PDS sync, custom lexicons\n- GitHub Pages site with classic Mac OS styling\n- Comprehensive test suite (83 tests)\n- Architecture and API documentation",
+    "files_changed": 56
+  },
+  {
     "hash": "02622b96009464a36928749eb68dd61f819d6ecd",
     "short_hash": "02622b9",
     "author": "Bobby Nathan",
