@@ -493,7 +493,7 @@ defmodule PokeAroundWeb.StumbleLive do
             </div>
           <% end %>
         </div>
-        <div class="mac-menu-item">Special</div>
+        <a href="/ingestion" class="mac-menu-item" style="text-decoration: none; color: inherit;">Ingestion</a>
       </div>
 
       <div class="mac-window">

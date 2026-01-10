@@ -18,6 +18,8 @@ defmodule PokeAroundWeb.Router do
     pipe_through :browser
 
     live "/", StumbleLive, :index
+    live "/stumble", StumbleLive, :index
+    live "/ingestion", IngestionLive, :index
     live "/bookmarklet", BookmarkletLive, :index
   end
 

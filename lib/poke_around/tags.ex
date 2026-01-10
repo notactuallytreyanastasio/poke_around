@@ -32,10 +32,10 @@ defmodule PokeAround.Tags do
   and associates them with the link.
   """
   def tag_link(link, tag_names, opts \\ []) when is_list(tag_names) do
-    source = opts[:source] || "ollama"
+    source = opts[:source] || "axon"
     confidence = opts[:confidence]
 
-    Repo.transaction(fn ->
+    result = Repo.transaction(fn ->
       tag_ids =
         tag_names
         |> Enum.map(&get_or_create_tag/1)
@@ -70,6 +70,21 @@ defmodule PokeAround.Tags do
 
       :ok
     end)
+
+    # Broadcast tagging result for live ingestion view
+    case result do
+      {:ok, :ok} ->
+        Phoenix.PubSub.broadcast(
+          PokeAround.PubSub,
+          "links:tagged",
+          {:link_tagged, %{link_id: link.id, tags: tag_names, source: source}}
+        )
+
+      _ ->
+        :ok
+    end
+
+    result
   end
 
   @doc """

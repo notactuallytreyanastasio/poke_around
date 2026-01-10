@@ -27,8 +27,20 @@ defmodule PokeAround.Links do
     |> Link.changeset(attrs)
     |> Repo.insert(on_conflict: :nothing)
     |> case do
-      {:ok, %Link{id: nil}} -> {:ok, :exists}
-      result -> result
+      {:ok, %Link{id: nil}} ->
+        {:ok, :exists}
+
+      {:ok, link} = result ->
+        # Broadcast new link for live ingestion view
+        Phoenix.PubSub.broadcast(
+          PokeAround.PubSub,
+          "links:new",
+          {:new_link, link}
+        )
+        result
+
+      error ->
+        error
     end
   end
 
