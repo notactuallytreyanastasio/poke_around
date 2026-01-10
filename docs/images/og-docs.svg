@@ -1,0 +1,45 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="dither" width="2" height="2" patternUnits="userSpaceOnUse">
+      <rect width="1" height="1" fill="#a0a0a0"/>
+      <rect x="1" y="1" width="1" height="1" fill="#a0a0a0"/>
+      <rect x="1" y="0" width="1" height="1" fill="#808080"/>
+      <rect x="0" y="1" width="1" height="1" fill="#808080"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#dither)"/>
+
+  <!-- Window -->
+  <rect x="100" y="80" width="1000" height="470" fill="#ffffff" stroke="#000000" stroke-width="3"/>
+
+  <!-- Titlebar -->
+  <rect x="100" y="80" width="1000" height="28" fill="#cccccc" stroke="#000000" stroke-width="2"/>
+  <rect x="108" y="88" width="14" height="14" fill="#ffffff" stroke="#000000" stroke-width="1"/>
+
+  <!-- Titlebar lines -->
+  <line x1="130" y1="88" x2="500" y2="88" stroke="#000" stroke-width="1"/>
+  <line x1="130" y1="91" x2="500" y2="91" stroke="#000" stroke-width="1"/>
+  <line x1="130" y1="94" x2="500" y2="94" stroke="#000" stroke-width="1"/>
+  <line x1="130" y1="97" x2="500" y2="97" stroke="#000" stroke-width="1"/>
+
+  <text x="600" y="100" font-family="Chicago, Monaco, monospace" font-size="14" font-weight="bold" text-anchor="middle">poke_around</text>
+
+  <line x1="700" y1="88" x2="1090" y2="88" stroke="#000" stroke-width="1"/>
+  <line x1="700" y1="91" x2="1090" y2="91" stroke="#000" stroke-width="1"/>
+  <line x1="700" y1="94" x2="1090" y2="94" stroke="#000" stroke-width="1"/>
+  <line x1="700" y1="97" x2="1090" y2="97" stroke="#000" stroke-width="1"/>
+
+  <!-- Content area -->
+  <rect x="100" y="108" width="1000" height="442" fill="#ffffff"/>
+
+  <!-- Big text -->
+  <text x="600" y="340" font-family="Chicago, Geneva, Monaco, monospace" font-size="120" font-weight="bold" text-anchor="middle" fill="#000000">DOCS</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="420" font-family="Monaco, monospace" font-size="28" text-anchor="middle" fill="#666666">link curation system documentation</text>
+
+  <!-- Apple icon -->
+  <text x="150" y="180" font-size="48">&#127822;</text>
+</svg>
