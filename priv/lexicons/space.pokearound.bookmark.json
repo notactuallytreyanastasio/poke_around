@@ -1,0 +1,56 @@
+{
+  "lexicon": 1,
+  "id": "space.pokearound.bookmark",
+  "description": "A personal bookmark saved to user's PDS",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["url", "createdAt"],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 2048,
+            "description": "The bookmarked URL"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "Title of the bookmarked page"
+          },
+          "domain": {
+            "type": "string",
+            "maxLength": 256,
+            "description": "Normalized domain"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 1000,
+            "description": "Personal note about this bookmark"
+          },
+          "personalTags": {
+            "type": "array",
+            "maxLength": 10,
+            "items": {
+              "type": "string",
+              "maxLength": 64
+            },
+            "description": "User's personal tags for organization"
+          },
+          "pokeAroundUri": {
+            "type": "string",
+            "format": "at-uri",
+            "description": "AT URI of the space.pokearound.link record if available"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    }
+  }
+}

@@ -16,6 +16,8 @@ defmodule PokeAround.Application do
       PokeAround.Bluesky.Supervisor,
       # AI services (tagging, etc.)
       PokeAround.AI.Supervisor,
+      # ATProto integration (OAuth, PDS sync)
+      PokeAround.ATProto.Supervisor,
       # Start to serve requests, typically the last entry
       PokeAroundWeb.Endpoint
     ]

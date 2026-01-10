@@ -23,6 +23,14 @@ end
 config :poke_around, PokeAroundWeb.Endpoint,
   http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 
+# ATProto OAuth Configuration
+config :poke_around, :atproto_client_id,
+  System.get_env("ATPROTO_CLIENT_ID")
+
+config :poke_around, PokeAround.ATProto,
+  sync_min_score: String.to_integer(System.get_env("ATPROTO_SYNC_MIN_SCORE", "50")),
+  sync_enabled: System.get_env("ATPROTO_SYNC_ENABLED", "false") == "true"
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||

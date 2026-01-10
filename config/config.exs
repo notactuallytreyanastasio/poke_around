@@ -60,6 +60,19 @@ config :logger, :default_formatter,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Configure Nx to use EXLA backend (optimized for Apple Silicon)
+config :nx, :default_backend, EXLA.Backend
+
+# Axon Tagger configuration
+# Fast on-device ML tagger using EXLA acceleration
+config :poke_around, PokeAround.AI.AxonTagger,
+  enabled: true,
+  model_path: "priv/models/tagger",
+  threshold: 0.25,
+  batch_size: 20,
+  interval_ms: 10_000,
+  langs: ["en"]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

@@ -98,20 +98,46 @@ defmodule PokeAround.Tags do
 
   @doc """
   Get links by tag slug.
+
+  Options:
+  - `:limit` - Max links to return (default: 50)
+  - `:order` - :newest (default) or :score
+  - `:langs` - Filter by languages (empty list = all)
   """
   def links_by_tag(slug, opts \\ []) do
-    limit = opts[:limit] || 20
+    limit = opts[:limit] || 50
+    order = opts[:order] || :newest
+    langs = opts[:langs] || []
 
-    from(l in Link,
+    order_by = case order do
+      :newest -> [desc: :inserted_at]
+      :score -> [desc: :score]
+    end
+
+    query = from(l in Link,
       join: lt in LinkTag,
       on: lt.link_id == l.id,
       join: t in Tag,
       on: t.id == lt.tag_id,
       where: t.slug == ^slug,
-      order_by: [desc: l.score],
+      order_by: ^order_by,
       limit: ^limit
     )
-    |> Repo.all()
+
+    query = if langs != [] do
+      from(l in query, where: fragment("? && ?", l.langs, ^langs))
+    else
+      query
+    end
+
+    Repo.all(query)
+  end
+
+  @doc """
+  Get a tag by slug.
+  """
+  def get_tag_by_slug(slug) do
+    Repo.get_by(Tag, slug: slug)
   end
 
   @doc """
@@ -123,14 +149,17 @@ defmodule PokeAround.Tags do
   def untagged_links(limit \\ 10, opts \\ []) do
     langs = opts[:langs] || ["en"]
 
-    from(l in Link,
+    query = from(l in Link,
       where: is_nil(l.tagged_at),
       where: not is_nil(l.post_text),
-      where: fragment("? && ?", l.langs, ^langs),
       order_by: [desc: l.score],
       limit: ^limit
     )
-    |> Repo.all()
+
+    # Only filter by language if langs is non-empty
+    query = if langs != [], do: from(l in query, where: fragment("? && ?", l.langs, ^langs)), else: query
+
+    Repo.all(query)
   end
 
   @doc """
@@ -142,11 +171,14 @@ defmodule PokeAround.Tags do
   def count_untagged(opts \\ []) do
     langs = opts[:langs] || ["en"]
 
-    from(l in Link,
+    query = from(l in Link,
       where: is_nil(l.tagged_at),
-      where: not is_nil(l.post_text),
-      where: fragment("? && ?", l.langs, ^langs)
+      where: not is_nil(l.post_text)
     )
-    |> Repo.aggregate(:count)
+
+    # Only filter by language if langs is non-empty
+    query = if langs != [], do: from(l in query, where: fragment("? && ?", l.langs, ^langs)), else: query
+
+    Repo.aggregate(query, :count)
   end
 end

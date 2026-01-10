@@ -1,11 +1,67 @@
 [
   {
+    "hash": "02622b96009464a36928749eb68dd61f819d6ecd",
+    "short_hash": "02622b9",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T16:58:30-05:00",
+    "message": "Default tagger to English-only links",
+    "files_changed": 2
+  },
+  {
+    "hash": "a94f503dd0b95927d620a859080a7fdc46f33153",
+    "short_hash": "a94f503",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T16:52:48-05:00",
+    "message": "Add parallel processing to Tagger using Task.async_stream",
+    "files_changed": 2
+  },
+  {
+    "hash": "8f03dab9c7307f32cc76467feacb85bb3fcb6697",
+    "short_hash": "8f03dab",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T16:31:45-05:00",
+    "message": "Add detailed logging for tagged links (post, url, tags)",
+    "files_changed": 2
+  },
+  {
+    "hash": "c7b946829cccb9159ef81d1442f56041147519df",
+    "short_hash": "c7b9468",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T16:20:37-05:00",
+    "message": "Switch Ollama client from :httpc to Req",
+    "files_changed": 3
+  },
+  {
+    "hash": "b65346f854ad277df3956b897e65637085c4e115",
+    "short_hash": "b65346f",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T15:56:58-05:00",
+    "message": "Add language filter feature\n\nDatabase:\n- Migration adds langs array column with GIN index\n- Link schema updated with langs field\n\nBackend:\n- Extractor captures langs from firehose posts\n- Links context supports :langs filter option (array overlap)\n- API controller accepts lang param from bookmarklet\n\nUI:\n- Mac-style Language dropdown in menubar\n- Toggle individual languages (en, es, pt, de, fr, ja, ko, zh)\n- \"All Languages\" option clears filter\n- Status bar shows active filter\n\nBookmarklet:\n- Detects page language via document.documentElement.lang\n- Falls back to navigator.language\n- Extracts base code (en-US -> en)",
+    "files_changed": 9
+  },
+  {
+    "hash": "074f350f6c7b1321773a1437381df6ac67c65db5",
+    "short_hash": "074f350",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T15:34:42-05:00",
+    "message": "Add emoji filter, banned domains, and UI fixes\n\nFiltering:\n- Max 3 emojis per post (spam filter)\n- Banned domains: tinyurl.com, bit.ly, t.co\n- Domain check in extractor before storing\n\nUI changes:\n- Grey/white dot pattern background (authentic Mac OS)\n- Wider window (95%, max 1000px)\n- Swapped columns: Post | Domain (removed Score)\n- Cleaned up unused score CSS\n\nDatabase cleanup:\n- Deleted 21 links from banned domains\n- Deleted 4 emoji spam links",
+    "files_changed": 4
+  },
+  {
     "hash": "56a50820d3caff955a75a03da4a69448b3c99ff9",
     "short_hash": "56a5082",
     "author": "Bobby Nathan",
     "date": "2026-01-09T15:25:40-05:00",
     "message": "Redesign UI as retro Mac OS desktop\n\n- Classic Mac OS 9/System 7 aesthetic\n- Window with titlebar, horizontal lines, close button\n- Grab bag view showing 20 links at once\n- Domain | Post | Score columns\n- Classic Mac scrollbar styling\n- Menu bar with Apple menu\n- Shuffle button to get new random links\n- Click any row to open link",
     "files_changed": 1
+  },
+  {
+    "hash": "d9973b58998d61acc0fe503dff4d42fb5544cc3a",
+    "short_hash": "d9973b5",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T15:22:42-05:00",
+    "message": "Cleanup: purged 166 old links not meeting new quality criteria",
+    "files_changed": 3
   },
   {
     "hash": "97a9069fa4415a2c54fe70b93beca4ce2721c6df",
@@ -62,5 +118,13 @@
     "date": "2026-01-09T14:56:55-05:00",
     "message": "Add Bluesky firehose integration via Graze Turbostream\n\n- WebSocket client connecting to Turbostream (hydrated firehose)\n- Parser for Turbostream events with snake_case keys\n- Type definitions for Post, Author, ExternalEmbed, FacetLink\n- Supervisor for firehose process\n- Broadcasts posts via Phoenix PubSub",
     "files_changed": 5
+  },
+  {
+    "hash": "ceaf5cb24cdc1e8742bd1f2231a562af0b12245b",
+    "short_hash": "ceaf5cb",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T14:56:38-05:00",
+    "message": "Initial Phoenix setup for poke_around",
+    "files_changed": 0
   }
 ]

@@ -67,3 +67,45 @@ Add detailed tagger logging
 Tightened emoji filter: max 1 emoji, deleted 62 links
 Add parallel processing to Tagger
 Default tagger to English only
+2026-01-09 17:47:31 - Added Page dropdown menu with Bag of Links, Tag Browsing, Your Links
+2026-01-09 17:59:27 - Fixed viewport height: flexbox layout with internal scrolling, no page overflow
+2026-01-09 18:02:58 - Tags page: click tag to see links (newest first), back button to return
+2026-01-09 18:17:10 - Fixed: default to English, window title shows tag name, refresh tags on back
+2026-01-09 18:18:01 - Tag links now respect language filter
+2026-01-09 18:34:39 - Switched tagger to llama3.2:3b (no thinking), batch=10, interval=5s
+2026-01-10 00:32:11 - Created mix poke.tag task for standalone background tagging
+2026-01-10 01:05:46 - Fixed mix poke.tag startup (ensure postgrex/ecto_sql started first)
+2026-01-10 01:31:24 - Parse failures now marked as needs-review (won't block queue)
+---
+deciduous add goal (ATProto integration)
+Sat Jan 10 01:41:04 EST 2026
+2026-01-10 01:46:24 - Starting 10-minute ingestion run for README documentation
+2026-01-10 02:01:36 - README updated with full pipeline documentation
+---
+deciduous add action (Phase 1 implementation)
+Sat Jan 10 02:55:51 EST 2026
+---
+deciduous add outcome (Phase 1 complete)
+Sat Jan 10 03:04:04 EST 2026
+2026-01-10 04:15:58 - Adding Axon/Nx/EXLA/Bumblebee dependencies
+2026-01-10 04:18:47 - Starting Axon model training
+2026-01-10 04:30:00 - Axon tagger implementation complete
+  - Created lib/poke_around/ai/axon/text_classifier.ex (model architecture)
+  - Created lib/mix/tasks/poke.train.ex (training task)
+  - Created lib/poke_around/ai/axon_tagger.ex (GenServer)
+  - Created lib/mix/tasks/poke.tag_axon.ex (tagging task)
+  - Trained model on 1104 samples with 50+ tags
+  - Model works well for: weather (95%), politics (72%), immigration (87%), music (81%)
+  - Limitations: struggles with niche tags not in training vocabulary
+2026-01-10 04:35:00 - Added XLA_TARGET=cpu auto-config for Apple Silicon
+  - EXLA on M Max: 0.59ms per prediction (~1700 predictions/sec)
+  - That's ~1000-3000x faster than Ollama LLM inference
+  - XLA_TARGET now auto-set in mix tasks
+2026-01-10 08:59:47 - Added Axon tagger config to config.exs and updated AI.Supervisor to use it
+2026-01-10 11:13:28 - Removed Ollama tagger (tagger.ex, ollama.ex, poke.tag.ex). Axon tagger is now the only tagger.
+2026-01-10 11:17:00 - git checkout -b feature/axon-tagger-tests
+mv docs/index.html docs/graph.html
+Created docs/index.html - Mac OS styled landing page
+Created docs/architecture.html - wrapper for architecture.md
+Created docs/axon-tagger.html - wrapper for axon-tagger.md
+Created docs/atproto-integration.html - wrapper for atproto-integration.md

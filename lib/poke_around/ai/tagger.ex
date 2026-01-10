@@ -1,22 +1,18 @@
 defmodule PokeAround.AI.Tagger do
   @moduledoc """
-  GenServer that continuously processes untagged links using Ollama.
+  GenServer that tags links using Ollama with a curated tag vocabulary.
 
-  Runs independently as a background worker, picking up untagged links
-  and enriching them with AI-generated tags.
-
-  ## Usage
-
-      # Start via supervisor
-      children = [PokeAround.AI.Tagger]
+  Uses a seed list of ~300 tags to guide the LLM toward consistent categorization.
+  Falls back to generating new tags if none of the seed tags fit.
 
   ## Configuration
 
       config :poke_around, PokeAround.AI.Tagger,
         enabled: true,
-        model: "qwen3:8b",
-        batch_size: 5,
-        interval_ms: 10_000
+        model: "llama3.2:3b",
+        batch_size: 10,
+        interval_ms: 10_000,
+        langs: ["en"]
   """
 
   use GenServer
@@ -25,16 +21,22 @@ defmodule PokeAround.AI.Tagger do
 
   alias PokeAround.AI.Ollama
   alias PokeAround.Tags
+  alias PokeAround.Repo
+  alias PokeAround.Links.Link
+  import Ecto.Query
 
+  @default_model "llama3.2:3b"
+  @default_batch_size 10
   @default_interval_ms 10_000
-  @default_batch_size 5
-  @default_model "qwen3:8b"
+  @seed_tags_path "priv/data/seed_tags.txt"
 
   defstruct [
     :model,
     :batch_size,
     :interval_ms,
     :enabled,
+    :seed_tags,
+    :langs,
     processed: 0,
     errors: 0,
     last_run: nil
@@ -72,10 +74,10 @@ defmodule PokeAround.AI.Tagger do
   end
 
   @doc """
-  Enable or disable the tagger.
+  Tag a single link (for testing).
   """
-  def set_enabled(enabled, server \\ __MODULE__) do
-    GenServer.call(server, {:set_enabled, enabled})
+  def tag_one(link_id, server \\ __MODULE__) do
+    GenServer.call(server, {:tag_one, link_id}, 60_000)
   end
 
   # ---------------------------------------------------------------------------
@@ -86,24 +88,25 @@ defmodule PokeAround.AI.Tagger do
   def init(opts) do
     config = Application.get_env(:poke_around, __MODULE__, [])
 
+    seed_tags = load_seed_tags()
+
     state = %__MODULE__{
       model: opts[:model] || config[:model] || @default_model,
       batch_size: opts[:batch_size] || config[:batch_size] || @default_batch_size,
       interval_ms: opts[:interval_ms] || config[:interval_ms] || @default_interval_ms,
-      enabled: opts[:enabled] != false && config[:enabled] != false
+      enabled: Keyword.get(opts, :enabled, Keyword.get(config, :enabled, true)),
+      langs: opts[:langs] || config[:langs] || ["en"],
+      seed_tags: seed_tags
     }
 
     if state.enabled do
-      # Check if Ollama is available before starting
       if Ollama.available?() do
-        Logger.info("Tagger started: model=#{state.model}, batch=#{state.batch_size}, interval=#{state.interval_ms}ms")
+        Logger.info("Tagger ready: #{length(seed_tags)} seed tags, model=#{state.model}")
         schedule_run(state.interval_ms)
       else
-        Logger.warning("Tagger: Ollama not available, will retry")
+        Logger.warning("Tagger: Ollama not available, will retry in 30s")
         schedule_run(30_000)
       end
-    else
-      Logger.info("Tagger started in disabled mode")
     end
 
     {:ok, state}
@@ -130,22 +133,31 @@ defmodule PokeAround.AI.Tagger do
 
   @impl GenServer
   def handle_call(:stats, _from, state) do
+    untagged = count_untagged(state.langs)
+
     stats = %{
       enabled: state.enabled,
       model: state.model,
       processed: state.processed,
       errors: state.errors,
       last_run: state.last_run,
-      untagged_count: Tags.count_untagged()
+      untagged_count: untagged,
+      seed_tags_count: length(state.seed_tags)
     }
 
     {:reply, stats, state}
   end
 
   @impl GenServer
-  def handle_call({:set_enabled, enabled}, _from, state) do
-    Logger.info("Tagger #{if enabled, do: "enabled", else: "disabled"}")
-    {:reply, :ok, %{state | enabled: enabled}}
+  def handle_call({:tag_one, link_id}, _from, state) do
+    link = Repo.get(Link, link_id)
+
+    if link do
+      result = tag_link(link, state)
+      {:reply, result, state}
+    else
+      {:reply, {:error, :not_found}, state}
+    end
   end
 
   # ---------------------------------------------------------------------------
@@ -157,142 +169,199 @@ defmodule PokeAround.AI.Tagger do
   end
 
   defp process_batch(state) do
-    links = Tags.untagged_links(state.batch_size)
-
-    if links == [] do
+    if not Ollama.available?() do
+      Logger.warning("Tagger: Ollama not available, skipping")
       state
     else
-      Logger.info("Tagger: processing #{length(links)} links in parallel")
-      start_time = System.monotonic_time(:millisecond)
+      links = fetch_untagged_links(state.batch_size, state.langs)
 
-      # Process all links in parallel
-      results =
-        links
-        |> Task.async_stream(
-          fn link -> {link, tag_link(link, state.model)} end,
-          max_concurrency: state.batch_size,
-          timeout: 120_000,
-          on_timeout: :kill_task
-        )
-        |> Enum.to_list()
+      if links == [] do
+        state
+      else
+        {processed, errors} =
+          Enum.reduce(links, {0, 0}, fn link, {p, e} ->
+            case tag_link(link, state) do
+              {:ok, _tags} -> {p + 1, e}
+              {:error, _} -> {p, e + 1}
+            end
+          end)
 
-      elapsed = System.monotonic_time(:millisecond) - start_time
+        new_processed = state.processed + processed
+        new_errors = state.errors + errors
 
-      # Tally results
-      {processed, errors} =
-        Enum.reduce(results, {0, 0}, fn
-          {:ok, {link, {:ok, tags}}}, {p, e} ->
-            log_tagged_link(link, tags)
-            {p + 1, e}
+        # Calculate rate
+        uptime_mins = max(DateTime.diff(DateTime.utc_now(), state.last_run || DateTime.utc_now()) / 60, 1)
+        rate = Float.round(new_processed / max(uptime_mins, 0.1), 1)
 
-          {:ok, {link, {:error, reason}}}, {p, e} ->
-            Logger.warning("Tagger: failed to tag link #{link.id}: #{inspect(reason)}")
-            {p, e + 1}
+        Logger.info("Tagger: #{processed}/#{length(links)} tagged | #{new_processed} total | #{rate}/min")
 
-          {:exit, :timeout}, {p, e} ->
-            Logger.warning("Tagger: task timed out")
-            {p, e + 1}
-        end)
-
-      Logger.info("Tagger: batch complete in #{elapsed}ms (#{processed} ok, #{errors} errors)")
-
-      %{state | processed: state.processed + processed, errors: state.errors + errors}
+        %{state | processed: new_processed, errors: new_errors}
+      end
     end
   end
 
-  defp tag_link(link, model) do
-    prompt = build_prompt(link)
+  defp fetch_untagged_links(limit, langs) do
+    query =
+      from(l in Link,
+        where: is_nil(l.tagged_at),
+        where: not is_nil(l.post_text),
+        order_by: [desc: l.score, desc: l.inserted_at],
+        limit: ^limit
+      )
 
-    case Ollama.generate(prompt, model: model) do
+    query =
+      if langs != [] do
+        from(l in query, where: fragment("? && ?", l.langs, ^langs))
+      else
+        query
+      end
+
+    Repo.all(query)
+  end
+
+  defp count_untagged(langs) do
+    query =
+      from(l in Link,
+        where: is_nil(l.tagged_at),
+        where: not is_nil(l.post_text)
+      )
+
+    query =
+      if langs != [] do
+        from(l in query, where: fragment("? && ?", l.langs, ^langs))
+      else
+        query
+      end
+
+    Repo.aggregate(query, :count)
+  end
+
+  defp tag_link(link, state) do
+    prompt = build_prompt(link, state.seed_tags)
+
+    case Ollama.generate(prompt, model: state.model, temperature: 0.3) do
       {:ok, response} ->
-        case parse_tags(response) do
+        case parse_tags(response, state.seed_tags) do
           {:ok, tags} when tags != [] ->
             Tags.tag_link(link, tags, source: "ollama")
+            log_tagged(link, tags)
             {:ok, tags}
 
           {:ok, []} ->
-            # No tags extracted, mark as processed anyway
-            Tags.tag_link(link, ["untagged"], source: "ollama")
-            {:ok, ["untagged"]}
+            # No tags - mark as needs-review
+            Tags.tag_link(link, ["needs-review"], source: "ollama-uncertain")
+            {:ok, ["needs-review"]}
 
-          {:error, reason} ->
-            {:error, {:parse_error, reason}}
+          {:error, _reason} ->
+            Tags.tag_link(link, ["needs-review"], source: "ollama-parse-error")
+            {:ok, ["needs-review"]}
         end
 
       {:error, reason} ->
+        Logger.debug("Tagger: Ollama error for link #{link.id}: #{inspect(reason)}")
         {:error, reason}
     end
   end
 
-  defp build_prompt(link) do
-    post_text = link.post_text || ""
+  defp build_prompt(link, seed_tags) do
+    post_text = String.slice(link.post_text || "", 0, 500)
     url = link.url || ""
     domain = link.domain || ""
 
+    # Group tags by first letter for readability
+    tag_list = Enum.join(seed_tags, ", ")
+
     """
-    You are a link categorization assistant. Given a social media post and a link, suggest 3-5 tags that would help humans browse and discover this content.
+    You are a link categorization assistant. Given a social media post and URL, select 2-5 tags from the provided list that best describe the content.
 
-    Rules:
-    - Tags must be single words or hyphenated (no spaces)
-    - Tags should be lowercase
-    - Focus on the topic, technology, or category
-    - Be specific but not too narrow
-    - Avoid generic tags like "interesting" or "cool"
+    AVAILABLE TAGS (choose ONLY from this list):
+    #{tag_list}
 
-    Post: #{String.slice(post_text, 0, 500)}
+    RULES:
+    - Select 2-5 tags that accurately describe the content
+    - Only use tags from the list above
+    - If nothing fits well, return an empty array []
+    - Respond with ONLY a JSON array, no explanation
+
+    POST: #{post_text}
     URL: #{url}
-    Domain: #{domain}
+    DOMAIN: #{domain}
 
-    Respond with ONLY a JSON array of tags. Example: ["javascript", "web-dev", "tutorial"]
+    JSON array of tags:
     """
   end
 
-  defp parse_tags(response) do
-    # Try to extract JSON array from response
-    # The model might include thinking or extra text
+  defp parse_tags(response, seed_tags) do
+    seed_set = MapSet.new(seed_tags)
 
-    # First, try direct JSON parse
-    case Jason.decode(String.trim(response)) do
+    # Clean up the response
+    cleaned =
+      response
+      |> String.trim()
+      |> String.replace(~r/^```json\s*/i, "")
+      |> String.replace(~r/\s*```$/, "")
+      |> String.trim()
+
+    # Try direct JSON parse
+    case Jason.decode(cleaned) do
       {:ok, tags} when is_list(tags) ->
-        {:ok, normalize_tags(tags)}
+        valid_tags =
+          tags
+          |> Enum.filter(&is_binary/1)
+          |> Enum.map(&String.downcase/1)
+          |> Enum.map(&String.replace(&1, ~r/\s+/, "-"))
+          |> Enum.filter(&MapSet.member?(seed_set, &1))
+          |> Enum.take(5)
+
+        {:ok, valid_tags}
 
       _ ->
-        # Try to find JSON array in the response
-        case Regex.run(~r/\[([^\]]+)\]/, response) do
+        # Try to extract array from response
+        case Regex.run(~r/\[([^\]]*)\]/, cleaned) do
           [match | _] ->
             case Jason.decode(match) do
               {:ok, tags} when is_list(tags) ->
-                {:ok, normalize_tags(tags)}
+                valid_tags =
+                  tags
+                  |> Enum.filter(&is_binary/1)
+                  |> Enum.map(&String.downcase/1)
+                  |> Enum.filter(&MapSet.member?(seed_set, &1))
+                  |> Enum.take(5)
+
+                {:ok, valid_tags}
 
               _ ->
-                {:error, :no_valid_json}
+                {:error, :invalid_json}
             end
 
           nil ->
-            {:error, :no_json_array}
+            {:error, :no_array_found}
         end
     end
   end
 
-  defp normalize_tags(tags) do
-    tags
-    |> Enum.filter(&is_binary/1)
-    |> Enum.map(&String.downcase/1)
-    |> Enum.map(&String.replace(&1, ~r/\s+/, "-"))
-    |> Enum.map(&String.replace(&1, ~r/[^a-z0-9\-]/, ""))
-    |> Enum.reject(&(&1 == ""))
-    |> Enum.take(5)
+  defp load_seed_tags do
+    path = Application.app_dir(:poke_around, @seed_tags_path)
+
+    case File.read(path) do
+      {:ok, content} ->
+        content
+        |> String.split("\n")
+        |> Enum.map(&String.trim/1)
+        |> Enum.reject(&(&1 == "" or String.starts_with?(&1, "#")))
+
+      {:error, _} ->
+        Logger.warning("Tagger: Could not load seed tags from #{path}")
+        []
+    end
   end
 
-  defp log_tagged_link(link, tags) do
-    post_preview = link.post_text |> String.slice(0, 80) |> String.replace(~r/\s+/, " ")
-    tags_str = Enum.join(tags, ", ")
+  defp log_tagged(link, tags) do
+    preview =
+      link.post_text
+      |> String.slice(0, 60)
+      |> String.replace(~r/\s+/, " ")
 
-    Logger.info("""
-    [Tagger] Tagged link ##{link.id}
-      Post: #{post_preview}...
-      Link: #{link.url}
-      Tags: #{tags_str}
-    """)
+    Logger.debug("Tagged ##{link.id}: [#{Enum.join(tags, ", ")}] - #{preview}...")
   end
 end

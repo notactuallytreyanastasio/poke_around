@@ -21,6 +21,15 @@ defmodule PokeAroundWeb.Router do
     live "/bookmarklet", BookmarkletLive, :index
   end
 
+  # ATProto OAuth
+  scope "/auth", PokeAroundWeb do
+    pipe_through :browser
+
+    get "/bluesky", ATProtoAuthController, :login
+    get "/bluesky/callback", ATProtoAuthController, :callback
+    delete "/logout", ATProtoAuthController, :logout
+  end
+
   # API for bookmarklet
   scope "/api", PokeAroundWeb.API do
     pipe_through :api

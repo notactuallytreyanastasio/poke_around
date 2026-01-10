@@ -41,6 +41,11 @@ defmodule PokeAround.Links.Link do
     field :tagged_at, :utc_datetime_usec
     many_to_many :normalized_tags, PokeAround.Tags.Tag, join_through: "link_tags"
 
+    # ATProto sync
+    field :at_uri, :string
+    field :synced_at, :utc_datetime_usec
+    field :sync_status, :string
+
     timestamps(type: :utc_datetime_usec)
   end
 
@@ -61,7 +66,10 @@ defmodule PokeAround.Links.Link do
     :tags,
     :langs,
     :stumble_count,
-    :tagged_at
+    :tagged_at,
+    :at_uri,
+    :synced_at,
+    :sync_status
   ]
 
   def changeset(link, attrs) do

@@ -1,0 +1,418 @@
+# Seed tags for PokeAround link tagging model
+# ~200 diverse tags covering common bookmark categories
+# One tag per line, lowercase, hyphenated
+
+# Programming Languages
+javascript
+typescript
+python
+ruby
+rust
+go
+java
+php
+swift
+kotlin
+elixir
+clojure
+haskell
+scala
+c
+cpp
+csharp
+
+# Web Development
+web-development
+frontend
+backend
+fullstack
+api
+rest-api
+graphql
+database
+sql
+nosql
+postgresql
+mongodb
+redis
+
+# Frameworks & Libraries
+react
+vue
+angular
+svelte
+nextjs
+nodejs
+django
+rails
+flask
+spring
+laravel
+express
+
+# DevOps & Infrastructure
+devops
+docker
+kubernetes
+aws
+azure
+gcp
+cloud
+serverless
+ci-cd
+terraform
+linux
+unix
+bash
+shell
+
+# AI & Data
+machine-learning
+artificial-intelligence
+deep-learning
+nlp
+data-science
+analytics
+data-visualization
+statistics
+neural-networks
+llm
+chatgpt
+openai
+
+# Security
+security
+cybersecurity
+privacy
+encryption
+authentication
+infosec
+hacking
+penetration-testing
+
+# Design
+design
+ui
+ux
+user-experience
+interface
+usability
+accessibility
+web-design
+graphic-design
+product-design
+
+# Visual Design
+typography
+fonts
+color
+illustration
+animation
+motion-design
+icons
+branding
+logo
+
+# Design Tools
+figma
+sketch
+photoshop
+illustrator
+css
+sass
+tailwind
+
+# Business
+business
+startup
+entrepreneurship
+saas
+marketing
+seo
+growth
+analytics
+conversion
+branding
+
+# Productivity
+productivity
+tools
+workflow
+automation
+apps
+software
+organization
+time-management
+note-taking
+
+# Career & Work
+career
+jobs
+hiring
+interviewing
+remote-work
+freelance
+consulting
+management
+leadership
+team
+
+# Finance
+finance
+investing
+stocks
+cryptocurrency
+bitcoin
+ethereum
+personal-finance
+budgeting
+economics
+trading
+
+# Content Creation
+writing
+blogging
+content
+copywriting
+journalism
+newsletter
+publishing
+editing
+storytelling
+
+# Media
+podcast
+video
+youtube
+streaming
+film
+movies
+tv
+documentary
+animation
+
+# Audio & Music
+music
+audio
+spotify
+soundcloud
+production
+dj
+electronic
+indie
+hip-hop
+
+# Photography & Art
+photography
+art
+illustration
+digital-art
+generative-art
+nft
+creative
+portfolio
+
+# Gaming
+games
+gaming
+video-games
+indie-games
+game-development
+esports
+steam
+playstation
+nintendo
+
+# Science
+science
+research
+physics
+biology
+chemistry
+mathematics
+neuroscience
+psychology
+medicine
+
+# Environment
+climate
+environment
+sustainability
+renewable-energy
+conservation
+nature
+wildlife
+
+# Space
+space
+astronomy
+nasa
+spacex
+rockets
+satellites
+mars
+
+# History & Culture
+history
+culture
+philosophy
+sociology
+anthropology
+archaeology
+linguistics
+
+# Education
+education
+learning
+tutorial
+course
+mooc
+university
+teaching
+resources
+
+# Reference
+reference
+documentation
+guide
+howto
+cheatsheet
+wiki
+manual
+faq
+
+# Open Source
+open-source
+github
+gitlab
+free
+foss
+libre
+community
+contribution
+
+# News & Media
+news
+journalism
+media
+press
+breaking-news
+analysis
+opinion
+commentary
+
+# Politics & Society
+politics
+government
+policy
+democracy
+activism
+social-justice
+law
+legal
+
+# Health & Wellness
+health
+fitness
+nutrition
+diet
+exercise
+mental-health
+meditation
+mindfulness
+sleep
+
+# Food
+food
+cooking
+recipes
+baking
+restaurants
+cuisine
+vegan
+vegetarian
+
+# Travel
+travel
+adventure
+destinations
+tourism
+backpacking
+digital-nomad
+expat
+
+# Outdoors
+outdoors
+hiking
+camping
+nature
+mountains
+beach
+national-parks
+
+# Books & Reading
+books
+reading
+literature
+fiction
+non-fiction
+kindle
+ebooks
+audiobooks
+
+# Lifestyle
+lifestyle
+minimalism
+sustainability
+diy
+crafts
+home
+interior-design
+
+# Social Media
+social-media
+twitter
+mastodon
+bluesky
+instagram
+tiktok
+reddit
+threads
+
+# Hardware
+hardware
+electronics
+raspberry-pi
+arduino
+robotics
+iot
+smart-home
+3d-printing
+
+# Apple
+apple
+macos
+ios
+iphone
+ipad
+mac
+swift
+xcode
+
+# Android
+android
+kotlin
+mobile
+smartphone
+tablet
+wearables
+
+# Miscellaneous
+interesting
+inspiration
+awesome-list
+collection
+curated
+resources
+links
+bookmarks

@@ -1,0 +1,105 @@
+{
+  "lexicon": 1,
+  "id": "space.pokearound.link",
+  "description": "A curated link from the PokeAround discovery service",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["url", "createdAt"],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 2048,
+            "description": "The canonical URL of the linked resource"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "Page title or post text excerpt"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2000,
+            "description": "Description or excerpt from the page"
+          },
+          "domain": {
+            "type": "string",
+            "maxLength": 256,
+            "description": "Normalized domain (e.g., 'github.com')"
+          },
+          "imageUrl": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 2048,
+            "description": "OpenGraph or preview image URL"
+          },
+          "tags": {
+            "type": "array",
+            "maxLength": 10,
+            "items": {
+              "type": "string",
+              "maxLength": 64
+            },
+            "description": "Topic tags for categorization"
+          },
+          "langs": {
+            "type": "array",
+            "maxLength": 5,
+            "items": {
+              "type": "string",
+              "format": "language"
+            },
+            "description": "Content languages (ISO 639-1)"
+          },
+          "score": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Quality score (0-100)"
+          },
+          "sourcePost": {
+            "type": "ref",
+            "ref": "#sourcePost",
+            "description": "Reference to the original Bluesky post"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    },
+    "sourcePost": {
+      "type": "object",
+      "description": "Metadata about the source Bluesky post",
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "AT URI of the source post"
+        },
+        "authorDid": {
+          "type": "string",
+          "format": "did"
+        },
+        "authorHandle": {
+          "type": "string",
+          "format": "handle"
+        },
+        "text": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Excerpt of post text"
+        },
+        "postedAt": {
+          "type": "string",
+          "format": "datetime"
+        }
+      }
+    }
+  }
+}

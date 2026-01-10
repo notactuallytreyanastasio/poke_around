@@ -1,47 +1,27 @@
 defmodule PokeAround.AI.Ollama do
   @moduledoc """
-  Client for interacting with the Ollama API.
+  HTTP client for Ollama local inference.
+
+  ## Usage
+
+      # Simple generation
+      {:ok, response} = Ollama.generate("What is 2+2?", model: "llama3.2:3b")
+
+      # Check availability
+      Ollama.available?()
   """
+
+  require Logger
 
   @default_url "http://localhost:11434"
-  @default_model "qwen3:8b"
-  @timeout 60_000
-
-  @doc """
-  Generate a completion from Ollama.
-
-  Options:
-  - `:model` - Model to use (default: qwen3:8b)
-  - `:url` - Ollama API URL (default: http://localhost:11434)
-  """
-  def generate(prompt, opts \\ []) do
-    model = opts[:model] || @default_model
-    url = opts[:url] || @default_url
-
-    case Req.post("#{url}/api/generate",
-           json: %{model: model, prompt: prompt, stream: false},
-           receive_timeout: @timeout,
-           connect_options: [timeout: 5_000]
-         ) do
-      {:ok, %{status: 200, body: %{"response" => response}}} ->
-        {:ok, response}
-
-      {:ok, %{status: 200, body: %{"error" => error}}} ->
-        {:error, error}
-
-      {:ok, %{status: status, body: body}} ->
-        {:error, {:http_status, status, body}}
-
-      {:error, reason} ->
-        {:error, {:http_error, reason}}
-    end
-  end
+  @default_model "llama3.2:3b"
+  @timeout 120_000
 
   @doc """
   Check if Ollama is available.
   """
-  def available?(opts \\ []) do
-    url = opts[:url] || @default_url
+  def available? do
+    url = get_url()
 
     case Req.get("#{url}/api/tags", receive_timeout: 5_000) do
       {:ok, %{status: 200}} -> true
@@ -52,18 +32,89 @@ defmodule PokeAround.AI.Ollama do
   @doc """
   List available models.
   """
-  def list_models(opts \\ []) do
-    url = opts[:url] || @default_url
+  def list_models do
+    url = get_url()
 
     case Req.get("#{url}/api/tags", receive_timeout: 5_000) do
       {:ok, %{status: 200, body: %{"models" => models}}} ->
         {:ok, Enum.map(models, & &1["name"])}
 
       {:ok, %{status: status, body: body}} ->
-        {:error, {:http_status, status, body}}
+        {:error, {:http_error, status, body}}
 
       {:error, reason} ->
         {:error, reason}
     end
+  end
+
+  @doc """
+  Generate a response from Ollama.
+
+  ## Options
+
+  - `:model` - Model to use (default: "llama3.2:3b")
+  - `:temperature` - Sampling temperature (default: model default)
+  - `:system` - System prompt
+  """
+  def generate(prompt, opts \\ []) do
+    url = get_url()
+    model = opts[:model] || @default_model
+
+    body = %{
+      model: model,
+      prompt: prompt,
+      stream: false
+    }
+
+    body = if opts[:system], do: Map.put(body, :system, opts[:system]), else: body
+    body = if opts[:temperature], do: Map.put(body, :options, %{temperature: opts[:temperature]}), else: body
+
+    case Req.post("#{url}/api/generate", json: body, receive_timeout: @timeout) do
+      {:ok, %{status: 200, body: %{"response" => response}}} ->
+        {:ok, response}
+
+      {:ok, %{status: status, body: body}} ->
+        {:error, {:http_error, status, body}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  @doc """
+  Chat completion with messages.
+
+  ## Options
+
+  - `:model` - Model to use
+  - `:temperature` - Sampling temperature
+  """
+  def chat(messages, opts \\ []) when is_list(messages) do
+    url = get_url()
+    model = opts[:model] || @default_model
+
+    body = %{
+      model: model,
+      messages: messages,
+      stream: false
+    }
+
+    body = if opts[:temperature], do: Map.put(body, :options, %{temperature: opts[:temperature]}), else: body
+
+    case Req.post("#{url}/api/chat", json: body, receive_timeout: @timeout) do
+      {:ok, %{status: 200, body: %{"message" => %{"content" => content}}}} ->
+        {:ok, content}
+
+      {:ok, %{status: status, body: body}} ->
+        {:error, {:http_error, status, body}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  defp get_url do
+    Application.get_env(:poke_around, __MODULE__, [])
+    |> Keyword.get(:url, @default_url)
   end
 end

@@ -67,7 +67,15 @@ defmodule PokeAround.MixProject do
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
       # Firehose
-      {:websockex, "~> 0.4.3"}
+      {:websockex, "~> 0.4.3"},
+      # ATProto OAuth
+      {:jose, "~> 1.11"},
+      # ML / Axon
+      {:nx, "~> 0.9"},
+      {:axon, "~> 0.7"},
+      {:exla, "~> 0.9"},
+      {:bumblebee, "~> 0.6"},
+      {:tokenizers, "~> 0.5"}
     ]
   end
 
