@@ -20,6 +20,7 @@ defmodule Mix.Tasks.Poke.Train do
     * `--min-tags` - Minimum tag count to include (default: 5)
     * `--output` or `-o` - Output path for model (default: priv/models/tagger)
     * `--test` - Run test predictions after training
+    * `--from-file` - Train from priv/ml/training_data.json instead of database
   """
 
   use Mix.Task
@@ -46,7 +47,8 @@ defmodule Mix.Tasks.Poke.Train do
           batch_size: :integer,
           min_tags: :integer,
           output: :string,
-          test: :boolean
+          test: :boolean,
+          from_file: :boolean
         ],
         aliases: [e: :epochs, b: :batch_size, o: :output]
       )
@@ -56,6 +58,7 @@ defmodule Mix.Tasks.Poke.Train do
     min_tags = opts[:min_tags] || @default_min_tags
     output_path = opts[:output] || @default_output
     run_test = opts[:test] || false
+    from_file = opts[:from_file] || false
 
     # Start required apps
     {:ok, _} = Application.ensure_all_started(:postgrex)
@@ -67,11 +70,14 @@ defmodule Mix.Tasks.Poke.Train do
     # Set EXLA as default backend
     Nx.default_backend(EXLA.Backend)
 
+    data_source = if from_file, do: "priv/ml/training_data.json", else: "database"
+
     IO.puts("""
 
     ╔══════════════════════════════════════════════════════════════╗
     ║               🧠 AXON TAGGER TRAINING                        ║
     ╠══════════════════════════════════════════════════════════════╣
+    ║  Data source: #{String.pad_trailing(data_source, 14)}                   ║
     ║  Epochs: #{String.pad_trailing("#{epochs}", 20)}                   ║
     ║  Batch size: #{String.pad_trailing("#{batch_size}", 16)}                   ║
     ║  Min tag count: #{String.pad_trailing("#{min_tags}", 13)}                   ║
@@ -84,7 +90,11 @@ defmodule Mix.Tasks.Poke.Train do
     start_time = System.monotonic_time(:second)
 
     {inputs, labels, vocab, tag_index} =
-      TextClassifier.prepare_training_data(min_tag_count: min_tags)
+      if from_file do
+        TextClassifier.prepare_training_data_from_file(min_tag_count: min_tags)
+      else
+        TextClassifier.prepare_training_data(min_tag_count: min_tags)
+      end
 
     data_time = System.monotonic_time(:second) - start_time
     IO.puts("   ✓ Data prepared in #{data_time}s")

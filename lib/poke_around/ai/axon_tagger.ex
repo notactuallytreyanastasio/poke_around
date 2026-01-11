@@ -186,6 +186,7 @@ defmodule PokeAround.AI.AxonTagger do
         Enum.reduce(links, {0, 0}, fn link, {tagged, errors} ->
           case tag_link(link, config) do
             :ok -> {tagged + 1, errors}
+            :skipped -> {tagged, errors}  # No confident predictions, but not an error
             :error -> {tagged, errors + 1}
           end
         end)
@@ -242,12 +243,16 @@ defmodule PokeAround.AI.AxonTagger do
         {:error, _} -> :error
       end
     else
-      # No confident predictions - mark as needs-review
-      case Tags.tag_link(link, ["needs-review"], source: "axon-uncertain") do
-        {:ok, _} -> :ok
-        {:error, _} -> :error
-      end
+      # No confident predictions - mark as processed but don't tag
+      mark_as_processed(link)
+      :skipped
     end
+  end
+
+  defp mark_as_processed(link) do
+    link
+    |> Ecto.Changeset.change(tagged_at: DateTime.utc_now())
+    |> Repo.update()
   end
 
   defp build_text(%{post_text: text, domain: domain}) do

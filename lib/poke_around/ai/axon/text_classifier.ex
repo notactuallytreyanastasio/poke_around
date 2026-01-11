@@ -91,6 +91,61 @@ defmodule PokeAround.AI.Axon.TextClassifier do
     {inputs, labels, vocab, tag_index}
   end
 
+  @doc """
+  Load and prepare training data from the JSON file (priv/ml/training_data.json).
+
+  This uses the manually curated training data with consolidated tags.
+  """
+  def prepare_training_data_from_file(opts \\ []) do
+    min_tag_count = opts[:min_tag_count] || 2
+    file_path = opts[:file] || "priv/ml/training_data.json"
+
+    Logger.info("Loading training data from #{file_path}...")
+
+    # Load JSON file
+    data =
+      file_path
+      |> File.read!()
+      |> Jason.decode!()
+      |> Enum.map(fn item ->
+        %{
+          text: item["text"],
+          domain: item["domain"],
+          tags: item["tags"]
+        }
+      end)
+
+    Logger.info("Loaded #{length(data)} samples from file")
+
+    # Build vocabulary from all texts
+    vocab = build_vocabulary(data)
+    Logger.info("Built vocabulary with #{map_size(vocab)} words")
+
+    # Build tag index from the training data itself (not database)
+    tag_index = build_tag_index_from_data(data, min_tag_count)
+    Logger.info("Using #{map_size(tag_index)} tags (min count: #{min_tag_count})")
+
+    # Filter to only include samples that have at least one of our target tags
+    filtered_data = filter_samples_with_target_tags(data, tag_index)
+    Logger.info("#{length(filtered_data)} samples have target tags")
+
+    # Convert to tensors
+    {inputs, labels} = to_tensors(filtered_data, vocab, tag_index)
+
+    {inputs, labels, vocab, tag_index}
+  end
+
+  defp build_tag_index_from_data(data, min_count) do
+    data
+    |> Enum.flat_map(& &1.tags)
+    |> Enum.frequencies()
+    |> Enum.filter(fn {_tag, count} -> count >= min_count end)
+    |> Enum.sort_by(fn {_tag, count} -> -count end)
+    |> Enum.map(fn {tag, _count} -> tag end)
+    |> Enum.with_index()
+    |> Map.new()
+  end
+
   defp load_tagged_links do
     from(l in Link,
       where: not is_nil(l.tagged_at),

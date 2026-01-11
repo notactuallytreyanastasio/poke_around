@@ -38,7 +38,7 @@ defmodule PokeAroundWeb.StumbleLive do
      |> assign(:current_page, "bag")
      |> assign(:pages, @pages)
      |> assign(:show_page_menu, false)
-     |> assign(:popular_tags, Tags.popular_tags(20))
+     |> assign(:popular_tags, Tags.popular_tags(100))
      |> assign(:selected_tag, nil)
      |> assign(:tag_links, [])
      |> assign(:stats, get_stats())}
@@ -134,7 +134,7 @@ defmodule PokeAroundWeb.StumbleLive do
      socket
      |> assign(:selected_tag, nil)
      |> assign(:tag_links, [])
-     |> assign(:popular_tags, Tags.popular_tags(20))}
+     |> assign(:popular_tags, Tags.popular_tags(100))}
   end
 
   @impl true

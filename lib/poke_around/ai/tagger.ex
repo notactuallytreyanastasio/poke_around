@@ -248,13 +248,14 @@ defmodule PokeAround.AI.Tagger do
             {:ok, tags}
 
           {:ok, []} ->
-            # No tags - mark as needs-review
-            Tags.tag_link(link, ["needs-review"], source: "ollama-uncertain")
-            {:ok, ["needs-review"]}
+            # No tags - skip this link (don't mark tagged_at)
+            Logger.debug("Tagger: No matching tags for link #{link.id}")
+            {:ok, []}
 
           {:error, _reason} ->
-            Tags.tag_link(link, ["needs-review"], source: "ollama-parse-error")
-            {:ok, ["needs-review"]}
+            # Parse error - skip this link
+            Logger.debug("Tagger: Parse error for link #{link.id}")
+            {:ok, []}
         end
 
       {:error, reason} ->

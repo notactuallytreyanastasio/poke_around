@@ -1,5 +1,45 @@
 [
   {
+    "hash": "9bbdb518c9ebb549f4a8d628475e563e661e8637",
+    "short_hash": "9bbdb51",
+    "author": "Bobby Nathan",
+    "date": "2026-01-10T13:12:10-05:00",
+    "message": "Add live ingestion dashboard at /ingestion\n\n- PubSub broadcasts for new links and tagging events\n- Real-time LiveView showing incoming links from firehose\n- Tagging activity panel showing ML predictions as they happen\n- Stats display for posts processed, links qualified, tags applied\n- Pause/resume and clear controls\n- Mac OS retro styling consistent with main UI\n- Navigation between Stumble and Ingestion views",
+    "files_changed": 6
+  },
+  {
+    "hash": "6a65889e5dbcd0dd4440a73512726926742d86f3",
+    "short_hash": "6a65889",
+    "author": "Bobby Nathan",
+    "date": "2026-01-10T12:55:47-05:00",
+    "message": "README: tell the build story with technical depth",
+    "files_changed": 2
+  },
+  {
+    "hash": "8385e0d52ec95cdf02ba83ca5398ecadf7d62dbb",
+    "short_hash": "8385e0d",
+    "author": "Bobby Nathan",
+    "date": "2026-01-10T12:53:26-05:00",
+    "message": "Rewrite README with compelling narrative",
+    "files_changed": 2
+  },
+  {
+    "hash": "e55c466ecbc66d3baa0ca45e5cbf1a7f9c31a555",
+    "short_hash": "e55c466",
+    "author": "Bobby Nathan",
+    "date": "2026-01-10T12:31:29-05:00",
+    "message": "Remove all Ollama references - Axon is the only tagger",
+    "files_changed": 4
+  },
+  {
+    "hash": "0ffb4eadc8a1d7e7a4072b6d87f434017768e118",
+    "short_hash": "0ffb4ea",
+    "author": "Bobby Nathan",
+    "date": "2026-01-10T11:44:58-05:00",
+    "message": "Update deciduous graph with documentation outcome",
+    "files_changed": 3
+  },
+  {
     "hash": "7a199bed04cb35425c421e34532bd044e42bf494",
     "short_hash": "7a199be",
     "author": "Bobby Nathan",

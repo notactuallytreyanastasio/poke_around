@@ -31,11 +31,59 @@ defmodule PokeAround.Links.Extractor do
   @max_hashtags 1
   @max_emojis 1
 
-  # Banned domains (URL shorteners, spam magnets)
+  # Banned domains (URL shorteners, spam magnets, media hosts, crypto, social)
   @banned_domains [
+    # URL shorteners
     "tinyurl.com",
     "bit.ly",
-    "t.co"
+    "t.co",
+    # Social media
+    "x.com",
+    "twitter.com",
+    # Media hosts
+    "media.tenor.com",
+    # Crypto exchanges
+    "coinbase.com",
+    "binance.com",
+    "binance.us",
+    "kraken.com",
+    "crypto.com",
+    "gemini.com",
+    "kucoin.com",
+    "bybit.com",
+    "okx.com",
+    "bitfinex.com",
+    "bitstamp.net",
+    "gate.io",
+    "huobi.com",
+    "mexc.com",
+    "bitget.com",
+    # Crypto news/media
+    "coindesk.com",
+    "cointelegraph.com",
+    "decrypt.co",
+    "theblock.co",
+    "bitcoinmagazine.com",
+    # NFT/DeFi
+    "opensea.io",
+    "uniswap.org",
+    "rarible.com",
+    "foundation.app",
+    "blur.io",
+    "looksrare.org",
+    "pancakeswap.finance",
+    "aave.com",
+    # Crypto trackers
+    "coingecko.com",
+    "coinmarketcap.com",
+    "dextools.io",
+    "dexscreener.com",
+    # Meme coin pumps
+    "pump.fun",
+    # Wallets
+    "metamask.io",
+    "phantom.app",
+    "trustwallet.com"
   ]
 
   @stats_interval_ms 30_000
@@ -73,8 +121,12 @@ defmodule PokeAround.Links.Extractor do
   # ---------------------------------------------------------------------------
 
   @impl GenServer
-  def init(_opts) do
-    Phoenix.PubSub.subscribe(PokeAround.PubSub, "firehose:events")
+  def init(opts) do
+    # Allow disabling PubSub subscription for testing
+    unless opts[:subscribe] == false do
+      Phoenix.PubSub.subscribe(PokeAround.PubSub, "firehose:events")
+    end
+
     schedule_stats_log()
 
     state = %__MODULE__{started_at: DateTime.utc_now()}
@@ -162,8 +214,17 @@ defmodule PokeAround.Links.Extractor do
   # No author = skip
   defp qualifies?(%{author: nil}), do: false
 
-  defp qualifies?(%{author: author, text: text}) do
-    author_qualifies?(author) && post_qualifies?(text)
+  defp qualifies?(%{author: author, text: text, langs: langs}) do
+    lang_qualifies?(langs) && author_qualifies?(author) && post_qualifies?(text)
+  end
+
+  # Must include English
+  defp lang_qualifies?(nil), do: false
+  defp lang_qualifies?([]), do: false
+  defp lang_qualifies?(langs) when is_list(langs) do
+    Enum.any?(langs, fn lang ->
+      lang == "en" || String.starts_with?(to_string(lang), "en-")
+    end)
   end
 
   defp author_qualifies?(author) do

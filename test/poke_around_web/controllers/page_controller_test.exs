@@ -1,8 +1,8 @@
 defmodule PokeAroundWeb.PageControllerTest do
   use PokeAroundWeb.ConnCase
 
-  test "GET /", %{conn: conn} do
+  test "GET / serves StumbleLive", %{conn: conn} do
     conn = get(conn, ~p"/")
-    assert html_response(conn, 200) =~ "Peace of mind from prototype to production"
+    assert html_response(conn, 200) =~ "poke_around"
   end
 end

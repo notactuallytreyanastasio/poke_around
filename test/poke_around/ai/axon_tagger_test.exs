@@ -225,18 +225,35 @@ defmodule PokeAround.AI.AxonTaggerTest do
     end
 
     test "handles empty queue gracefully", %{pid: pid} do
-      # Don't create any links
+      # Mark all existing links as tagged so queue is empty
+      import Ecto.Query
+      PokeAround.Repo.update_all(
+        from(l in PokeAround.Links.Link, where: is_nil(l.tagged_at)),
+        set: [tagged_at: DateTime.utc_now()]
+      )
 
-      # Should not raise
+      before_stats = AxonTagger.stats(pid)
+
+      # Should not raise when queue is empty
       AxonTagger.process_batch(pid)
       Process.sleep(100)
 
-      stats = AxonTagger.stats(pid)
-      assert stats.tagged == 0
-      assert stats.errors == 0
+      after_stats = AxonTagger.stats(pid)
+      # Stats should not increase when queue is empty
+      assert after_stats.tagged == before_stats.tagged
+      assert after_stats.errors == before_stats.errors
     end
 
     test "filters by language", %{pid: pid} do
+      # Mark all existing links as tagged first
+      import Ecto.Query
+      PokeAround.Repo.update_all(
+        from(l in PokeAround.Links.Link, where: is_nil(l.tagged_at)),
+        set: [tagged_at: DateTime.utc_now()]
+      )
+
+      before_stats = AxonTagger.stats(pid)
+
       # Create links with different languages
       _en_link = Fixtures.link_fixture(%{
         post_text: "English post about things",
@@ -253,9 +270,9 @@ defmodule PokeAround.AI.AxonTaggerTest do
       AxonTagger.process_batch(pid)
       Process.sleep(500)
 
-      stats = AxonTagger.stats(pid)
+      after_stats = AxonTagger.stats(pid)
       # Should only process English link (tagger configured with langs: ["en"])
-      assert stats.tagged <= 1
+      assert after_stats.tagged - before_stats.tagged == 1
     end
   end
 

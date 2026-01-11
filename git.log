@@ -124,3 +124,8 @@ Sat Jan 10 12:53:52 EST 2026: git commit
 Sat Jan 10 12:53:52 EST 2026: git push
 2026-01-10 12:55:47 - Rewrote README with technical narrative - tells the story of how it was built
 2026-01-10 13:12:04 - Added /ingestion live view for real-time link and tagging monitoring
+2026-01-10 13:41:26 - Added media.tenor.com to banned domains (GIF filter)
+2026-01-10 13:44:30 - Added crypto domains to banned list (exchanges, NFT, DeFi, trackers, wallets)
+2026-01-10 13:48:15 - Disabled Axon tagger (ingestion only mode)
+2026-01-10 16:50:28 - mix test (340 tests, 0 failures)
+2026-01-11 03:21:59 - git add (staged all changes)
