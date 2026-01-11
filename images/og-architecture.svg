@@ -1,0 +1,79 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="checkerboard" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="2" height="2" fill="#a0a0a0"/>
+      <rect x="2" y="2" width="2" height="2" fill="#a0a0a0"/>
+      <rect x="2" width="2" height="2" fill="#808080"/>
+      <rect y="2" width="2" height="2" fill="#808080"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#checkerboard)"/>
+
+  <!-- Main window -->
+  <rect x="100" y="60" width="700" height="500" fill="#ffffff" stroke="#000000" stroke-width="3"/>
+
+  <!-- Window titlebar -->
+  <rect x="100" y="60" width="700" height="28" fill="#ffffff" stroke="#000000" stroke-width="3"/>
+  <rect x="108" y="68" width="14" height="14" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+
+  <!-- Titlebar stripes -->
+  <g>
+    <line x1="130" y1="68" x2="320" y2="68" stroke="#000" stroke-width="1"/>
+    <line x1="130" y1="72" x2="320" y2="72" stroke="#000" stroke-width="1"/>
+    <line x1="130" y1="76" x2="320" y2="76" stroke="#000" stroke-width="1"/>
+    <line x1="130" y1="80" x2="320" y2="80" stroke="#000" stroke-width="1"/>
+  </g>
+  <text x="450" y="81" font-family="Geneva, Chicago, monospace" font-size="14" font-weight="bold" text-anchor="middle">architecture.md</text>
+  <g>
+    <line x1="580" y1="68" x2="790" y2="68" stroke="#000" stroke-width="1"/>
+    <line x1="580" y1="72" x2="790" y2="72" stroke="#000" stroke-width="1"/>
+    <line x1="580" y1="76" x2="790" y2="76" stroke="#000" stroke-width="1"/>
+    <line x1="580" y1="80" x2="790" y2="80" stroke="#000" stroke-width="1"/>
+  </g>
+
+  <!-- Window content area -->
+  <rect x="110" y="98" width="680" height="452" fill="#ffffff"/>
+
+  <!-- Big ARCHITECTURE text -->
+  <text x="450" y="250" font-family="Geneva, Chicago, Impact, sans-serif" font-size="100" font-weight="bold" text-anchor="middle" fill="#000000">ARCHITECTURE</text>
+
+  <!-- Subtitle -->
+  <text x="450" y="310" font-family="Monaco, monospace" font-size="22" text-anchor="middle" fill="#444444">system design &amp; data flow</text>
+
+  <!-- Architecture diagram boxes -->
+  <rect x="150" y="350" width="120" height="50" fill="#eeeeee" stroke="#000000" stroke-width="2"/>
+  <text x="210" y="382" font-family="Monaco, monospace" font-size="14" text-anchor="middle">Firehose</text>
+
+  <rect x="310" y="350" width="120" height="50" fill="#eeeeee" stroke="#000000" stroke-width="2"/>
+  <text x="370" y="382" font-family="Monaco, monospace" font-size="14" text-anchor="middle">Extractor</text>
+
+  <rect x="470" y="350" width="120" height="50" fill="#eeeeee" stroke="#000000" stroke-width="2"/>
+  <text x="530" y="382" font-family="Monaco, monospace" font-size="14" text-anchor="middle">Tagger</text>
+
+  <rect x="630" y="350" width="120" height="50" fill="#eeeeee" stroke="#000000" stroke-width="2"/>
+  <text x="690" y="382" font-family="Monaco, monospace" font-size="14" text-anchor="middle">Scorer</text>
+
+  <!-- Arrows -->
+  <path d="M270 375 L300 375" stroke="#000" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M430 375 L460 375" stroke="#000" stroke-width="2" fill="none"/>
+  <path d="M590 375 L620 375" stroke="#000" stroke-width="2" fill="none"/>
+
+  <!-- Database -->
+  <ellipse cx="450" cy="480" rx="80" ry="25" fill="#dddddd" stroke="#000000" stroke-width="2"/>
+  <rect x="370" y="455" width="160" height="25" fill="#dddddd" stroke="#000000" stroke-width="2"/>
+  <ellipse cx="450" cy="455" rx="80" ry="25" fill="#eeeeee" stroke="#000000" stroke-width="2"/>
+  <text x="450" y="475" font-family="Monaco, monospace" font-size="14" text-anchor="middle">PostgreSQL</text>
+
+  <!-- Floating keywords -->
+  <text x="880" y="100" font-family="Monaco, monospace" font-size="26" fill="#000000" transform="rotate(-5 880 100)">GenServer</text>
+  <text x="920" y="170" font-family="Monaco, monospace" font-size="20" fill="#555555" transform="rotate(8 920 170)">WebSocket</text>
+  <text x="870" y="240" font-family="Monaco, monospace" font-size="28" fill="#333333" transform="rotate(-3 870 240)">OTP</text>
+  <text x="950" y="310" font-family="Monaco, monospace" font-size="22" fill="#444444" transform="rotate(5 950 310)">supervisor</text>
+  <text x="890" y="380" font-family="Monaco, monospace" font-size="24" fill="#000000" transform="rotate(-7 890 380)">Ecto</text>
+  <text x="970" y="440" font-family="Monaco, monospace" font-size="20" fill="#666666" transform="rotate(4 970 440)">LiveView</text>
+  <text x="880" y="510" font-family="Monaco, monospace" font-size="22" fill="#555555" transform="rotate(-4 880 510)">pubsub</text>
+  <text x="1030" y="260" font-family="Monaco, monospace" font-size="18" fill="#777777" transform="rotate(6 1030 260)">batch</text>
+  <text x="1050" y="380" font-family="Monaco, monospace" font-size="20" fill="#444444" transform="rotate(-8 1050 380)">queue</text>
+</svg>

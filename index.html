@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>poke_around - Documentation</title>
+  <meta property="og:title" content="poke_around - Documentation">
+  <meta property="og:description" content="A link curation system that extracts, filters, tags, and surfaces the best links shared on Bluesky.">
+  <meta property="og:image" content="https://notactuallytreyanastasio.github.io/poke_around/images/og-docs.png">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://notactuallytreyanastasio.github.io/poke_around/images/og-docs.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Geneva', 'VT323', 'Chicago', monospace;
+      background-color: #808080;
+      background-image: url("data:image/svg+xml,%3Csvg width='2' height='2' viewBox='0 0 2 2' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0' y='0' width='1' height='1' fill='%23a0a0a0'/%3E%3Crect x='1' y='1' width='1' height='1' fill='%23a0a0a0'/%3E%3C/svg%3E");
+      background-size: 2px 2px;
+      image-rendering: pixelated;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .mac-menubar {
+      background: #ffffff;
+      border-bottom: 2px solid #000000;
+      padding: 2px 8px;
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      font-weight: bold;
+      width: 95%;
+      max-width: 800px;
+      margin: 0 auto 20px auto;
+    }
+
+    .mac-menu-item {
+      padding: 2px 8px;
+      cursor: default;
+    }
+
+    .mac-menu-item:hover {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .mac-window {
+      background: #ffffff;
+      border: 2px solid #000000;
+      box-shadow:
+        2px 2px 0 #000000,
+        inset -1px -1px 0 #808080,
+        inset 1px 1px 0 #dfdfdf;
+      width: 95%;
+      max-width: 800px;
+      margin: 0 auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 500px;
+    }
+
+    .mac-titlebar {
+      background: linear-gradient(to bottom, #ffffff 0%, #cccccc 100%);
+      border-bottom: 2px solid #000000;
+      padding: 2px 4px;
+      display: flex;
+      align-items: center;
+      height: 20px;
+    }
+
+    .mac-titlebar-lines {
+      flex: 1;
+      height: 12px;
+      margin: 0 8px;
+      background: repeating-linear-gradient(
+        to bottom,
+        #000000 0px,
+        #000000 1px,
+        #ffffff 1px,
+        #ffffff 3px
+      );
+    }
+
+    .mac-close-btn {
+      width: 12px;
+      height: 12px;
+      border: 1px solid #000000;
+      background: #ffffff;
+      margin-right: 4px;
+    }
+
+    .mac-title {
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+      padding: 0 8px;
+    }
+
+    .mac-content {
+      background: #ffffff;
+      padding: 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header-section {
+      text-align: center;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px dotted #cccccc;
+    }
+
+    .header-section h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .header-section p {
+      font-size: 12px;
+      color: #666666;
+    }
+
+    .docs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .doc-card {
+      background: #dddddd;
+      border: 2px outset #ffffff;
+      padding: 16px;
+      text-decoration: none;
+      color: #000000;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .doc-card:hover {
+      background: #cccccc;
+    }
+
+    .doc-card:active {
+      border-style: inset;
+      background: #bbbbbb;
+    }
+
+    .doc-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .doc-card h2 {
+      font-size: 14px;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .doc-card p {
+      font-size: 11px;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .mac-statusbar {
+      background: #dddddd;
+      border-top: 1px solid #000000;
+      padding: 4px 8px;
+      font-size: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .footer-links {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 11px;
+    }
+
+    .footer-links a {
+      color: #ffffff;
+      margin: 0 8px;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .docs-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .mac-menubar {
+        font-size: 10px;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="mac-menubar">
+    <div class="mac-menu-item">&#127822;</div>
+    <div class="mac-menu-item">File</div>
+    <div class="mac-menu-item">Edit</div>
+    <div class="mac-menu-item">View</div>
+    <div class="mac-menu-item">Help</div>
+  </div>
+
+  <div class="mac-window">
+    <div class="mac-titlebar">
+      <div class="mac-close-btn"></div>
+      <div class="mac-titlebar-lines"></div>
+      <div class="mac-title">poke_around - Documentation</div>
+      <div class="mac-titlebar-lines"></div>
+    </div>
+
+    <div class="mac-content">
+      <div class="header-section">
+        <h1>poke_around</h1>
+        <p>A link curation system that extracts, filters, tags, and surfaces the best links shared on Bluesky.</p>
+      </div>
+
+      <div class="docs-grid">
+        <a href="graph.html" class="doc-card">
+          <div class="doc-icon">&#128200;</div>
+          <h2>Decision Graph</h2>
+          <p>Interactive visualization of architectural decisions, actions, and outcomes tracked with deciduous.</p>
+        </a>
+
+        <a href="architecture.html" class="doc-card">
+          <div class="doc-icon">&#128736;</div>
+          <h2>Architecture</h2>
+          <p>Complete system architecture: firehose, extractor, tagger, scoring algorithm, and database schema.</p>
+        </a>
+
+        <a href="axon-tagger.html" class="doc-card">
+          <div class="doc-icon">&#129302;</div>
+          <h2>Axon ML Tagger</h2>
+          <p>On-device ML tagger built with Axon/Nx/EXLA. 1,700 predictions/sec on Apple Silicon.</p>
+        </a>
+      </div>
+
+      <div class="docs-grid">
+        <a href="atproto-integration.html" class="doc-card">
+          <div class="doc-icon">&#128279;</div>
+          <h2>ATProto Integration</h2>
+          <p>OAuth, PDS sync, custom lexicons, and user bookmarking via the AT Protocol.</p>
+        </a>
+      </div>
+    </div>
+
+    <div class="mac-statusbar">
+      <span>4 documents</span>
+      <span>poke_around v0.1.0</span>
+    </div>
+  </div>
+
+  <div class="footer-links">
+    <a href="https://github.com/notactuallytreyanastasio/poke_around">GitHub</a>
+  </div>
+</body>
+</html>

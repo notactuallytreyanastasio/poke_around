@@ -1,0 +1,92 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="checkerboard" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="2" height="2" fill="#a0a0a0"/>
+      <rect x="2" y="2" width="2" height="2" fill="#a0a0a0"/>
+      <rect x="2" width="2" height="2" fill="#808080"/>
+      <rect y="2" width="2" height="2" fill="#808080"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#checkerboard)"/>
+
+  <!-- Main window -->
+  <rect x="100" y="60" width="700" height="500" fill="#ffffff" stroke="#000000" stroke-width="3"/>
+
+  <!-- Window titlebar -->
+  <rect x="100" y="60" width="700" height="28" fill="#ffffff" stroke="#000000" stroke-width="3"/>
+  <rect x="108" y="68" width="14" height="14" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+
+  <!-- Titlebar stripes -->
+  <g>
+    <line x1="130" y1="68" x2="300" y2="68" stroke="#000" stroke-width="1"/>
+    <line x1="130" y1="72" x2="300" y2="72" stroke="#000" stroke-width="1"/>
+    <line x1="130" y1="76" x2="300" y2="76" stroke="#000" stroke-width="1"/>
+    <line x1="130" y1="80" x2="300" y2="80" stroke="#000" stroke-width="1"/>
+  </g>
+  <text x="450" y="81" font-family="Geneva, Chicago, monospace" font-size="14" font-weight="bold" text-anchor="middle">atproto-integration.md</text>
+  <g>
+    <line x1="600" y1="68" x2="790" y2="68" stroke="#000" stroke-width="1"/>
+    <line x1="600" y1="72" x2="790" y2="72" stroke="#000" stroke-width="1"/>
+    <line x1="600" y1="76" x2="790" y2="76" stroke="#000" stroke-width="1"/>
+    <line x1="600" y1="80" x2="790" y2="80" stroke="#000" stroke-width="1"/>
+  </g>
+
+  <!-- Window content area -->
+  <rect x="110" y="98" width="680" height="452" fill="#ffffff"/>
+
+  <!-- Big ATPROTO text -->
+  <text x="450" y="230" font-family="Geneva, Chicago, Impact, sans-serif" font-size="130" font-weight="bold" text-anchor="middle" fill="#000000">ATPROTO</text>
+
+  <!-- Subtitle -->
+  <text x="450" y="290" font-family="Monaco, monospace" font-size="22" text-anchor="middle" fill="#444444">bluesky protocol integration</text>
+
+  <!-- AT URI example -->
+  <rect x="140" y="320" width="620" height="45" fill="#eeeeee" stroke="#000000" stroke-width="2"/>
+  <text x="450" y="350" font-family="Monaco, monospace" font-size="16" text-anchor="middle" fill="#333333">at://did:plc:xyz123/space.pokearound.link/abc</text>
+
+  <!-- Integration diagram -->
+  <g transform="translate(140, 390)">
+    <!-- User box -->
+    <rect x="0" y="0" width="120" height="60" fill="#dddddd" stroke="#000" stroke-width="2"/>
+    <text x="60" y="25" font-family="Monaco, monospace" font-size="12" text-anchor="middle">User</text>
+    <text x="60" y="45" font-family="Monaco, monospace" font-size="10" text-anchor="middle" fill="#666">Bluesky</text>
+
+    <!-- OAuth arrow -->
+    <line x1="120" y1="30" x2="180" y2="30" stroke="#000" stroke-width="2"/>
+    <text x="150" y="20" font-family="Monaco, monospace" font-size="10" text-anchor="middle">OAuth</text>
+
+    <!-- App box -->
+    <rect x="180" y="0" width="140" height="60" fill="#cccccc" stroke="#000" stroke-width="2"/>
+    <text x="250" y="25" font-family="Monaco, monospace" font-size="12" text-anchor="middle">poke_around</text>
+    <text x="250" y="45" font-family="Monaco, monospace" font-size="10" text-anchor="middle" fill="#666">curated links</text>
+
+    <!-- PDS arrow -->
+    <line x1="320" y1="30" x2="380" y2="30" stroke="#000" stroke-width="2"/>
+    <text x="350" y="20" font-family="Monaco, monospace" font-size="10" text-anchor="middle">XRPC</text>
+
+    <!-- PDS box -->
+    <rect x="380" y="0" width="120" height="60" fill="#bbbbbb" stroke="#000" stroke-width="2"/>
+    <text x="440" y="25" font-family="Monaco, monospace" font-size="12" text-anchor="middle">PDS</text>
+    <text x="440" y="45" font-family="Monaco, monospace" font-size="10" text-anchor="middle" fill="#666">user repo</text>
+
+    <!-- Bookmark label -->
+    <rect x="520" y="10" width="100" height="40" fill="#000000"/>
+    <text x="570" y="36" font-family="Monaco, monospace" font-size="12" text-anchor="middle" fill="#ffffff">bookmark</text>
+  </g>
+
+  <!-- Lexicon hint -->
+  <text x="450" y="520" font-family="Monaco, monospace" font-size="14" text-anchor="middle" fill="#666666">space.pokearound.link • space.pokearound.bookmark</text>
+
+  <!-- Floating keywords -->
+  <text x="870" y="100" font-family="Monaco, monospace" font-size="26" fill="#000000" transform="rotate(-5 870 100)">OAuth</text>
+  <text x="930" y="170" font-family="Monaco, monospace" font-size="20" fill="#555555" transform="rotate(6 930 170)">DID</text>
+  <text x="870" y="240" font-family="Monaco, monospace" font-size="24" fill="#333333" transform="rotate(-3 870 240)">lexicon</text>
+  <text x="960" y="300" font-family="Monaco, monospace" font-size="22" fill="#444444" transform="rotate(4 960 300)">PDS</text>
+  <text x="880" y="370" font-family="Monaco, monospace" font-size="28" fill="#000000" transform="rotate(-6 880 370)">XRPC</text>
+  <text x="970" y="440" font-family="Monaco, monospace" font-size="18" fill="#666666" transform="rotate(7 970 440)">firehose</text>
+  <text x="880" y="510" font-family="Monaco, monospace" font-size="20" fill="#555555" transform="rotate(-4 880 510)">repo</text>
+  <text x="1030" y="220" font-family="Monaco, monospace" font-size="16" fill="#777777" transform="rotate(8 1030 220)">sync</text>
+  <text x="1060" y="360" font-family="Monaco, monospace" font-size="22" fill="#444444" transform="rotate(-5 1060 360)">feed</text>
+</svg>

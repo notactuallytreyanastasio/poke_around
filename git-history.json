@@ -1,0 +1,194 @@
+[
+  {
+    "hash": "d22960ea5c7e16cb82d742b0579f9600d8e291cb",
+    "short_hash": "d22960e",
+    "author": "Bobby Nathan",
+    "date": "2026-01-11T03:22:11-05:00",
+    "message": "Add comprehensive test suite and improve link filtering\n\nTests:\n- Added 340+ tests covering all major modules\n- ATProto: discovery, dpop, pkce, session, tid\n- Bluesky: parser\n- Links: extractor, link, quality_filter, links context\n- Web: controllers, LiveView\n- Disabled firehose/tagger in test config for isolation\n\nFiltering improvements:\n- Added x.com/twitter.com to banned domains\n- Added English-only filtering (requires en/en-* lang tag)\n- Deleted 54 x.com links and 11,958 non-English links\n\nFixes:\n- Fixed AxonTagger :skipped case clause error\n- Mark skipped links as processed to prevent reprocessing\n- Fixed flaky AxonTagger tests with proper isolation",
+    "files_changed": 37
+  },
+  {
+    "hash": "9bbdb518c9ebb549f4a8d628475e563e661e8637",
+    "short_hash": "9bbdb51",
+    "author": "Bobby Nathan",
+    "date": "2026-01-10T13:12:10-05:00",
+    "message": "Add live ingestion dashboard at /ingestion\n\n- PubSub broadcasts for new links and tagging events\n- Real-time LiveView showing incoming links from firehose\n- Tagging activity panel showing ML predictions as they happen\n- Stats display for posts processed, links qualified, tags applied\n- Pause/resume and clear controls\n- Mac OS retro styling consistent with main UI\n- Navigation between Stumble and Ingestion views",
+    "files_changed": 6
+  },
+  {
+    "hash": "6a65889e5dbcd0dd4440a73512726926742d86f3",
+    "short_hash": "6a65889",
+    "author": "Bobby Nathan",
+    "date": "2026-01-10T12:55:47-05:00",
+    "message": "README: tell the build story with technical depth",
+    "files_changed": 2
+  },
+  {
+    "hash": "8385e0d52ec95cdf02ba83ca5398ecadf7d62dbb",
+    "short_hash": "8385e0d",
+    "author": "Bobby Nathan",
+    "date": "2026-01-10T12:53:26-05:00",
+    "message": "Rewrite README with compelling narrative",
+    "files_changed": 2
+  },
+  {
+    "hash": "e55c466ecbc66d3baa0ca45e5cbf1a7f9c31a555",
+    "short_hash": "e55c466",
+    "author": "Bobby Nathan",
+    "date": "2026-01-10T12:31:29-05:00",
+    "message": "Remove all Ollama references - Axon is the only tagger",
+    "files_changed": 4
+  },
+  {
+    "hash": "0ffb4eadc8a1d7e7a4072b6d87f434017768e118",
+    "short_hash": "0ffb4ea",
+    "author": "Bobby Nathan",
+    "date": "2026-01-10T11:44:58-05:00",
+    "message": "Update deciduous graph with documentation outcome",
+    "files_changed": 3
+  },
+  {
+    "hash": "7a199bed04cb35425c421e34532bd044e42bf494",
+    "short_hash": "7a199be",
+    "author": "Bobby Nathan",
+    "date": "2026-01-10T11:44:25-05:00",
+    "message": "Flesh out README and fix docs GitHub link",
+    "files_changed": 6
+  },
+  {
+    "hash": "db776de694ff439435907be0f727141cec9a1a73",
+    "short_hash": "db776de",
+    "author": "Bobby Nathan",
+    "date": "2026-01-10T11:39:35-05:00",
+    "message": "Add Axon ML tagger, ATProto integration, and GitHub Pages docs\n\n- Axon/Nx/EXLA tagger for on-device ML tagging (1700 pred/sec)\n- ATProto OAuth, PDS sync, custom lexicons\n- GitHub Pages site with classic Mac OS styling\n- Comprehensive test suite (83 tests)\n- Architecture and API documentation",
+    "files_changed": 56
+  },
+  {
+    "hash": "02622b96009464a36928749eb68dd61f819d6ecd",
+    "short_hash": "02622b9",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T16:58:30-05:00",
+    "message": "Default tagger to English-only links",
+    "files_changed": 2
+  },
+  {
+    "hash": "a94f503dd0b95927d620a859080a7fdc46f33153",
+    "short_hash": "a94f503",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T16:52:48-05:00",
+    "message": "Add parallel processing to Tagger using Task.async_stream",
+    "files_changed": 2
+  },
+  {
+    "hash": "8f03dab9c7307f32cc76467feacb85bb3fcb6697",
+    "short_hash": "8f03dab",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T16:31:45-05:00",
+    "message": "Add detailed logging for tagged links (post, url, tags)",
+    "files_changed": 2
+  },
+  {
+    "hash": "c7b946829cccb9159ef81d1442f56041147519df",
+    "short_hash": "c7b9468",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T16:20:37-05:00",
+    "message": "Switch Ollama client from :httpc to Req",
+    "files_changed": 3
+  },
+  {
+    "hash": "b65346f854ad277df3956b897e65637085c4e115",
+    "short_hash": "b65346f",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T15:56:58-05:00",
+    "message": "Add language filter feature\n\nDatabase:\n- Migration adds langs array column with GIN index\n- Link schema updated with langs field\n\nBackend:\n- Extractor captures langs from firehose posts\n- Links context supports :langs filter option (array overlap)\n- API controller accepts lang param from bookmarklet\n\nUI:\n- Mac-style Language dropdown in menubar\n- Toggle individual languages (en, es, pt, de, fr, ja, ko, zh)\n- \"All Languages\" option clears filter\n- Status bar shows active filter\n\nBookmarklet:\n- Detects page language via document.documentElement.lang\n- Falls back to navigator.language\n- Extracts base code (en-US -> en)",
+    "files_changed": 9
+  },
+  {
+    "hash": "074f350f6c7b1321773a1437381df6ac67c65db5",
+    "short_hash": "074f350",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T15:34:42-05:00",
+    "message": "Add emoji filter, banned domains, and UI fixes\n\nFiltering:\n- Max 3 emojis per post (spam filter)\n- Banned domains: tinyurl.com, bit.ly, t.co\n- Domain check in extractor before storing\n\nUI changes:\n- Grey/white dot pattern background (authentic Mac OS)\n- Wider window (95%, max 1000px)\n- Swapped columns: Post | Domain (removed Score)\n- Cleaned up unused score CSS\n\nDatabase cleanup:\n- Deleted 21 links from banned domains\n- Deleted 4 emoji spam links",
+    "files_changed": 4
+  },
+  {
+    "hash": "56a50820d3caff955a75a03da4a69448b3c99ff9",
+    "short_hash": "56a5082",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T15:25:40-05:00",
+    "message": "Redesign UI as retro Mac OS desktop\n\n- Classic Mac OS 9/System 7 aesthetic\n- Window with titlebar, horizontal lines, close button\n- Grab bag view showing 20 links at once\n- Domain | Post | Score columns\n- Classic Mac scrollbar styling\n- Menu bar with Apple menu\n- Shuffle button to get new random links\n- Click any row to open link",
+    "files_changed": 1
+  },
+  {
+    "hash": "d9973b58998d61acc0fe503dff4d42fb5544cc3a",
+    "short_hash": "d9973b5",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T15:22:42-05:00",
+    "message": "Cleanup: purged 166 old links not meeting new quality criteria",
+    "files_changed": 3
+  },
+  {
+    "hash": "97a9069fa4415a2c54fe70b93beca4ce2721c6df",
+    "short_hash": "97a9069",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T15:14:21-05:00",
+    "message": "Fix: text length check now excludes hashtags\n\nPosts like '#totp' with just a hashtag and link no longer qualify.\nText length requirement (50 chars) now measured AFTER stripping hashtags.",
+    "files_changed": 1
+  },
+  {
+    "hash": "ef7fdbb71f4b2071c7dda4cf3aebdf281bb2eb7b",
+    "short_hash": "ef7fdbb",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T15:08:18-05:00",
+    "message": "Refine link quality signals for higher quality links\n\nQuality criteria:\n- Author: >= 500 followers, <= 5000 following\n- Account age: >= 1 year old (indexed_at)\n- Bio: must be filled (non-empty description)\n- Post: >= 50 chars text (no bare links)\n- Post: max 1 hashtag (spam filter)\n- Post: exactly 1 link (multiple links = spam)\n- Replies: now allowed if meeting all criteria\n\nScoring updated:\n- Base score from log10(followers) * 15\n- Bonus for follower/following ratio (up to +20)\n- Rewards curated accounts over follow-for-follow",
+    "files_changed": 1
+  },
+  {
+    "hash": "db6869f88ebebe938130d2bb3b0155d374b47275",
+    "short_hash": "db6869f",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T14:58:39-05:00",
+    "message": "Add bookmarklet and API endpoint\n\n- BookmarkletLive at GET /bookmarklet with draggable bookmarklet\n- POST /api/links endpoint for bookmarklet submissions\n- LinkController handles create with validation\n- JavaScript bookmarklet sends URL/title via fetch",
+    "files_changed": 3
+  },
+  {
+    "hash": "34ca01feba574364376624fe4e5e4657313cdac0",
+    "short_hash": "34ca01f",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T14:58:14-05:00",
+    "message": "Add stumble LiveView UI\n\n- StumbleLive at GET / with Stumble! button\n- Shows random link with author info, avatar, follower count\n- Tracks session history to avoid showing same links\n- Displays total link count and top domains\n- Gradient purple/pink design with Tailwind CSS",
+    "files_changed": 2
+  },
+  {
+    "hash": "44c48bacf629dec7c331b79883e635cd754b07df",
+    "short_hash": "44c48ba",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T14:57:40-05:00",
+    "message": "Add link extraction and scoring\n\n- Extractor subscribes to firehose posts via PubSub\n- Filters links by author quality (>=100 followers)\n- Excludes replies and Bluesky internal links\n- Log-based scoring algorithm (log10(followers) * 20)\n- Links context with random_link/1 for stumbling",
+    "files_changed": 2
+  },
+  {
+    "hash": "a7e5a735816c395fb185ad54bc6b8361168df1a7",
+    "short_hash": "a7e5a73",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T14:57:24-05:00",
+    "message": "Add links database schema\n\n- Link Ecto schema with url, url_hash, domain, title, score\n- Author metadata fields (handle, display_name, followers_count)\n- Stumble count tracking\n- Migration with indexes on url_hash, domain, score",
+    "files_changed": 2
+  },
+  {
+    "hash": "6fd0faec202c562c6d2bd4ce49f5df9b9e49c18b",
+    "short_hash": "6fd0fae",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T14:56:55-05:00",
+    "message": "Add Bluesky firehose integration via Graze Turbostream\n\n- WebSocket client connecting to Turbostream (hydrated firehose)\n- Parser for Turbostream events with snake_case keys\n- Type definitions for Post, Author, ExternalEmbed, FacetLink\n- Supervisor for firehose process\n- Broadcasts posts via Phoenix PubSub",
+    "files_changed": 5
+  },
+  {
+    "hash": "ceaf5cb24cdc1e8742bd1f2231a562af0b12245b",
+    "short_hash": "ceaf5cb",
+    "author": "Bobby Nathan",
+    "date": "2026-01-09T14:56:38-05:00",
+    "message": "Initial Phoenix setup for poke_around",
+    "files_changed": 0
+  }
+]
