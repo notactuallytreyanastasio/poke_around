@@ -1220,6 +1220,17 @@
       "created_at": "2026-01-11T03:21:40.719898-05:00",
       "updated_at": "2026-01-11T03:21:40.719898-05:00",
       "metadata_json": "{\"branch\":\"main\",\"confidence\":95}"
+    },
+    {
+      "id": 112,
+      "change_id": "b39551c6-5da1-467f-9747-6a3e47aa7411",
+      "node_type": "outcome",
+      "title": "Comprehensive test suite and filtering improvements committed",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-01-11T03:22:18.430280-05:00",
+      "updated_at": "2026-01-11T03:22:18.430280-05:00",
+      "metadata_json": "{\"branch\":\"main\",\"commit\":\"d22960e\",\"confidence\":95}"
     }
   ],
   "edges": [
@@ -2443,6 +2454,50 @@
       "weight": 1.0,
       "rationale": "New feature implementation",
       "created_at": "2026-01-10T13:12:20.511590-05:00"
+    },
+    {
+      "id": 112,
+      "from_node_id": 108,
+      "to_node_id": 112,
+      "from_change_id": "7391bc0f-607d-4b4f-8803-fae490c34d07",
+      "to_change_id": "b39551c6-5da1-467f-9747-6a3e47aa7411",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "x.com ban implemented",
+      "created_at": "2026-01-11T03:22:18.438273-05:00"
+    },
+    {
+      "id": 113,
+      "from_node_id": 109,
+      "to_node_id": 112,
+      "from_change_id": "b9d43b1d-c09e-44fe-a97f-f06e7ec755ed",
+      "to_change_id": "b39551c6-5da1-467f-9747-6a3e47aa7411",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "English filter implemented",
+      "created_at": "2026-01-11T03:22:18.445374-05:00"
+    },
+    {
+      "id": 114,
+      "from_node_id": 110,
+      "to_node_id": 112,
+      "from_change_id": "d88774bf-b3be-474b-803b-d516d9503ca4",
+      "to_change_id": "b39551c6-5da1-467f-9747-6a3e47aa7411",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Test isolation implemented",
+      "created_at": "2026-01-11T03:22:18.453357-05:00"
+    },
+    {
+      "id": 115,
+      "from_node_id": 111,
+      "to_node_id": 112,
+      "from_change_id": "7c21463b-cc72-4906-9a20-8e93f417abea",
+      "to_change_id": "b39551c6-5da1-467f-9747-6a3e47aa7411",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Tagger fix implemented",
+      "created_at": "2026-01-11T03:22:18.462045-05:00"
     }
   ]
 }

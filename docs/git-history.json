@@ -1,5 +1,13 @@
 [
   {
+    "hash": "d22960ea5c7e16cb82d742b0579f9600d8e291cb",
+    "short_hash": "d22960e",
+    "author": "Bobby Nathan",
+    "date": "2026-01-11T03:22:11-05:00",
+    "message": "Add comprehensive test suite and improve link filtering\n\nTests:\n- Added 340+ tests covering all major modules\n- ATProto: discovery, dpop, pkce, session, tid\n- Bluesky: parser\n- Links: extractor, link, quality_filter, links context\n- Web: controllers, LiveView\n- Disabled firehose/tagger in test config for isolation\n\nFiltering improvements:\n- Added x.com/twitter.com to banned domains\n- Added English-only filtering (requires en/en-* lang tag)\n- Deleted 54 x.com links and 11,958 non-English links\n\nFixes:\n- Fixed AxonTagger :skipped case clause error\n- Mark skipped links as processed to prevent reprocessing\n- Fixed flaky AxonTagger tests with proper isolation",
+    "files_changed": 37
+  },
+  {
     "hash": "9bbdb518c9ebb549f4a8d628475e563e661e8637",
     "short_hash": "9bbdb51",
     "author": "Bobby Nathan",
